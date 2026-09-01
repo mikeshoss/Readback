@@ -36,6 +36,12 @@ const fleets = fleetsData.fleets;
           <span class="name">Border crossings <em id="count-border"></em></span>
           <span class="why">Every land crossing runs plate readers (CBSA / US CBP). A defined checkpoint, not ambient surveillance. Included for completeness.</span>
         </label>
+        <label class="layer" data-layer="private">
+          <input type="checkbox" />
+          <span class="swatch private"></span>
+          <span class="name">Private &amp; institutional <em id="count-private"></em></span>
+          <span class="why">Malls, retailers, campus parking. Scanning private property — but private collections can feed police by request.</span>
+        </label>
       </div>
       <div class="thesis">
         Consent and context matter — a toll you pay and a border you cross are not the
@@ -56,6 +62,7 @@ const fleets = fleetsData.fleets;
       police_alpr: '#ff5a5f',
       toll: '#4da3ff',
       border: '#b07aff',
+      private: '#58d6a3',
     };
 
     const map = new maplibregl.Map({
@@ -95,6 +102,7 @@ const fleets = fleetsData.fleets;
       setCount('count-police', data.counts.police_alpr);
       setCount('count-toll', data.counts.toll);
       setCount('count-border', data.counts.border);
+      setCount('count-private', data.counts.private);
 
       const fc = (cat: string) => ({
         type: 'FeatureCollection' as const,
@@ -107,7 +115,7 @@ const fleets = fleetsData.fleets;
           })),
       });
 
-      for (const cat of ['toll', 'border', 'police_alpr']) {
+      for (const cat of ['toll', 'border', 'private', 'police_alpr']) {
         map.addSource(cat, { type: 'geojson', data: fc(cat) });
         map.addLayer({
           id: cat,
@@ -129,7 +137,7 @@ const fleets = fleetsData.fleets;
             p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}</div>` : '',
             p.zone ? `<div><b>Zone:</b> ${p.zone}</div>` : '',
             p.tollMethod ? `<div><b>Toll method:</b> ${p.tollMethod}</div>` : '',
-            `<div class="pop-cat">${p.category === 'police_alpr' ? 'Police surveillance ALPR' : p.category === 'toll' ? 'Toll gantry — paid service' : 'Border crossing checkpoint'}</div>`,
+            `<div class="pop-cat">${{ police_alpr: 'Police surveillance ALPR', toll: 'Toll camera — paid service', border: 'Border crossing checkpoint', private: 'Private/institutional ALPR' }[p.category as string] ?? p.category}</div>`,
           ].join('');
           new maplibregl.Popup({ closeButton: false })
             .setLngLat((e.features![0].geometry as any).coordinates)
@@ -210,6 +218,7 @@ const fleets = fleetsData.fleets;
     .swatch.toll { background: var(--toll); }
     .swatch.border { background: var(--border-cat); }
     .swatch.fleet { background: var(--fleet); }
+    .swatch.private { background: #58d6a3; }
     .thesis {
       font-size: 0.84rem; color: var(--muted);
       border-left: 3px solid var(--accent); padding: 0.5rem 0.8rem;

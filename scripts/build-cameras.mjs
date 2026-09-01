@@ -25,8 +25,14 @@ function classify(tags) {
   if (tags.highway === 'toll_gantry') return 'toll';
   if (tags.barrier === 'border_control') return 'border';
   const op = (tags.operator || '').toLowerCase();
-  if (/407|toll/.test(op) || tags['surveillance:zone'] === 'toll') return 'toll';
+  const mfr = (tags.manufacturer || tags.brand || '').toLowerCase();
+  // RTX (Raytheon) built the 407's tolling system; MTO-operated RTX ALPRs
+  // trace the 407 corridor exactly (verified 2026-09: all 244 within its
+  // bbox). Revisit if Ontario deploys RTX highway ALPR elsewhere.
+  if (/407|toll/.test(op) || tags['surveillance:zone'] === 'toll' || /rtx|raytheon/.test(mfr)) return 'toll';
   if (/cbsa|border|customs/.test(op)) return 'border';
+  // Private/institutional: parking and property scanning, not policing.
+  if (/university|ubc|college|mall|home depot|walmart|canadian tire|plaza|property|parking/.test(op)) return 'private';
   return 'police_alpr';
 }
 

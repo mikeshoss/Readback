@@ -42,6 +42,16 @@ like hiding data. A layered map with honest categories does both jobs.
 - The category is OUR classification layer on top of OSM data — keep it in
   our pipeline (query source + osmId → category mapping), don't rely on
   OSM tags alone.
+- **Correction (2026-09-01, caught by Mike):** 244 of 618 Canadian
+  ALPR-tagged OSM nodes are `manufacturer=RTX Corporation` +
+  `operator=Ministry of Transportation of Ontario` — these are the 407's
+  tolling cameras (Raytheon/RTX built the 407 ETR tolling system; the
+  province owns the corridor/407 East). All 244 fall inside the 407
+  corridor bbox. Classifier now routes RTX/Raytheon-manufactured units to
+  the toll layer. **This means 40% of what panopti.ca shows as generic
+  surveillance is actually the toll system — a headline finding for the
+  site.** Also split out: private/institutional ALPR (Upper Canada Mall,
+  Home Depot, UBC parking — 57 nodes) into its own layer.
 - UI: legend explains each category in one line; the off-by-default layers
   get a short "why is this off?" note (text above). The distinction itself
   is part of the site's thesis: **consent and context matter — a toll you
