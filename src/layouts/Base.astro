@@ -19,12 +19,12 @@ const path = Astro.url.pathname;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} · ALPRMap</title>
+    <title>{title} · Readback</title>
     <meta name="description" content={description} />
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/">ALPR<span>Map</span></a>
+      <a class="brand" href="/">Read<span>back</span></a>
       <nav>
         {nav.map((n) => (
           <a href={n.href} class={path === n.href || (n.href !== '/' && path.startsWith(n.href)) ? 'active' : ''}>{n.label}</a>

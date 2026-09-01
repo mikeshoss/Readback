@@ -1,0 +1,70 @@
+# The intake pipeline — how new cameras, news, and trends reach the site
+
+Everything is a scheduled job writing static JSON; the site rebuilds when
+data changes. No servers, no database. Target runtime: GitHub Actions cron.
+
+## The four intake lanes
+
+### Lane 1 — Newly MAPPED cameras (running today)
+`npm run data` (scripts/build-cameras.mjs), daily via cron.
+- Pulls OSM via Overpass (ALPR + toll gantries + border), classifies,
+  writes `public/data/cameras.json`.
+- **Diffs against the previous run** → `public/data/changes.json`: every
+  newly mapped or removed camera, with category/operator, last 100 change
+  events. This powers a "New this week" panel and lets new dots glow on
+  the map.
+- Honest caveat surfaced in UI: OSM additions = newly *mapped*, not
+  necessarily newly *installed*. (Context: OSM ALPR tagging is growing
+  ~10k nodes per 3 weeks globally — the mapping wave is itself a trend.)
+
+### Lane 2 — Cameras coming ONLINE (early warning, before they exist)
+Sources that announce installs months ahead, monitored weekly:
+- **Ontario grant announcements** (Guns, Gangs & Violence Reduction
+  Strategy newsroom RSS) — names recipient cities before procurement.
+- **Procurement portals** (bids&tenders, MERX) — tender → award = vendor,
+  count, sometimes sites. Scraper searches: ALPR, licence plate, AutoVu,
+  Fusus, Vector.
+- **Police services board agendas** (CivicWeb/eScribe platforms) — approval
+  reports carry PIAs, site criteria, retention configs.
+Output: `data/leads.json` — the funnel (lead → candidate → confirmed →
+mapped-in-OSM). Confirmed sites get tagged in OSM (upstream contribution),
+after which Lane 1 picks them up automatically. Unconfirmed leads can render
+as hollow markers + a "Coming soon to..." list.
+
+### Lane 3 — News & trends (feed + timeline)
+Weekly job merging:
+- Curated RSS: 404 Media, EFF Deeplinks, IJ, The Record, Stateline,
+  Evanston RoundTable, CBC Toronto, Blue Line, IPC Ontario news.
+- Google News RSS queries (see data/research/news-sweep-2025-2026.md for
+  the exact query strings, incl. Canadian-spelling variants).
+- Cancellation trackers (deflocktheusa.com, findingflock.com) — scraped.
+Pipeline: fetch → dedupe by URL/title → tag (region, vendor, adopt/cancel/
+legal/security) → append `public/data/news.json` → /news page renders it,
+newest first, with the curated timeline as the archive.
+Tagging can start keyword-based; an LLM pass later for summaries.
+
+### Lane 4 — Trend metrics (monthly)
+Monthly snapshot job appends to `data/snapshots.jsonl`:
+- Camera counts by category/region (from Lane 1)
+- OSM global ALPR count (taginfo API)
+- Cancellation count (Lane 3 trackers)
+- Fleet counts as they update (manual, from research)
+Output: growth charts on a /trends page — adoption curve vs cancellation
+curve is the headline visual (both are rising; that IS the story).
+
+## Flow
+
+```
+OSM/Overpass ──daily──> classify ──> cameras.json ──> map layers
+     └────────────────> diff ─────> changes.json ──> "New this week"
+grants/tenders/boards ──weekly──> leads.json ──> "Coming soon" + MFIPPA queue
+RSS/GNews/trackers ──weekly──> tag+dedupe ──> news.json ──> /news feed
+all of the above ──monthly──> snapshots.jsonl ──> /trends charts
+```
+
+## Build order
+1. ✅ Lane 1 diffing (done — in build-cameras.mjs)
+2. Lane 3 news fetcher (highest visible value; sources already researched)
+3. "New this week" panel on map + recent-camera styling
+4. Lane 2 monitors (grants RSS first — trivial; then board agendas)
+5. Lane 4 snapshots + /trends page

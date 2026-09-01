@@ -84,5 +84,30 @@ const out = {
 
 const dest = join(root, 'public/data/cameras.json');
 mkdirSync(dirname(dest), { recursive: true });
+
+// Diff against the previous run: newly mapped / removed cameras become the
+// change feed ("new cameras coming online" — strictly, newly *mapped*).
+const { readFileSync, existsSync } = await import('node:fs');
+const changesDest = join(root, 'public/data/changes.json');
+if (existsSync(dest)) {
+  const prev = JSON.parse(readFileSync(dest, 'utf8'));
+  const prevIds = new Set(prev.cameras.map((c) => c.id));
+  const currIds = new Set(cameras.map((c) => c.id));
+  const added = cameras.filter((c) => !prevIds.has(c.id));
+  const removed = prev.cameras.filter((c) => !currIds.has(c.id));
+  const history = existsSync(changesDest) ? JSON.parse(readFileSync(changesDest, 'utf8')).history ?? [] : [];
+  if (added.length || removed.length) {
+    history.unshift({
+      date: out.generated,
+      added: added.map(({ id, lat, lon, category, operator, manufacturer }) => ({ id, lat, lon, category, operator, manufacturer })),
+      removedIds: removed.map((c) => c.id),
+      prevCounts: prev.counts,
+      counts,
+    });
+  }
+  writeFileSync(changesDest, JSON.stringify({ generated: out.generated, history: history.slice(0, 100) }));
+  console.log(`Diff vs previous run: +${added.length} new, -${removed.length} removed`);
+}
+
 writeFileSync(dest, JSON.stringify(out));
 console.log('Wrote', dest, counts);

@@ -1,4 +1,8 @@
-# ALPRMap
+# Readback (readback.ca)
+
+*In aviation, a readback is repeating a transmission back to prove you
+received it. This site reads back to the public what the state collects
+about them.*
 
 Mapping automated licence plate readers in Canada — where they are, what they
 can do, and what the settings say. A better panopti.ca / DeFlock: layered by
