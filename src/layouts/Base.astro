@@ -1,0 +1,106 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  fullBleed?: boolean;
+}
+const { title, description = 'Mapping automated licence plate readers in Canada — where they are, what they can do, and what the settings say.', fullBleed = false } = Astro.props;
+const nav = [
+  { href: '/', label: 'Map' },
+  { href: '/regions', label: 'Regions' },
+  { href: '/vendors', label: 'Vendors' },
+  { href: '/evidence', label: 'Evidence' },
+  { href: '/news', label: 'News' },
+];
+const path = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · ALPRMap</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">ALPR<span>Map</span></a>
+      <nav>
+        {nav.map((n) => (
+          <a href={n.href} class={path === n.href || (n.href !== '/' && path.startsWith(n.href)) ? 'active' : ''}>{n.label}</a>
+        ))}
+      </nav>
+    </header>
+    <main class={fullBleed ? 'full-bleed' : 'page'}>
+      <slot />
+    </main>
+    {!fullBleed && (
+      <footer class="site-footer">
+        <p>Camera data © OpenStreetMap contributors (ODbL). Retention and capability claims are sourced; see Evidence.</p>
+      </footer>
+    )}
+    <style is:global>
+      :root {
+        --bg: #101418;
+        --panel: #1a2028;
+        --panel-2: #222a35;
+        --line: #2e3846;
+        --text: #e8edf2;
+        --muted: #9aa7b4;
+        --police: #ff5a5f;
+        --toll: #4da3ff;
+        --border-cat: #b07aff;
+        --fleet: #ffb54d;
+        --accent: #ff5a5f;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      html, body { height: 100%; }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        display: flex; flex-direction: column; min-height: 100vh;
+      }
+      a { color: inherit; }
+      .site-header {
+        display: flex; align-items: center; gap: 1.5rem;
+        padding: 0.7rem 1.25rem;
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+        position: sticky; top: 0; z-index: 20;
+      }
+      .brand { font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em; text-decoration: none; }
+      .brand span { color: var(--accent); }
+      .site-header nav { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+      .site-header nav a {
+        text-decoration: none; color: var(--muted);
+        padding: 0.35rem 0.7rem; border-radius: 6px; font-weight: 500;
+      }
+      .site-header nav a:hover { color: var(--text); background: var(--panel-2); }
+      .site-header nav a.active { color: var(--text); background: var(--panel-2); }
+      main.page { max-width: 62rem; width: 100%; margin: 0 auto; padding: 2rem 1.25rem 3rem; flex: 1; }
+      main.full-bleed { flex: 1; display: flex; min-height: 0; }
+      .site-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem; }
+      h1 { font-size: 1.7rem; line-height: 1.25; margin-bottom: 0.5rem; }
+      h2 { font-size: 1.2rem; margin: 2rem 0 0.6rem; }
+      p.lede { color: var(--muted); max-width: 46rem; margin-bottom: 1rem; }
+      table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+      .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+      th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { background: var(--panel); position: sticky; top: 0; }
+      tr:last-child td { border-bottom: none; }
+      .tag { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+      .tag.hot { background: rgba(255,90,95,0.15); color: var(--police); }
+      .tag.cool { background: rgba(77,163,255,0.15); color: var(--toll); }
+      .note {
+        background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+        border-radius: 8px; padding: 0.8rem 1rem; margin: 1rem 0; color: var(--muted); font-size: 0.9rem;
+      }
+      .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+      .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem 1rem; }
+      .card h3 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+      .card .meta { color: var(--fleet); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.4rem; }
+      .card p { color: var(--muted); font-size: 0.84rem; }
+    </style>
+  </body>
+</html>

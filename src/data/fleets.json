@@ -1,0 +1,113 @@
+{
+  "note": "Mobile (vehicle-mounted) ALPR fleets — the majority of Canadian scanning capacity, invisible on dot maps. Sources in data/research/. Counts are vehicles equipped with ALPR.",
+  "fleets": [
+    {
+      "service": "Toronto Police Service",
+      "vehicles": 600,
+      "vehiclesLabel": "entire marked fleet (~560–600+)",
+      "lat": 43.6532, "lon": -79.3832,
+      "detail": "Every marked cruiser scans. Capacity 1.25M+ plates/day, reads at up to 225 km/h. Axon in-car system. Reads kept 7 days, hits 365 days.",
+      "retentionReads": "7 days", "retentionHits": "365 days",
+      "vendor": "Axon"
+    },
+    {
+      "service": "Ontario Provincial Police",
+      "vehicles": null,
+      "vehiclesLabel": "all frontline vehicles province-wide",
+      "lat": 44.6082, "lon": -79.4197,
+      "detail": "Rollout to every frontline cruiser completed 2023. Vendor not publicly named.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "Ottawa Police Service",
+      "vehicles": 65,
+      "vehiclesLabel": "65 vehicles (up from 5)",
+      "lat": 45.4215, "lon": -75.6972,
+      "detail": "Grew from 5 to 65 ALPR-equipped patrol vehicles.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "Windsor Police / Essex OPP",
+      "vehicles": 50,
+      "vehiclesLabel": "~50 vehicles in Essex County",
+      "lat": 42.3149, "lon": -83.0364,
+      "detail": "Cruiser-mounted ALPR across Windsor-Essex.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "Greater Sudbury Police",
+      "vehicles": 31,
+      "vehiclesLabel": "31 vehicles + 16 fixed sites",
+      "lat": 46.49, "lon": -80.99,
+      "detail": "31 equipped vehicles plus provincially funded fixed ALPRs at 16 locations.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "Montreal SPVM",
+      "vehicles": 30,
+      "vehiclesLabel": "~30 vehicles",
+      "lat": 45.5088, "lon": -73.5542,
+      "detail": "SRPI system. Unusually tight controls: only 2 officers can query stored data; officers cannot search historical captures.",
+      "retentionReads": "restricted access", "retentionHits": "restricted access",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "Peel Regional Police",
+      "vehicles": null,
+      "vehiclesLabel": "fleet + portable trailer unit",
+      "lat": 43.589, "lon": -79.6441,
+      "detail": "Vehicle ALPR plus a portable unit combining acoustic detection, PTZ cameras, ALPR and a loudspeaker. Non-matching scans kept 24 hours — vs Toronto's 7 days, same tech, neighbouring service.",
+      "retentionReads": "24 hours", "retentionHits": "30 days",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "York Regional Police",
+      "vehicles": null,
+      "vehiclesLabel": "camera program, every camera has ALPR",
+      "lat": 44.0065, "lon": -79.4504,
+      "detail": "$255K expansion; cameras feed the real-time operations centre on Axon Fusus.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "Axon Fusus"
+    },
+    {
+      "service": "Waterloo Regional Police",
+      "vehicles": null,
+      "vehiclesLabel": "combined CCTV + ALPR (live June 23, 2026)",
+      "lat": 43.4643, "lon": -80.5204,
+      "detail": "Live June 23, 2026; Kitchener, Cambridge and North Dumfries to follow. Funded via Ontario's Guns, Gangs and Violence Reduction Strategy.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "BC (RCMP-run provincial program)",
+      "vehicles": null,
+      "vehiclesLabel": "provincial program",
+      "lat": 49.1913, "lon": -122.849,
+      "detail": "Neology/PIPS hardware. Hotlists generated daily from ICBC + CPIC. Non-hit reads deleted at end of officer's shift — the strictest retention in Canada.",
+      "retentionReads": "end of shift", "retentionHits": "per investigation",
+      "vendor": "Neology (PIPS)"
+    },
+    {
+      "service": "Winnipeg Police Service",
+      "vehicles": null,
+      "vehiclesLabel": "operates ALPR",
+      "lat": 49.8951, "lon": -97.1384,
+      "detail": "Operates vehicle ALPR; program details unpublished.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "unconfirmed"
+    },
+    {
+      "service": "Vancouver Police Department",
+      "vehicles": null,
+      "vehiclesLabel": "operates ALPR",
+      "lat": 49.2827, "lon": -123.1207,
+      "detail": "Operates vehicle ALPR; program details unpublished.",
+      "retentionReads": "unpublished", "retentionHits": "unpublished",
+      "vendor": "unconfirmed"
+    }
+  ]
+}

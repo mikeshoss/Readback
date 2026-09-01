@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+
+const retention = [
+  { j: 'New Hampshire', r: '3 minutes', a: 'RSA 261:75-b (repeal slated Jan 2027)', hl: true },
+  { j: 'BC, Canada (police)', r: 'End of shift / immediate', a: 'OIPC BC ruling F12-04 (2012)', hl: true },
+  { j: 'Peel Regional Police, ON', r: '24 hours (matches: 30 days)', a: 'Service policy', hl: true },
+  { j: 'Toronto Police, ON', r: '7 days (hits: 365 days)', a: 'TPS policy + PIA', hl: true },
+  { j: 'Maine', r: '21 days', a: '29-A M.R.S. §2117-A' },
+  { j: 'Virginia', r: '21 days', a: 'HB 2724 (2025)' },
+  { j: 'Washington State', r: '21 days', a: 'Driver Privacy Act, SB 6002 (2026)' },
+  { j: 'Flock default (US)', r: '30 days', a: 'Vendor default setting' },
+  { j: 'Oregon', r: '30 days', a: '2026 statute' },
+  { j: 'Minnesota', r: '60 days', a: 'Statute' },
+  { j: 'California (CHP)', r: '60 days', a: 'SB 34 (2015)' },
+  { j: 'Tennessee', r: '90 days', a: 'Statute' },
+  { j: 'Arkansas', r: '150 days', a: 'Statute' },
+  { j: 'Utah', r: '9 months', a: 'Statute' },
+  { j: 'United Kingdom (national ANPR)', r: '12 months', a: 'NPCC standards — no statute' },
+  { j: 'Vermont', r: '18 months', a: '23 V.S.A. §1607' },
+  { j: 'Georgia', r: '30 months', a: 'Statute' },
+  { j: 'Colorado', r: '3 years', a: 'C.R.S. §24-72-113' },
+  { j: 'New Jersey', r: '3 years (was 5)', a: 'AG Directive 2022-12' },
+  { j: '~34 US states with no statute', r: 'Agency discretion — up to indefinite', a: 'LAPD audit found 320M stored images', hl: true },
+];
+---
+<Base title="Regions">
+  <h1>Retention is a setting, not a standard</h1>
+  <p class="lede">
+    The same technology keeps your plate read for 3 minutes in New Hampshire, 24 hours in
+    Peel Region, 7 days in Toronto, a year in the UK — and forever in most US states.
+    Five orders of magnitude, decided by a dropdown menu.
+  </p>
+
+  <div class="note">
+    <strong>Two neighbouring services, same province, same technology:</strong> Peel Regional
+    Police keeps non-matching scans for 24 hours. Toronto Police keeps them 7 days. Nothing
+    about the tech requires either number — retention is an admin setting, not a board vote.
+  </div>
+
+  <h2>How long they keep the plates of innocent drivers</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Jurisdiction</th><th>Non-hit read retention</th><th>Authority</th></tr></thead>
+      <tbody>
+        {retention.map((row) => (
+          <tr>
+            <td>{row.hl ? <strong>{row.j}</strong> : row.j}</td>
+            <td>{row.hl ? <span class="tag hot">{row.r}</span> : row.r}</td>
+            <td style="color: var(--muted)">{row.a}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Three models of oversight</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>🇨🇦 Canada — commissioner-led</h3>
+      <p>No ALPR statute anywhere. Privacy commissioners (OPC, IPC Ontario, OIPC BC, CAI Québec)
+      set doctrine through investigations and guidance. The template: BC's 2012 ruling that keeping
+      non-hit data is unlawful. Result: short retention, no vendor-run national search network,
+      and no Flock — the company has zero Canadian police contracts.</p>
+    </div>
+    <div class="card">
+      <h3>🇺🇸 United States — patchwork + litigation</h3>
+      <p>~16 states have statutes; ~34 leave it to agency discretion. Enforcement comes from
+      lawsuits (the Norfolk Fourth Amendment case is at the Fourth Circuit) and state AGs —
+      California sued El Cajon, Illinois caught Flock giving CBP access. Since Feb 2025,
+      50+ communities have cancelled Flock contracts.</p>
+    </div>
+    <div class="card">
+      <h3>🇬🇧 UK — everything, for a year</h3>
+      <p>The National ANPR Service: ~14,000 cameras, 100M+ reads per day into one national
+      database, 12-month retention — with no statutory basis, and its dedicated oversight
+      office recently abolished. The former commissioner called it possibly "one of the largest
+      data gatherers of its citizens in the world."</p>
+    </div>
+  </div>
+
+  <h2>Ontario: the spread, funded provincially</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Where</th><th>What</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Toronto</strong></td><td>Entire marked fleet (~560–600 vehicles) scans — 1.25M+ plates/day capacity. 2026 budget adds $5.6M for "AI Operationalization."</td></tr>
+        <tr><td><strong>Brampton (Peel)</strong></td><td>Genetec fixed cameras at key intersections (50 per early reports; Genetec's release says 200).</td></tr>
+        <tr><td><strong>York Region</strong></td><td>$255K expansion; every camera has ALPR, feeding a real-time operations centre on Axon Fusus.</td></tr>
+        <tr><td><strong>Waterloo Region</strong></td><td>Combined CCTV + ALPR live June 23, 2026; Kitchener, Cambridge, North Dumfries next. Funded by Ontario's Guns, Gangs and Violence Reduction Strategy.</td></tr>
+        <tr><td><strong>Sudbury</strong></td><td>31 equipped vehicles + fixed ALPR at 16 locations (provincially funded).</td></tr>
+        <tr><td><strong>Province-wide</strong></td><td>Ontario assessing highway ALPR under the proposed Protecting Ontario's Streets and Communities Act, 2026. OPP: all frontline vehicles equipped since 2023.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</Base>

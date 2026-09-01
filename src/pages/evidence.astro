@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+
+const studies = [
+  { s: 'Lum et al. (2011) — RCT, 30 hot spots, Virginia', f: 'No significant effect on any crime outcome', v: 'null' },
+  { s: 'Taylor, Koper & Woods (2012) — RCT, Mesa AZ', f: '3× more stolen-vehicle hits, 2× recoveries — no decline in auto theft rates', v: 'null' },
+  { s: 'Koper, Lum et al. (2021) — 785 patrols, 33 hot spots', f: 'More recoveries, no effect on likelihood/timing/seriousness of next crime', v: 'null' },
+  { s: 'RAND (2014) — literature review', f: 'Anecdotes only; "lack of rigorous outcome evidence"', v: 'null' },
+  { s: 'Mourtgos & Adams (2025) — 216 agencies, fixed Flock networks', f: 'Motor vehicle theft down 11% after deployment (quasi-experimental)', v: 'mixed' },
+  { s: 'Shjarback & Sarkos (2025) — Atlantic City fixed network', f: 'No reduction in violent crime; reductions in shootings, auto theft, property crime', v: 'mixed' },
+];
+
+const hitRates = [
+  { j: 'LAPD (CA State Auditor)', r: '~0.1% — 99.9% of stored images matched nothing' },
+  { j: 'Central Marin, CA', r: '0.02% of ~4M plates' },
+  { j: 'Piedmont, CA', r: '0.0013% — 2M scans, 26 leads' },
+  { j: 'High Point, NC', r: '0.08%' },
+  { j: 'Rhinebeck, NY', r: '0.01%' },
+  { j: 'LAPD Inspector General hotlist audit', r: '1 in 3 alerts were FALSE (stale hotlist data)' },
+];
+---
+<Base title="Evidence">
+  <h1>Does it actually reduce crime — or move it?</h1>
+  <p class="lede">
+    Every randomized trial of patrol ALPR finds the same thing: more plates checked, more
+    stolen cars recovered — and no measurable drop in crime. The strongest evidence for fixed
+    networks is an 11% auto-theft reduction. Everything bigger is marketing.
+  </p>
+
+  <h2>The studies</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Study</th><th>Finding</th><th></th></tr></thead>
+      <tbody>
+        {studies.map((row) => (
+          <tr>
+            <td>{row.s}</td>
+            <td>{row.f}</td>
+            <td>{row.v === 'null' ? <span class="tag cool">no deterrence</span> : <span class="tag hot">modest effect</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Displacement: does crime just move?</h2>
+  <p class="lede">
+    The 40-year CCTV literature (Piza et al. 2019, 80 studies) — the closest proxy for fixed
+    ALPR — finds a modest overall decrease driven almost entirely by <strong>vehicle crime in car
+    parks</strong>. Violent crime doesn't respond. Displacement to nearby areas is rarer than
+    feared, but so is city-wide benefit: effects stay local. When York Region's deputy chief
+    cites a 6% crime reduction within 1 km of cameras, the honest question is what happened
+    at 2 km — and no Canadian service publishes that analysis.
+  </p>
+
+  <h2>What the vendors claim vs. what happened</h2>
+  <div class="note">
+    <strong>Flock's "reduces crime by up to 70%"</strong> came from San Marino, CA — whose own
+    police chief later said the figure isn't accurate. Forbes found the company handpicked and
+    oversimplified data in four flagship cities. The academic who oversaw Flock's "10% of US
+    crime" study later said the data was "too varied and incomplete… to do any type of
+    meaningful statistical analysis."
+  </div>
+
+  <h2>Hit rates: what a billion scans actually catch</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Audited jurisdiction</th><th>Hit rate</th></tr></thead>
+      <tbody>
+        {hitRates.map((row) => <tr><td>{row.j}</td><td>{row.r}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="lede" style="margin-top: 0.8rem">
+    Toronto has never published a hit-rate audit. At 1.25M scans/day capacity and typical
+    hit rates, roughly 999 of every 1,000 records the system keeps for 7 days belong to
+    drivers suspected of nothing.
+  </p>
+
+  <h2>When it's wrong</h2>
+  <p class="lede">
+    At least 27 documented wrongful stops in the US since 2018 — including the Gilliam family
+    in Aurora, CO: four Black children held at gunpoint because an ALPR matched their SUV's
+    plate to a stolen <em>motorcycle</em> from another state ($1.9M settlement). Vallejo, CA
+    trials found 37% of stationary ALPR hits were misreads. These are system failures —
+    stale hotlists, no plate-state verification — not one vendor's bug.
+  </p>
+
+  <div class="note">
+    Full citations with links live in the project research base
+    (<code>data/research/crime-stats-evidence.md</code>). Every claim on this page is sourced.
+  </div>
+</Base>

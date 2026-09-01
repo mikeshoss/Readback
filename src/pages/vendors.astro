@@ -1,0 +1,108 @@
+---
+import Base from '../layouts/Base.astro';
+
+const vendors = [
+  {
+    name: 'Flock Safety', where: 'US only — zero Canadian police contracts',
+    caps: ['Plate reads', 'Vehicle fingerprint (make, colour, stickers, damage)', 'Gunshot detection (Raven)', '"Human distress" audio', 'Drones dispatched to hits', 'Nova people-lookup platform'],
+    sharing: 'TALON nationwide lookup — ~5,000 agencies search each other\'s data. HOAs and retailers pipe private cameras to police.',
+    retention: '30 days default (paid 5-year option)',
+    flags: 'ICE side-door searches; abortion-related search across 83,000 cameras; 50+ security vulnerabilities; congressional inquiry; 50+ cities cancelled since 2025.',
+  },
+  {
+    name: 'Axon (Fusus)', where: 'Toronto (in-car), York Region, Denver',
+    caps: ['Plate reads (Fleet 3: 4K, 3 lanes)', 'Vehicle attribute search', 'Fixed Outpost + streetlight Lightpost', 'Fusus: real-time crime centre ingesting private camera registries'],
+    sharing: 'Department-by-department agreements; NCIC hotlists include ICE\'s immigration violator file.',
+    retention: 'Customer-set — no vendor limit. Axon default 30 days; Toronto sets 7.',
+    flags: '2019 "no face matching" ethics commitment vs. 2025 bodycam facial-recognition field tests (Edmonton). Retention and permissions are admin settings.',
+  },
+  {
+    name: 'Genetec AutoVu', where: 'Canada\'s most common vendor (Montreal-based) — Brampton, UBC',
+    caps: ['Plate reads (SharpV fixed, SharpZ3 in-car)', 'Vehicle type/colour/speed/direction', 'Partial and no-plate search'],
+    sharing: 'Agency-controlled only — no vendor-run national pool. Canadian cloud hosting available.',
+    retention: 'Customer-controlled',
+    flags: 'The structural opposite of Flock: customers own their data, no cross-agency search network by default.',
+  },
+  {
+    name: 'Motorola (Vigilant + DRN)', where: 'US-wide',
+    caps: ['Plate reads', 'Attribute + plain-language AI search', 'Portfolio includes BriefCam facial recognition (separate product)'],
+    sharing: 'LEARN-NVLS: 500+ agencies, 1.5B police reads + 5B+ commercial scans from repo fleets — sold to police and insurers.',
+    retention: 'Agency-set; indefinite allowed (NYPD: 5 years)',
+    flags: 'ICE query access via $6.8M Thomson Reuters contract. The commercial-collection outlier.',
+  },
+  {
+    name: 'Neology (PIPS)', where: 'BC provincial program (RCMP-run)',
+    caps: ['Plate reads', 'AI vehicle classification incl. plateless vehicles'],
+    sharing: 'Hotlists from ICBC + CPIC, generated daily.',
+    retention: 'BC: non-hit reads deleted at end of officer\'s shift — strictest in Canada',
+    flags: 'Shows what the technology looks like under strong rules.',
+  },
+  {
+    name: 'Leonardo ELSAG', where: 'US agencies',
+    caps: ['Plate reads (in-car, fixed, covert)', 'SignalTrace: tracks Bluetooth/Wi-Fi from phones, watches, vehicles alongside plates'],
+    sharing: 'Agency-controlled (EOC back office)',
+    retention: 'Agency-set',
+    flags: 'SignalTrace is the outlier: your devices, not just your plate.',
+  },
+  {
+    name: 'Perceptics', where: 'The border — CBP and CBSA crossings',
+    caps: ['Border-grade plate reads', 'Driver imaging at primary inspection lanes'],
+    sharing: 'Federal border infrastructure',
+    retention: 'Government-set',
+    flags: '2019: copied CBP plate images + ~184,000 traveler face photos to its own network without authorization; got hacked; data hit the dark web. CBSA investigated.',
+  },
+  {
+    name: 'SoundThinking (PlateRanger)', where: 'US agencies',
+    caps: ['Plate reads (Rekor-powered)', 'Native ShotSpotter gunshot-detection integration', 'CrimeTracer person-records search'],
+    sharing: 'SafetySmart platform integrations',
+    retention: 'Not published',
+    flags: 'Chicago dropped its ~$49M ShotSpotter contract in 2024; ~70% of covered residents were Black or Latino.',
+  },
+];
+---
+<Base title="Vendors">
+  <h1>What each platform can actually do</h1>
+  <p class="lede">
+    "It reads licence plates" is never the whole answer. The differences that matter:
+    what else it captures, who can search it, and whether the safeguards are rules or settings.
+  </p>
+
+  <div class="note">
+    <strong>The structural issue no vendor advertises:</strong> any platform syncing FBI NCIC
+    hotlists (Flock, Axon, Vigilant, ELSAG) automatically ingests ICE's Immigration Violator
+    File — populated solely by ICE, including administrative warrants no judge ever signed.
+    A local plate alert can be an immigration screen whether the local police chose that or not.
+  </div>
+
+  {vendors.map((v) => (
+    <section class="vendor">
+      <h2>{v.name}</h2>
+      <p class="where">{v.where}</p>
+      <div class="vgrid">
+        <div>
+          <h4>Capabilities</h4>
+          <ul>{v.caps.map((c) => <li>{c}</li>)}</ul>
+        </div>
+        <div>
+          <h4>Data sharing</h4>
+          <p>{v.sharing}</p>
+          <h4>Retention</h4>
+          <p>{v.retention}</p>
+        </div>
+      </div>
+      <p class="flags">⚠ {v.flags}</p>
+    </section>
+  ))}
+
+  <style>
+    .vendor { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.25rem; margin-top: 1rem; }
+    .vendor h2 { margin: 0 0 0.1rem; }
+    .where { color: var(--toll); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .vgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .vgrid h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.25rem; }
+    .vgrid ul { margin: 0; padding-left: 1.1rem; font-size: 0.86rem; }
+    .vgrid p { font-size: 0.86rem; color: var(--text); margin-bottom: 0.6rem; }
+    .flags { margin-top: 0.7rem; font-size: 0.84rem; color: var(--fleet); }
+    @media (max-width: 640px) { .vgrid { grid-template-columns: 1fr; } }
+  </style>
+</Base>

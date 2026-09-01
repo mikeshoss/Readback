@@ -1,0 +1,233 @@
+---
+import Base from '../layouts/Base.astro';
+import fleetsData from '../data/fleets.json';
+const fleets = fleetsData.fleets;
+---
+<Base title="Map" fullBleed>
+  <div class="map-shell">
+    <aside class="panel">
+      <h1>Who's scanning your plate?</h1>
+      <p class="sub">
+        Every dot is a mapped automated licence plate reader in Canada. Most scanning
+        isn't dots at all — it's police fleets. Toggle layers below.
+      </p>
+      <div class="layers" id="layers">
+        <label class="layer on" data-layer="police_alpr">
+          <input type="checkbox" checked />
+          <span class="swatch police"></span>
+          <span class="name">Police surveillance ALPR <em id="count-police"></em></span>
+          <span class="why">Generalized scanning of everyday movement. What this site is about.</span>
+        </label>
+        <label class="layer" data-layer="fleet">
+          <input type="checkbox" checked />
+          <span class="swatch fleet"></span>
+          <span class="name">Mobile fleets <em>{fleets.length} services</em></span>
+          <span class="why">Vehicle-mounted ALPR — the majority of Canadian scanning capacity. Circles sized by fleet; no fixed location exists.</span>
+        </label>
+        <label class="layer" data-layer="toll">
+          <input type="checkbox" />
+          <span class="swatch toll"></span>
+          <span class="name">Toll / paid service <em id="count-toll"></em></span>
+          <span class="why">407 ETR and toll gantries. You entered a paid service billed by plate — scanning is the product. Off by default: it's not the same thing.</span>
+        </label>
+        <label class="layer" data-layer="border">
+          <input type="checkbox" />
+          <span class="swatch border"></span>
+          <span class="name">Border crossings <em id="count-border"></em></span>
+          <span class="why">Every land crossing runs plate readers (CBSA / US CBP). A defined checkpoint, not ambient surveillance. Included for completeness.</span>
+        </label>
+      </div>
+      <div class="thesis">
+        Consent and context matter — a toll you pay and a border you cross are not the
+        same as a dragnet on your commute. Every safeguard on these systems is a
+        setting. <a href="/regions">See how the settings differ →</a>
+      </div>
+      <div class="attr">Data © OpenStreetMap contributors (ODbL) · <span id="generated"></span></div>
+    </aside>
+    <div id="map"></div>
+  </div>
+
+  <script>
+    import maplibregl from 'maplibre-gl';
+    import 'maplibre-gl/dist/maplibre-gl.css';
+    import fleetsData from '../data/fleets.json';
+
+    const CAT_COLORS: Record<string, string> = {
+      police_alpr: '#ff5a5f',
+      toll: '#4da3ff',
+      border: '#b07aff',
+    };
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: {
+          osm: {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '© OpenStreetMap contributors',
+          },
+        },
+        layers: [
+          { id: 'bg', type: 'background', paint: { 'background-color': '#101418' } },
+          { id: 'osm', type: 'raster', source: 'osm', paint: { 'raster-opacity': 0.55, 'raster-saturation': -0.6 } },
+        ],
+      },
+      center: [-79.6, 43.9],
+      zoom: 8,
+      attributionControl: false,
+    });
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+    map.addControl(new maplibregl.AttributionControl({ compact: true }));
+
+    map.on('load', async () => {
+      const res = await fetch('/data/cameras.json');
+      const data = await res.json();
+
+      const gen = document.getElementById('generated');
+      if (gen) gen.textContent = 'updated ' + new Date(data.generated).toLocaleDateString();
+      const setCount = (id: string, n: number | undefined) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = n ? `${n.toLocaleString()} mapped` : '0 mapped';
+      };
+      setCount('count-police', data.counts.police_alpr);
+      setCount('count-toll', data.counts.toll);
+      setCount('count-border', data.counts.border);
+
+      const fc = (cat: string) => ({
+        type: 'FeatureCollection' as const,
+        features: data.cameras
+          .filter((c: any) => c.category === cat)
+          .map((c: any) => ({
+            type: 'Feature' as const,
+            geometry: { type: 'Point' as const, coordinates: [c.lon, c.lat] },
+            properties: c,
+          })),
+      });
+
+      for (const cat of ['toll', 'border', 'police_alpr']) {
+        map.addSource(cat, { type: 'geojson', data: fc(cat) });
+        map.addLayer({
+          id: cat,
+          type: 'circle',
+          source: cat,
+          layout: { visibility: cat === 'police_alpr' ? 'visible' : 'none' },
+          paint: {
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 10, 5, 14, 8],
+            'circle-color': CAT_COLORS[cat],
+            'circle-opacity': 0.85,
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#101418',
+          },
+        });
+        map.on('click', cat, (e) => {
+          const p: any = e.features?.[0]?.properties ?? {};
+          const rows = [
+            p.operator ? `<div><b>Operator:</b> ${p.operator}</div>` : '',
+            p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}</div>` : '',
+            p.zone ? `<div><b>Zone:</b> ${p.zone}</div>` : '',
+            p.tollMethod ? `<div><b>Toll method:</b> ${p.tollMethod}</div>` : '',
+            `<div class="pop-cat">${p.category === 'police_alpr' ? 'Police surveillance ALPR' : p.category === 'toll' ? 'Toll gantry — paid service' : 'Border crossing checkpoint'}</div>`,
+          ].join('');
+          new maplibregl.Popup({ closeButton: false })
+            .setLngLat((e.features![0].geometry as any).coordinates)
+            .setHTML(`<div class="pop">${rows}</div>`)
+            .addTo(map);
+        });
+        map.on('mouseenter', cat, () => (map.getCanvas().style.cursor = 'pointer'));
+        map.on('mouseleave', cat, () => (map.getCanvas().style.cursor = ''));
+      }
+
+      // Mobile fleet layer — circles sized by fleet, placed at service HQ.
+      const fleetFc = {
+        type: 'FeatureCollection' as const,
+        features: fleetsData.fleets.map((f: any) => ({
+          type: 'Feature' as const,
+          geometry: { type: 'Point' as const, coordinates: [f.lon, f.lat] },
+          properties: f,
+        })),
+      };
+      map.addSource('fleet', { type: 'geojson', data: fleetFc });
+      map.addLayer({
+        id: 'fleet',
+        type: 'circle',
+        source: 'fleet',
+        paint: {
+          'circle-radius': ['+', 10, ['sqrt', ['coalesce', ['get', 'vehicles'], 100]]],
+          'circle-color': '#ffb54d',
+          'circle-opacity': 0.18,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffb54d',
+        },
+      });
+      map.on('click', 'fleet', (e) => {
+        const f: any = e.features?.[0]?.properties ?? {};
+        new maplibregl.Popup({ closeButton: false })
+          .setLngLat((e.features![0].geometry as any).coordinates)
+          .setHTML(
+            `<div class="pop"><b>${f.service}</b><div>${f.vehiclesLabel}</div><div>${f.detail}</div>` +
+            `<div><b>Reads kept:</b> ${f.retentionReads} · <b>Hits:</b> ${f.retentionHits}</div></div>`
+          )
+          .addTo(map);
+      });
+      map.on('mouseenter', 'fleet', () => (map.getCanvas().style.cursor = 'pointer'));
+      map.on('mouseleave', 'fleet', () => (map.getCanvas().style.cursor = ''));
+
+      document.querySelectorAll<HTMLLabelElement>('#layers .layer').forEach((label) => {
+        const layer = label.dataset.layer!;
+        const box = label.querySelector('input')!;
+        box.addEventListener('change', () => {
+          map.setLayoutProperty(layer, 'visibility', box.checked ? 'visible' : 'none');
+          label.classList.toggle('on', box.checked);
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .map-shell { display: flex; flex: 1; min-height: 0; width: 100%; }
+    #map { flex: 1; min-height: 0; }
+    .panel {
+      width: 22.5rem; max-width: 45vw; overflow-y: auto;
+      background: var(--panel); border-right: 1px solid var(--line);
+      padding: 1.25rem; display: flex; flex-direction: column; gap: 0.9rem;
+    }
+    .panel h1 { font-size: 1.35rem; }
+    .panel .sub { color: var(--muted); font-size: 0.88rem; }
+    .layers { display: flex; flex-direction: column; gap: 0.5rem; }
+    .layer {
+      display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 0.5rem;
+      background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px;
+      padding: 0.6rem 0.7rem; cursor: pointer;
+    }
+    .layer .why { grid-column: 1 / -1; color: var(--muted); font-size: 0.76rem; }
+    .layer .name { font-weight: 600; font-size: 0.88rem; }
+    .layer .name em { font-style: normal; color: var(--muted); font-weight: 400; font-size: 0.78rem; }
+    .swatch { width: 12px; height: 12px; border-radius: 50%; }
+    .swatch.police { background: var(--police); }
+    .swatch.toll { background: var(--toll); }
+    .swatch.border { background: var(--border-cat); }
+    .swatch.fleet { background: var(--fleet); }
+    .thesis {
+      font-size: 0.84rem; color: var(--muted);
+      border-left: 3px solid var(--accent); padding: 0.5rem 0.8rem;
+      background: var(--panel-2); border-radius: 6px;
+    }
+    .thesis a { color: var(--text); }
+    .attr { color: var(--muted); font-size: 0.72rem; margin-top: auto; }
+    :global(.maplibregl-popup-content) {
+      background: var(--panel-2) !important; color: var(--text) !important; border-radius: 8px !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important; font-size: 0.8rem; max-width: 240px;
+      padding: 0.7rem 0.85rem !important;
+    }
+    :global(.maplibregl-popup-tip) { border-top-color: var(--panel-2) !important; border-bottom-color: var(--panel-2) !important; }
+    :global(.pop) { display: flex; flex-direction: column; gap: 0.2rem; }
+    :global(.pop-cat) { color: var(--muted); margin-top: 0.3rem; }
+    @media (max-width: 720px) {
+      .map-shell { flex-direction: column; }
+      .panel { width: 100%; max-width: none; max-height: 45vh; border-right: none; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</Base>
