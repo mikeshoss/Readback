@@ -4,7 +4,7 @@
     {
       "name": "alprmap-dev",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["astro", "dev", "--port", "4321"],
+      "runtimeArgs": ["astro", "dev", "--port", "4321", "--host"],
       "port": 4321
     }
   ]

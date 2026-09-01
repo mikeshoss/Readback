@@ -39,10 +39,17 @@ const vendors = [
   },
   {
     name: 'Leonardo ELSAG', where: 'US agencies',
-    caps: ['Plate reads (in-car, fixed, covert)', 'SignalTrace: tracks Bluetooth/Wi-Fi from phones, watches, vehicles alongside plates'],
+    caps: ['Plate reads (in-car, fixed, covert)', 'SignalTrace: "electronic fingerprints" from phones, AirPods, smartwatches, car head units — with or without a plate read'],
     sharing: 'Agency-controlled (EOC back office)',
     retention: 'Agency-set',
-    flags: 'SignalTrace is the outlier: your devices, not just your plate.',
+    flags: 'SignalTrace (announced Aug 2026, marketed as "EOC Plus" since 2024) pairs device signals with plate records. No confirmed paying customers yet — see "The antenna problem" above.',
+  },
+  {
+    name: 'Jenoptik', where: 'UK national ANPR; US border counties',
+    caps: ['Plate reads (Vector, fixed + trailers)', 'TraffiCatch: captures Bluetooth device addresses from phones, earbuds, and car systems and merges them with the plate read'],
+    sharing: 'Feeds the UK\'s state-run National ANPR Service; US border deployments via DHS grants',
+    retention: 'Agency/national policy',
+    flags: 'TraffiCatch has been deployed since ~2019 in Texas border counties (Webb, Val Verde) on DHS Operation Stonegarden and Operation Lone Star money — the first documented plate+device tracking in the field.',
   },
   {
     name: 'Perceptics', where: 'The border — CBP and CBSA crossings',
@@ -74,6 +81,33 @@ const vendors = [
     A local plate alert can be an immigration screen whether the local police chose that or not.
   </div>
 
+  <section class="antenna">
+    <h2>⚠ The antenna problem: it stopped being "just plates"</h2>
+    <p>
+      Two ALPR vendors now sell plate readers that also capture the wireless signals inside
+      your car. <strong>Jenoptik's TraffiCatch</strong> — deployed in Texas border counties since
+      ~2019 on DHS grant money — detects Bluetooth addresses from phones, earbuds, and car
+      systems and merges them with the plate read. <strong>Leonardo's SignalTrace</strong>
+      (announced 2026) markets "electronic fingerprints": identifying "groups of consumer
+      electronic devices that routinely travel together," with or without a readable plate.
+      Your phone randomizes its identifiers; your earbuds, smartwatch, car head unit, and
+      tire-pressure sensors mostly don't — and the <em>combination</em> of devices you carry
+      is a signature even when each one behaves.
+    </p>
+    <p>
+      The sharper fact: on most modern ALPR hardware, <strong>the radio is already installed</strong>.
+      Flock's Falcon contains an active Wi-Fi + Bluetooth module (18,000+ of its own hotspots
+      are visible on public wardriving databases); Motorola's L6Q and Axon's Outpost ship with
+      radios for setup and pairing. None of them sniff today — but for those platforms,
+      device tracking is a software update plus a legal decision, not a hardware purchase.
+      Genetec's fixed cameras are the exception: no Wi-Fi or Bluetooth radios identified.
+    </p>
+    <p>
+      And no retention statute on the <a href="/regions">Regions page</a> mentions device
+      signals. Every rule ever written about this technology regulates the plate.
+    </p>
+  </section>
+
   {vendors.map((v) => (
     <section class="vendor">
       <h2>{v.name}</h2>
@@ -103,6 +137,13 @@ const vendors = [
     .vgrid ul { margin: 0; padding-left: 1.1rem; font-size: 0.86rem; }
     .vgrid p { font-size: 0.86rem; color: var(--text); margin-bottom: 0.6rem; }
     .flags { margin-top: 0.7rem; font-size: 0.84rem; color: var(--fleet); }
+    .antenna {
+      background: var(--panel); border: 1px solid var(--police); border-radius: 10px;
+      padding: 1.1rem 1.25rem; margin-top: 1.5rem;
+    }
+    .antenna h2 { margin: 0 0 0.5rem; color: var(--police); }
+    .antenna p { font-size: 0.9rem; color: var(--text); margin-bottom: 0.6rem; }
+    .antenna a { color: var(--toll); }
     @media (max-width: 640px) { .vgrid { grid-template-columns: 1fr; } }
   </style>
 </Base>
