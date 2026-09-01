@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import foi from '../data/foi.json';
+
+const STATUS_LABELS: Record<string, string> = {
+  drafted: 'Drafted',
+  sent: 'Sent — awaiting response',
+  acknowledged: 'Acknowledged',
+  extended: 'Deadline extended',
+  refused: 'Refused — appealing',
+  appealed: 'Under appeal at IPC',
+  answered: 'Answered',
+};
+const STATUS_CLASS: Record<string, string> = {
+  drafted: 's-drafted', sent: 's-sent', acknowledged: 's-sent', extended: 's-warn',
+  refused: 's-bad', appealed: 's-warn', answered: 's-good',
+};
+const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' }) : null;
+---
+<Base title="FOI tracker">
+  <h1>The paper trail: our freedom-of-information requests</h1>
+  <p class="lede">
+    Crowdsourced maps show where cameras are. Only the institutions themselves can show the
+    settings — retention periods, sharing agreements, audit reports, and the analysis behind
+    their claims. So we ask, formally, under MFIPPA (Ontario's municipal freedom-of-information
+    law: $5, any person may file, 30-day response deadline). Every request we send is published
+    here in full — what we asked, when, and what came back.
+  </p>
+  <div class="note">
+    <strong>Take these for your region.</strong> These letters are free to copy and adapt for
+    any police service — that's why they're public. Change the institution and the local
+    details, include the $5 fee, and send it. If you file one, tell us and we'll track it here.
+  </div>
+
+  <div class="tracker">
+    {foi.requests.map((r) => (
+      <article class="req">
+        <header>
+          <div>
+            <h3>{r.institution}</h3>
+            <div class="region">{r.region}</div>
+          </div>
+          <div class="status-wrap">
+            <span class={`status ${STATUS_CLASS[r.status]}`}>{STATUS_LABELS[r.status]}</span>
+            {r.dateSent && <div class="dates">Sent {fmt(r.dateSent)}{r.dateDue ? ` · due ${fmt(r.dateDue)}` : ''}</div>}
+          </div>
+        </header>
+        {r.outcome && <p class="outcome">{r.outcome}</p>}
+        <details>
+          <summary>Read the full request ({r.items.length} items)</summary>
+          <div class="letter">
+            <p class="pre">{foi.preamble}</p>
+            <p><strong>I request the following records:</strong></p>
+            <ol>
+              {r.items.map((item) => <li>{item}</li>)}
+            </ol>
+            <p class="pre">{foi.closing}</p>
+          </div>
+        </details>
+      </article>
+    ))}
+  </div>
+
+  <h2>Why these five?</h2>
+  <p class="lede">
+    Toronto runs the largest fleet program in the country and is expanding into AI. Peel and
+    Toronto are the retention contrast (24 hours vs 7 days, same technology). York made a
+    specific crime-reduction claim — we've asked for the analysis behind it. Waterloo just went
+    live on provincial money. And Halton has said nothing at all — which is exactly why it gets
+    a request.
+  </p>
+
+  <style>
+    .tracker { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.2rem; }
+    .req { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.2rem; }
+    .req header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+    .req h3 { font-size: 1.05rem; }
+    .region { color: var(--muted); font-size: 0.8rem; }
+    .status { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.76rem; font-weight: 600; }
+    .status-wrap { text-align: right; }
+    .dates { color: var(--muted); font-size: 0.74rem; margin-top: 0.25rem; }
+    .s-drafted { background: rgba(154,167,180,0.15); color: var(--muted); }
+    .s-sent { background: rgba(77,163,255,0.15); color: var(--toll); }
+    .s-warn { background: rgba(255,181,77,0.15); color: var(--fleet); }
+    .s-bad { background: rgba(255,90,95,0.15); color: var(--police); }
+    .s-good { background: rgba(88,214,163,0.18); color: #58d6a3; }
+    .outcome { margin-top: 0.6rem; font-size: 0.88rem; }
+    details { margin-top: 0.7rem; }
+    summary { cursor: pointer; color: var(--toll); font-size: 0.86rem; }
+    .letter { margin-top: 0.8rem; border-left: 3px solid var(--line); padding-left: 1rem; font-size: 0.86rem; }
+    .letter .pre { white-space: pre-line; color: var(--muted); margin-bottom: 0.7rem; }
+    .letter ol { padding-left: 1.2rem; }
+    .letter li { margin-bottom: 0.55rem; }
+  </style>
+</Base>
