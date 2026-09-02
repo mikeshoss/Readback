@@ -152,3 +152,61 @@ ISED cert for Canadian enforcement use (not verified).
 ### Gaps (not findings)
 - Outpost imaging resolution/IR; exact LTE module inside SharpV-LTE and
   CR-H2; ISED REL entry for Fleet 3 dual-view camera S00947C.
+
+## Motorola-Vigilant / ELSAG / Neology cluster (fourth agent, same date)
+
+### Structural finding [CERT]
+Almost no ALPR camera in this group carries its own FCC/ISED cert. Pattern:
+(a) wired PoE cameras with no radios (ReaperHD, ELSAG cameras); (b) hosts
+with pre-certified modules needing no host cert (L6Q — Part 15 SDoC per
+manual); (c) cellular in a separate COTS router box (ELSAG Street Sentry).
+Only two vendor radio certs exist across all three: ELSAG VTFADM3 (2009)
+and Neology 2AKNFP500FAW (2021).
+
+### Motorola / Vigilant
+- **L6Q**: LTE (microSIM) + 802.11ac + BT5 LE + **embedded radar trigger**
+  (to 100 mph; frequency undisclosed); 2.1MP starlight, 850nm pulsed IR;
+  solar 45W/12Ah or 12VDC/120VAC; ~20,000 scans per charge; IP67. No host
+  FCC ID [CERT: no L6Q or Motorola LPR filing exists].
+- **ReaperHD**: zero radios — PoE+ only; dual-lens IR+colour, 60 img/s,
+  capture to 150 mph; GPS antenna connects to the in-car VLP processor,
+  not the camera. Vigilant Solutions never held any FCC authorization.
+
+### Leonardo ELSAG
+- **Only FCC cert in company history: VTFADM3** — 2009, 802.11b/g Wi-Fi AP
+  in the ADM3 trunk processor (grantee "Remington Elsag"). Cameras
+  radio-free (1280x1024, IR, reads to 150 mph closing).
+- **Street Sentry**: solar pole unit; "cellular connectivity in a
+  weatherproof utility box" = separate COTS router with its own cert.
+- **Covert line** (own catalog): pole cameras disguised as weathered
+  utility boxes, toolboxes, cargo carriers; radar/message-board trailers.
+- **SignalTrace/EOC Plus**: receive-only — "captures device frequencies
+  emitted into the air": phones, BT wearables, RFID tags/key fobs,
+  tire-pressure sensors, infotainment/hotspots. As a passive receiver it
+  needs NO transmitter authorization → no filing exists → **the
+  device-signal harvester is legally invisible to radio certification.**
+
+### Neology
+- **neoForce**: integrated 4G/5G + GPS per vendor page; PoE; 4-lane edge
+  AI. No own FCC/ISED cert (module-based) [CERT-negative].
+- **P500 IRIS (P520/P525)**: FCC **2AKNFP500FAW** (granted 2021-05-05) —
+  variant with internal 4G modem + Wi-Fi ("configure from the street") +
+  optional GPS; 5MP IR + 5MP colour, motorized 12–50mm, 28-LED pulsed
+  illuminator, 48VDC, IP67.
+- **ISED Canada: Neology's only listed products are 3 RFID toll readers**
+  (company 23567) — no LPR camera. BC's provincial ALPR camera vendor has
+  no LPR camera in Canada's radio registry; connectivity rides module
+  certs.
+- Trivia [CERT]: the only "license plate"-described radio device in
+  Canada's REL is a consumer backup camera (Winplus).
+
+### Cluster-complete meta-conclusions (all four clusters now in)
+1. Radio-stack vendors: **Flock, Axon Outpost, Motorola L6Q, Neology
+   P500-FAW variant** (LTE+Wi-Fi±BT). Wired-silent: **Genetec, Axis,
+   Dahua, Verkada current, Jenoptik camera, ELSAG cameras, ReaperHD**.
+2. Certification is a weak lens for the scariest capability: passive
+   receivers (SignalTrace) and receive-only GPS need no cert at all —
+   absence of filings ≠ absence of capability for RECEIVERS, while for
+   transmitters absence IS evidence. State this precisely on the site.
+3. Canada's radio registry contains almost none of this equipment — 
+   module-level certs make whole product lines invisible to ISED search.

@@ -37,17 +37,17 @@
       "notes": "General-purpose IP cameras running plate-reading analytics."
     },
     "Neology": {
-      "radios": "neoForce: unconfirmed; legacy PIPS TS-500 offered optional Wi-Fi, Bluetooth and internal modem",
-      "radiosSummary": "Radio loadout unconfirmed (legacy PIPS units offered optional Wi-Fi/BT/modem)",
-      "confidence": "partial (legacy PIPS docs; neoForce datasheet not public)",
-      "formFactor": "Fixed + in-car (PIPS heritage)",
-      "notes": "BC provincial program vendor; BC deletes non-hit reads at end of shift."
+      "radios": "neoForce: integrated 4G/5G + GPS per vendor page (no own FCC/ISED cert — module-based). Predecessor P500 IRIS: FCC ID 2AKNFP500FAW (2021) covers a variant with internal 4G modem + Wi-Fi ('configure from the street') + optional GPS.",
+      "radiosSummary": "Cellular + GPS per vendor specs; P500 variant adds Wi-Fi (FCC-certified)",
+      "confidence": "confirmed [CERT/DATASHEET]: P500 grant 2AKNFP500FAW; neoForce vendor datasheet; ISED REL lists only 3 Neology RFID toll readers for Canada — no LPR camera",
+      "formFactor": "Fixed multi-lane (neoForce: 4-lane, edge AI, PoE; P500: 5MP dual-sensor, 28-LED pulsed IR)",
+      "notes": "BC provincial program vendor; BC deletes non-hit reads at end of shift. No Neology LPR camera appears in Canada's radio-equipment registry — connectivity rides module certs."
     },
     "Motorola Solutions": {
-      "radios": "L6Q: LTE + Wi-Fi + Bluetooth + GPS",
-      "radiosSummary": "Cellular, Wi-Fi and Bluetooth radios onboard (L6Q)",
-      "confidence": "vendor spec page",
-      "formFactor": "Quick-deploy portable (L6Q), fixed (ReaperHD), in-car",
+      "radios": "L6Q: LTE + Wi-Fi 802.11ac + Bluetooth 5 LE + embedded radar trigger (speed/direction to 100 mph) — all via pre-certified modules, no host FCC ID (Part 15 SDoC per manual). ReaperHD (in-car/fixed): ZERO radios — pure PoE+ camera; GPS and comms live in the vehicle systems.",
+      "radiosSummary": "Portable L6Q: cellular, Wi-Fi, Bluetooth and radar onboard. In-car ReaperHD: no radios — wired PoE",
+      "confidence": "confirmed [CERT/DATASHEET]: FCC has no Motorola LPR camera filings; Vigilant never held any FCC authorization; L6Q manual shows Part 15 SDoC (module-based); ReaperHD datasheet PoE-only",
+      "formFactor": "Quick-deploy solar/pole (L6Q, IP67, ~20,000 scans per battery charge), in-car dual-lens (ReaperHD, capture to 150 mph), fixed packages",
       "notes": "Vigilant/DRN parent — the commercial-collection outlier in the US."
     },
     "Dahua": {
@@ -65,11 +65,11 @@
       "notes": "2021 breach exposed ~150,000 customer camera feeds. Separate CR63-E 'remote' line has LTE."
     },
     "Leonardo ELSAG": {
-      "radios": "Plate readers: wireless alarm broadcast (~0.5 mi); SignalTrace sensor adds Wi-Fi/BT/RF capture by design",
-      "radiosSummary": "Vendor of SignalTrace — device-signal capture as a product",
-      "confidence": "vendor docs",
-      "formFactor": "In-car, fixed, covert pole/barrel, radar trailers",
-      "notes": "See the antenna problem — SignalTrace pairs device signals with plates."
+      "radios": "Cameras themselves: radio-free. Only FCC cert ELSAG ever held is a 2009 2.4GHz Wi-Fi AP in the in-car trunk processor (VTFADM3). Street Sentry solar units use an off-the-shelf cellular router in a separate utility box. SignalTrace/EOC Plus: RECEIVE-ONLY sensor harvesting Wi-Fi, Bluetooth and RFID identifiers (needs no transmitter cert — hence no filing).",
+      "radiosSummary": "Cameras radio-free; SignalTrace is the receive-only device-signal harvester — legally invisible to radio certification",
+      "confidence": "confirmed [CERT]: FCC applicant 'elsag' = exactly 1 record (VTFADM3, 2009); ISED = 0 results; SignalTrace absence-of-filing consistent with passive receiver",
+      "formFactor": "In-car (MPH900), fixed (bridges/gantries), Street Sentry solar pole, covert units disguised as utility boxes/toolboxes/cargo carriers, radar trailers",
+      "notes": "See the antenna problem — SignalTrace pairs device signals with plates. Covert-disguise product line is documented in ELSAG's own catalog."
     },
     "Bosch": {
       "radios": "Unconfirmed",
