@@ -68,3 +68,43 @@ all of the above ──monthly──> snapshots.jsonl ──> /trends charts
 3. "New this week" panel on map + recent-camera styling
 4. Lane 2 monitors (grants RSS first — trivial; then board agendas)
 5. Lane 4 snapshots + /trends page
+
+---
+
+## Implemented: weekly refresh (2026-09-02)
+
+`.github/workflows/refresh-data.yml` runs the pipeline on a schedule and
+on demand.
+
+**Schedule:** Mondays 09:00 UTC (~5am ET).
+
+**Manual republish:** GitHub → **Actions** → *Refresh camera data* →
+**Run workflow**. Works from the GitHub mobile app too, so a republish is
+available from anywhere. The button offers a `force` checkbox that
+bypasses the sanity gate — only tick it when a large change is genuinely
+real.
+
+**What a run does:** query Overpass (3 mirrors, 3 attempts, 30s backoff)
+→ classify → sanity-gate → diff against committed data → `npm run build`
+to prove the site still compiles → commit only if data actually changed →
+push, which triggers the Cloudflare Pages deploy.
+
+**Sanity gate** (in `scripts/build-cameras.mjs`, runs before any write):
+- Hard floor: refuse anything under 500 features (Canada sits ~1,357).
+- Shrink guard: refuse a drop of more than 10% vs the committed data.
+- Both bypassable with `--force`. Tested against truncated fixtures: a
+  20-feature response and a 19% shrink are both refused with exit 1 and
+  the existing data left untouched.
+
+The point of the gate: a *partial* Overpass response is structurally
+valid but quietly wrong. Committing one would wipe the map and emit a
+bogus "N cameras removed" event. A loud failure is always better.
+
+**Staleness is visible on the site.** The map panel prints "camera data
+updated N days ago" and, past 10 days, adds "refresh may be stalled" in
+amber — so a silently broken cron shows up to visitors rather than
+letting the site quietly serve stale claims.
+
+**"New this week"** reads `changes.json` and lists newly mapped cameras
+(clicking one flies the map to it). Labelled *newly mapped, not
+necessarily newly installed* — the honest framing.

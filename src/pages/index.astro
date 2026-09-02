@@ -49,6 +49,11 @@ const fleets = fleetsData.fleets;
         same as a dragnet on your commute. Every safeguard on these systems is a
         setting. <a href="/rules">See how the settings differ →</a>
       </div>
+      <div class="whatsnew" id="whatsnew" hidden>
+        <h2>New this week</h2>
+        <p class="wn-note">Newly <em>mapped</em>, not necessarily newly installed — these appeared in OpenStreetMap since the last refresh.</p>
+        <ul id="wn-list"></ul>
+      </div>
       <div class="attr">Data © OpenStreetMap contributors (ODbL) · <span id="generated"></span></div>
     </aside>
     <div id="map"></div>
@@ -83,8 +88,18 @@ const fleets = fleetsData.fleets;
       const res = await fetch('/data/cameras.json');
       const data = await res.json();
 
+      // Data age, stated plainly. If the weekly refresh silently breaks,
+      // the site should say so rather than quietly serve stale claims.
       const gen = document.getElementById('generated');
-      if (gen) gen.textContent = 'updated ' + new Date(data.generated).toLocaleDateString();
+      if (gen) {
+        const days = Math.floor((Date.now() - new Date(data.generated).getTime()) / 86400000);
+        const when = days < 1 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`;
+        gen.textContent = `camera data updated ${when}`;
+        if (days > 10) {
+          gen.textContent += ' — refresh may be stalled';
+          gen.classList.add('stale');
+        }
+      }
       const setCount = (id: string, n: number | undefined) => {
         const el = document.getElementById(id);
         if (el) el.textContent = n ? `${n.toLocaleString()} mapped` : '0 mapped';
@@ -96,6 +111,30 @@ const fleets = fleetsData.fleets;
       setCount('count-toll', data.counts.toll);
       setCount('count-border', data.counts.border);
       setCount('count-private', data.counts.private);
+
+      // "New this week" — driven by the diff the weekly refresh writes.
+      try {
+        const ch = await (await fetch('/data/changes.json')).json();
+        const latest = ch.history?.[0];
+        const withinAWeek = latest && (Date.now() - new Date(latest.date).getTime()) < 8 * 86400000;
+        if (withinAWeek && latest.added?.length) {
+          const list = document.getElementById('wn-list')!;
+          list.innerHTML = latest.added.slice(0, 8).map((c: any) => {
+            const who = c.operator ?? 'operator not recorded';
+            const kind = c.category === 'police_alpr' ? 'Police ALPR' : c.category === 'toll' ? 'Toll' : c.category === 'border' ? 'Border' : 'Private';
+            return `<li><a href="#" data-lat="${c.lat}" data-lon="${c.lon}">${kind} — ${who}</a></li>`;
+          }).join('');
+          const extra = latest.added.length - 8;
+          if (extra > 0) list.innerHTML += `<li class="wn-more">+${extra} more</li>`;
+          list.querySelectorAll<HTMLAnchorElement>('a[data-lat]').forEach((a) => {
+            a.addEventListener('click', (e) => {
+              e.preventDefault();
+              map.flyTo({ center: [Number(a.dataset.lon), Number(a.dataset.lat)], zoom: 16 });
+            });
+          });
+          document.getElementById('whatsnew')!.hidden = false;
+        }
+      } catch { /* no change feed yet — panel stays hidden */ }
 
       const fc = (cat: string) => ({
         type: 'FeatureCollection' as const,
@@ -288,6 +327,15 @@ const fleets = fleetsData.fleets;
     }
     .thesis a { color: var(--text); }
     .attr { color: var(--muted); font-size: 0.72rem; margin-top: auto; }
+    :global(#generated.stale) { color: var(--fleet); }
+    .whatsnew { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 0.7rem 0.8rem; }
+    .whatsnew h2 { font-size: 0.85rem; margin: 0 0 0.2rem; }
+    .wn-note { color: var(--muted); font-size: 0.72rem; margin-bottom: 0.4rem; }
+    .whatsnew ul { list-style: none; padding: 0; margin: 0; font-size: 0.78rem; }
+    .whatsnew li { padding: 0.12rem 0; }
+    .whatsnew a { color: var(--toll); text-decoration: none; }
+    .whatsnew a:hover { text-decoration: underline; }
+    .wn-more { color: var(--muted); }
     :global(.maplibregl-popup-content) {
       background: var(--panel-2) !important; color: var(--text) !important; border-radius: 8px !important;
       box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important; font-size: 0.8rem; max-width: 240px;

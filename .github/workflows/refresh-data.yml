@@ -1,0 +1,72 @@
+name: Refresh camera data
+
+# Weekly, plus a "Run workflow" button in the GitHub UI (Actions tab →
+# this workflow → Run workflow). That button also works from the GitHub
+# mobile app, so a republish is available from anywhere.
+on:
+  schedule:
+    - cron: '0 9 * * 1'      # Mondays 09:00 UTC (~5am ET)
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Bypass the sanity gate (only if a big change is genuinely real)'
+        type: boolean
+        default: false
+
+# Never let two refreshes race each other into the same commit.
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # to commit refreshed data
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Query Overpass and classify
+        run: node scripts/build-cameras.mjs ${{ inputs.force && '--force' || '' }}
+
+      - name: Verify the site still builds with the new data
+        run: npm run build
+
+      - name: Commit if the data actually changed
+        id: commit
+        run: |
+          if git diff --quiet -- public/data/; then
+            echo "No change in camera data — nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          ADDED=$(node -e "const h=require('./public/data/changes.json').history[0]; console.log(h?h.added.length:0)")
+          REMOVED=$(node -e "const h=require('./public/data/changes.json').history[0]; console.log(h?h.removedIds.length:0)")
+          git config user.name  "readback-bot"
+          git config user.email "actions@github.com"
+          git add public/data/
+          git commit -m "Data refresh: +${ADDED} newly mapped, -${REMOVED} removed
+
+          Automated weekly Overpass pull. Camera data © OpenStreetMap
+          contributors (ODbL)."
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        run: |
+          {
+            echo "### Camera data refresh"
+            if [ "${{ steps.commit.outputs.changed }}" = "true" ]; then
+              echo "Committed — Cloudflare Pages will deploy automatically."
+            else
+              echo "No changes this week. Nothing committed."
+            fi
+            node -e "const d=require('./public/data/cameras.json');console.log('\nTotals: '+JSON.stringify(d.counts));"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -9,7 +9,21 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const OVERPASS = 'https://overpass-api.de/api/interpreter';
+
+// Mirrors are tried in order. Overpass instances time out and rate-limit
+// routinely; one failing is normal, all failing is a real outage.
+const OVERPASS_MIRRORS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass.osm.ch/api/interpreter',
+];
+
+// Sanity gate. A partial Overpass response can be structurally valid but
+// wildly incomplete — committing it would wipe the map and emit a bogus
+// "N cameras removed" change event. Refuse anything that looks truncated.
+const MIN_PLAUSIBLE_TOTAL = 500;   // hard floor; Canada sits ~1,357
+const MAX_SHRINK_RATIO = 0.10;     // abort if >10% smaller than last run
+const force = process.argv.includes('--force');
 
 const QUERY = `[out:json][timeout:300];
 area["ISO3166-1"="CA"][admin_level=2]->.ca;
@@ -45,16 +59,40 @@ if (localFile) {
   ({ elements } = JSON.parse(await import('node:fs/promises').then((fs) => fs.readFile(localFile, 'utf8'))));
 } else {
   console.log('Querying Overpass (Canada: ALPR + toll gantries + border controls)…');
-  const res = await fetch(OVERPASS, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': 'ALPRMap/0.1 (surveillance transparency project)',
-    },
-    body: 'data=' + encodeURIComponent(QUERY),
-  });
-  if (!res.ok) throw new Error(`Overpass ${res.status}`);
-  ({ elements } = await res.json());
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  let lastErr;
+  outer: for (let attempt = 1; attempt <= 3; attempt++) {
+    for (const endpoint of OVERPASS_MIRRORS) {
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Readback/1.0 (readback.ca; ALPR transparency project)',
+          },
+          body: 'data=' + encodeURIComponent(QUERY),
+          signal: AbortSignal.timeout(300_000),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        ({ elements } = await res.json());
+        console.log(`  ✓ ${endpoint} returned ${elements.length} elements`);
+        break outer;
+      } catch (err) {
+        lastErr = err;
+        console.warn(`  ✗ ${endpoint}: ${err.message}`);
+      }
+    }
+    if (attempt < 3) {
+      const backoff = attempt * 30;
+      console.log(`  all mirrors failed; retrying in ${backoff}s…`);
+      await sleep(backoff * 1000);
+    }
+  }
+  if (!elements) {
+    console.error(`FAILED: every Overpass mirror failed. Last error: ${lastErr?.message}`);
+    console.error('Nothing written — existing data left untouched.');
+    process.exit(1);
+  }
 }
 
 // Normalize messy crowdsourced manufacturer tags to canonical names so the
@@ -153,6 +191,29 @@ mkdirSync(dirname(dest), { recursive: true });
 // change feed ("new cameras coming online" — strictly, newly *mapped*).
 const { readFileSync, existsSync } = await import('node:fs');
 const changesDest = join(root, 'public/data/changes.json');
+
+// --- Sanity gate -----------------------------------------------------------
+// Runs BEFORE anything is written. A truncated Overpass response is the
+// dangerous failure: structurally valid, quietly wrong. Refuse it.
+if (cameras.length < MIN_PLAUSIBLE_TOTAL && !force) {
+  console.error(`REFUSED: only ${cameras.length} features returned (floor is ${MIN_PLAUSIBLE_TOTAL}).`);
+  console.error('This looks like a truncated Overpass response. Nothing written.');
+  console.error('If this shrink is real, re-run with --force.');
+  process.exit(1);
+}
+if (existsSync(dest)) {
+  const prevTotal = JSON.parse(readFileSync(dest, 'utf8')).cameras.length;
+  const shrink = (prevTotal - cameras.length) / prevTotal;
+  if (shrink > MAX_SHRINK_RATIO && !force) {
+    console.error(`REFUSED: dataset shrank ${(shrink * 100).toFixed(1)}% (${prevTotal} → ${cameras.length}).`);
+    console.error('Above the 10% guard rail — treating as a bad response. Nothing written.');
+    console.error('If this drop is real, re-run with --force.');
+    process.exit(1);
+  }
+}
+if (force) console.warn('--force: sanity gate bypassed.');
+// ---------------------------------------------------------------------------
+
 if (existsSync(dest)) {
   const prev = JSON.parse(readFileSync(dest, 'utf8'));
   const prevIds = new Set(prev.cameras.map((c) => c.id));
