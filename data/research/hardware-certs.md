@@ -1,0 +1,110 @@
+# ALPR hardware certification research (FCC/ISED)
+
+Agent report, 2026-09-01. Cluster: Axis / Dahua / Verkada / Jenoptik
+(delivered; other clusters — Flock, Genetec/Axon, Motorola/ELSAG/Neology —
+partially covered by earlier device-signal research in
+device-signal-tracking.md). Confidence flags: [CERT] = certification filing,
+[DATASHEET] = vendor doc, [INFERENCE] = reasoned from absence.
+
+## Meta-finding
+
+Every dedicated fixed ALPR camera in this cluster — Axis P1445-LE-3 and
+Q1700-LE, Dahua ITC415/ITC215, Verkada CB62-TE, Jenoptik VECTOR — is
+**wired-only with no transmit radios**, authorized under FCC Part 15
+Subpart B (unintentional radiator, Supplier's Declaration of Conformity).
+**No FCC ID exists for them by design** — the absence of a grant is itself
+the evidence of no radio. Contrast: Flock/Motorola/Axon units carry
+intentional-radiator grants (see device-signal-tracking.md).
+
+## Axis Communications
+- **P1445-LE-3** (License Plate Verifier Kit): PoE 802.3af/at, 1080p,
+  OptimizedIR 850nm, 2.8–8.5mm varifocal, single-lane ≤30 km/h, IP66/67.
+  Approvals: FCC 15B Class A + ICES-003 only. No radios.
+  https://www.axis.com/dam/public/49/8c/0b/datasheet-axis-p1445-le-3-license-plate-verifier-kit-en-US-443262.pdf
+- **Q1700-LE**: highway-grade (130 km/h edge / 250 km/h with server), 8x
+  zoom 18–137mm, PoE or 20–28VDC. Same 15B-only approvals. Discontinued →
+  Q1800-LE. No radios.
+
+## Dahua
+- **ITC415 (DHI-ITC415-PW6M-IZ-BH/-GN)**: 4MP, 2.7–12mm motorized, 6 IR
+  illuminators, GbE RJ-45 + 2x RS-485 + RS-232 + alarm I/O (barrier
+  control), PoE+/12VDC/24VAC, <20W, IP67, capture 3–6m ≤30 km/h. Cert row:
+  "CE, FCC / RoHS" only — no wireless anywhere. No FCC ID found for the
+  ITC line (15B SDoC). Datasheet also claims recognition of "features of
+  driver and front-seat passenger."
+- **ITC215**: 2MP sibling, same wired-only profile.
+
+## Verkada
+- "LPC" series **does not exist** — LPR runs on telephoto Bullets:
+  CB61-TE (gen-1, discontinued), CB52-TE (5MP) / CB62-TE (4K) current.
+- **CB62-TE**: 4K, Ambarella CV22S edge LPR up to 80 mph / 3 lanes,
+  8–20mm, IR 50m, PoE+ (RJ-45 10/100 only). No radios; not in FCC grantee
+  2AWUU's 31 grants → 15B SDoC. https://docs.verkada.com/docs/video-security-cb62-te-datasheet.pdf
+- **CB61-TE (gen-1) — THE EXCEPTION**: contains Wi-Fi hardware, **disabled
+  by default; enabling requires org-level action via Verkada Support**;
+  camera must first onboard over Ethernet. Verkada help doc lists Wi-Fi
+  enable for "CD61, CD61-E, CB61-E, CB61-TE, CM61, D50W."
+  https://help.verkada.com/verkada-cameras/configuration/camera-network-settings/enable-wi-fi-on-select-verkada-cameras
+  → The "dormant radio, vendor-enabled" pattern in the wild.
+- **Outdoor Remote Deployment Camera — FCC ID 2AWUU68B66001 [CERT],
+  granted 2026-01-12**: BLE (2402–2480 MHz DTS) + LTE + IR modules per
+  filing schematics. Verkada's only FCC-certified camera; their direction
+  for off-grid (ALPR-style solar pole) deployments. https://fccid.io/2AWUU68B66001
+
+## Jenoptik
+- Lineup: VECTOR/VECTOR2/VECTOR3 (fixed ALPR), VECTOR P2P (average speed),
+  VECTOR SR (speed/red-light + ALPR), GardoVia. ("P2X" not a real model.)
+- **VECTOR camera**: dual 3.2MP (mono ANPR + colour context), integrated
+  IR, built-in **GPS (receive-only — no FCC ID needed)**, compass,
+  accelerometer; wired LAN backhaul; trailer variant 2x330W solar. No
+  transmit radios in the camera.
+- **The transmitter is the companion radar**: 24 GHz K-band 3D tracking
+  radar, FCC grantee **QJJ** (JENOPTIK Robot GmbH) — QJJ-590113 (2024),
+  QJJ-590112 (2014), QJJ-590106/104 (2010). https://fccid.io/QJJ
+- Border deployments pair VECTOR trailers with TraffiCatch (see
+  device-signal-tracking.md).
+
+## ISED caveat
+The ISED Radio Equipment List (sms-sgs.ic.gc.ca) is a POST-form app not
+reachable by static fetch — Canadian cert numbers unconfirmed. By design,
+15B wired cameras have no REL entry; Jenoptik's 24 GHz radar would need an
+ISED cert for Canadian enforcement use (not verified).
+
+## Site implications
+1. Radio presence cleaves the market: **networked-surveillance vendors
+   (Flock, Motorola L6Q, Axon) ship transmit radios; traditional fixed-
+   camera vendors (Axis, Dahua, Verkada current, Genetec SharpV, Jenoptik
+   camera) are wired-silent.** The sniff-capability worry concentrates
+   exactly where the cross-agency-network worry already lives.
+2. Verkada CB61-TE documents the "dormant radio a vendor can switch on"
+   pattern as fact, not hypothetical.
+3. "No FCC ID" is not "unverified" — for 15B devices it's the proof.
+
+## Flock Safety cluster (second surviving agent, same date)
+
+- **Flock has no device-level certifications anywhere.** FCC grantee code
+  2BKG8 (Flock Group, registered Aug 2024): ZERO applications filed.
+  ISED Radio Equipment List live query for "Flock": no entries. Every
+  device ships on third-party module certs. https://fccid.io/2BKG8
+- **Falcon V1**: NimbeLink/Sierra HL7648 LTE (FCC N7NHL7648) + LiteOn
+  WCBN3510A Wi-Fi/BT (FCC PPQ-WCBN3510A; ISED 4491A-WCBN3510A) + Taoglas
+  GPS; solar + 205Wh Li-ion; Lantronix Snapdragon SOM; microphones present.
+- **Falcon V2 (current)**: Sierra RC7611 LTE Cat 4 (FCC N7NRC76B; ISED
+  2417C-RC76B; Aug 2026 grant update adds satellite "supplemental coverage
+  from space") + same LiteOn Wi-Fi/BT; Android Things 8.1 on Open-Q 624A.
+  Generations distinguishable by modem FCC ID on the label.
+- **"Falcon V3": no cert trail exists** — treat as V2 platform.
+- **Unlabeled radar**: reports (footnote4a.org + vuln assessments) that
+  newer Falcons carry an external radar module with NO FCC ID label and no
+  filing — potential Part 15 labeling gap. [reported, not cert-verified]
+- **Sparrow**: same platform/BOM as Falcon (GainSec treats as one family).
+- **Condor PTZ**: only Flock model with no verifiable radio BOM; LTE per
+  vendor; one unverified lead suggests a rebadged Shenzhen OEM PTZ
+  (FCC 2A4SK-HSP01H2Z20). ~60 Condors found streaming openly (Jan 2026).
+- **Raven**: not a camera — acoustic sensor. ESP32-WROOM-32D (FCC
+  2AC7Z-ESPWROOM32D): Wi-Fi 2.4GHz + BT/BLE, BLE-beaconing
+  (fingerprintable), LTE fallback, Syntiant NDP120 ML audio processor,
+  no secure boot / no flash encryption.
+- Canadian angle: module-level ISED certs (4491A-, 2417C-) likely cover
+  legality, but Flock-the-company has certified nothing in Canada — of a
+  piece with zero Canadian police contracts.

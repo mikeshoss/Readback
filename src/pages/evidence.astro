@@ -10,6 +10,7 @@ const studies = [
   { s: 'Shjarback & Sarkos (2025) — Atlantic City fixed network', f: 'No reduction in violent crime; reductions in shootings, auto theft, property crime', v: 'mixed' },
 ];
 
+// Sources rendered at page bottom; master list in data/research/crime-stats-evidence.md
 const hitRates = [
   { j: 'LAPD (CA State Auditor)', r: '~0.1% — 99.9% of stored images matched nothing' },
   { j: 'Central Marin, CA', r: '0.02% of ~4M plates' },
@@ -86,8 +87,30 @@ const hitRates = [
     stale hotlists, no plate-state verification — not one vendor's bug.
   </p>
 
-  <div class="note">
-    Full citations with links live in the project research base
-    (<code>data/research/crime-stats-evidence.md</code>). Every claim on this page is sourced.
-  </div>
+  <h2>Sources</h2>
+  <details class="sources">
+    <summary>Every claim on this page, cited — expand for the full list</summary>
+    <ul>
+      <li>Lum, Merola, Willis &amp; Cave — LPR patrols in crime hot spots: <a href="https://nij.ojp.gov/library/publications/license-plate-reader-lpr-police-patrols-crime-hot-spots-experimental" rel="noopener">NIJ summary</a> · <a href="https://link.springer.com/article/10.1007/s11292-011-9133-9" rel="noopener">J. Experimental Criminology (2011)</a></li>
+      <li>Taylor, Koper &amp; Woods (2012), Mesa AZ randomized experiment: <a href="https://doi.org/10.1177/0734016811425858" rel="noopener">Criminal Justice Review</a></li>
+      <li>Koper, Lum et al. (2021), LPR patrols and deterrence: <a href="https://link.springer.com/article/10.1007/s11292-021-09473-y" rel="noopener">J. Experimental Criminology</a></li>
+      <li>RAND (2014), RR-467: <a href="https://www.rand.org/pubs/research_reports/RR467.html" rel="noopener">License Plate Readers for Law Enforcement</a></li>
+      <li>Mourtgos &amp; Adams (2025), 216-agency Flock event study: <a href="https://www.crimrxiv.com/pub/zleg04q3/release/1" rel="noopener">CrimRxiv working paper</a></li>
+      <li>Shjarback &amp; Sarkos (2025), Atlantic City: <a href="https://www.tandfonline.com/doi/full/10.1080/24751979.2025.2473363" rel="noopener">Justice Evaluation Journal</a></li>
+      <li>Welsh &amp; Farrington, CCTV meta-analysis: <a href="https://dx.doi.org/10.4073/csr.2008.17" rel="noopener">Campbell Systematic Review</a></li>
+      <li>Piza, Welsh, Farrington &amp; Thomas (2019), 40-year CCTV meta-analysis: <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/1745-9133.12419" rel="noopener">Criminology &amp; Public Policy</a></li>
+      <li>Flock's "70%" claim examined: <a href="https://www.forbes.com/sites/cyrusfarivar/2024/02/29/flock-ai-cameras-may-not-reduce-crime/" rel="noopener">Forbes (2024)</a> · "10% of US crime" study: <a href="https://www.404media.co/researcher-who-oversaw-flock-surveillance-study-now-has-concerns-about-it/" rel="noopener">404 Media</a> · <a href="https://www.flocksafety.com/blog/how-effective-is-flock" rel="noopener">Flock's Impact Census</a></li>
+      <li>Hit rates &amp; compliance: <a href="https://information.auditor.ca.gov/reports/2019-118/summary.html" rel="noopener">California State Auditor, Report 2019-118</a></li>
+      <li>Wrongful stops: <a href="https://ij.org/dozens-of-innocent-motorists-have-been-pulled-over-detained-at-gunpoint-or-jailed-due-to-ai-license-plate-camera-errors/" rel="noopener">Institute for Justice</a> · <a href="https://www.eff.org/deeplinks/2024/11/human-toll-alpr-errors" rel="noopener">EFF, "The Human Toll of ALPR Errors"</a></li>
+      <li>Toronto Police ALPR retention &amp; program: <a href="https://www.tps.ca/use-technology/automatic-licence-plate-reader/" rel="noopener">TPS official page</a></li>
+    </ul>
+  </details>
+
+  <style>
+    .sources { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem 1.1rem; }
+    .sources summary { cursor: pointer; color: var(--toll); font-size: 0.9rem; }
+    .sources ul { margin: 0.8rem 0 0; padding-left: 1.2rem; font-size: 0.84rem; }
+    .sources li { margin-bottom: 0.5rem; }
+    .sources a { color: var(--toll); }
+  </style>
 </Base>

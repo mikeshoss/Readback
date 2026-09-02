@@ -2,9 +2,9 @@
   "note": "Hardware capability profiles keyed by canonical manufacturer (see MFR_ALIASES in scripts/build-cameras.mjs). 'profile' is shown on map popups when the model isn't tagged (almost always). Sources: FCC ID filings, ISED REL, teardowns, vendor datasheets — see data/research/. Seed data; expanded from certification-database research.",
   "manufacturers": {
     "Flock Safety": {
-      "radios": "LTE + Wi-Fi (802.11ac) + Bluetooth 4.2 LE + GPS",
-      "radiosSummary": "Cellular, Wi-Fi and Bluetooth radios onboard — active hotspot; sniff-capable hardware",
-      "confidence": "confirmed (teardown + FCC ID WCBN3510A, N7NRC76B)",
+      "radios": "LTE Cat 4 (Sierra RC7611, FCC N7NRC76B) + Wi-Fi 5 (802.11ac) + Bluetooth 4.2 LE (LiteOn WCBN3510A, FCC PPQ-WCBN3510A) + GNSS. Newer units reportedly add an UNLABELED radar module with no FCC ID. Raven audio sensor: ESP32 Wi-Fi/BLE (beaconing) + LTE fallback.",
+      "radiosSummary": "Full radio stack — LTE, Wi-Fi, Bluetooth, GNSS; active hotspot; sniff-capable hardware",
+      "confidence": "confirmed (teardowns + module FCC IDs). Flock's own FCC grantee (2BKG8) has zero filings; no ISED Radio Equipment List entries found for Flock (live query) — devices ride third-party module certs.",
       "formFactor": "Fixed, solar/battery, pole-mount",
       "notes": "No Canadian police contracts; Canadian pins are likely HOA/private or mistagged."
     },
@@ -30,9 +30,9 @@
       "notes": "These are the 407's toll cameras, operator-tagged as MTO. Not police surveillance."
     },
     "Axis Communications": {
-      "radios": "None — PoE wired only (typical for Axis fixed cameras)",
-      "radiosSummary": "No radios — wired PoE camera",
-      "confidence": "datasheet (verify per model)",
+      "radios": "None — PoE/DC wired only (P1445-LE-3, Q1700-LE: FCC Part 15B unintentional radiators; no FCC ID exists by design)",
+      "radiosSummary": "No radios — wired PoE; certified as an unintentional radiator",
+      "confidence": "confirmed (Axis datasheets: approvals list only FCC 15B/ICES-003 class marks)",
       "formFactor": "Fixed IP camera, ALPR via analytics software",
       "notes": "General-purpose IP cameras running plate-reading analytics."
     },
@@ -51,16 +51,16 @@
       "notes": "Vigilant/DRN parent — the commercial-collection outlier in the US."
     },
     "Dahua": {
-      "radios": "None — Ethernet RJ-45 only; PoE+/12VDC/24VAC power",
+      "radios": "None — Ethernet RJ-45 only (ITC415/ITC215 datasheets); PoE+/12VDC/24VAC; FCC Part 15B class marks, no FCC ID",
       "radiosSummary": "No radios — wired PoE. But vendor datasheet claims recognition of driver and front-seat passenger features",
       "confidence": "confirmed (Dahua DHI-ITC415-PW6M-IZ-BH datasheet, 2021)",
       "formFactor": "Fixed bullet, vertical pole mount, built-in IR",
       "notes": "PRC vendor; banned from US federal procurement (NDAA s.889), FCC equipment authorizations halted 2022; still sold in Canada. Datasheet: 'supports recognizing... features of driver and front-seat passenger.'"
     },
     "Verkada": {
-      "radios": "None on LPR-capable bullets (CB52-TE/CB62-TE etc.) — PoE wired; cloud-managed",
-      "radiosSummary": "No radios on LPR models — wired PoE, cloud-managed (footage leaves premises by design)",
-      "confidence": "vendor docs (Verkada LPR guide + power requirements)",
+      "radios": "Current CB52-TE/CB62-TE: PoE only. Gen-1 CB61-TE: contains a DORMANT Wi-Fi radio — disabled by default, enable requires Verkada Support at org level. New Outdoor Remote camera (FCC 2AWUU68B66001, Jan 2026): BLE + LTE.",
+      "radiosSummary": "Current LPR bullets are wired PoE — but gen-1 units carry a dormant support-enabled Wi-Fi radio, and the newest remote camera ships BLE + LTE",
+      "confidence": "confirmed (datasheets + FCC grantee 2AWUU records + Verkada help docs)",
       "formFactor": "Fixed bullet (telephoto/wide), LPR as cloud analytics",
       "notes": "2021 breach exposed ~150,000 customer camera feeds. Separate CR63-E 'remote' line has LTE."
     },
@@ -77,6 +77,13 @@
       "confidence": "pending",
       "formFactor": "Fixed IP camera",
       "notes": ""
+    },
+    "Jenoptik": {
+      "radios": "VECTOR camera: no transmit radios (GPS receive-only, wired LAN). Paired 24 GHz enforcement radar is the certified transmitter (FCC grantee QJJ, e.g. QJJ-590113).",
+      "radiosSummary": "Camera itself transmit-silent; the radar beside it is the certified RF device. Vendor of TraffiCatch device-signal capture (separate product)",
+      "confidence": "confirmed (datasheets + FCC grantee QJJ filings)",
+      "formFactor": "Fixed multi-lane (VECTOR/VECTOR2/3), average-speed P2P, trailer/portable; dual-sensor mono+colour",
+      "notes": "UK national ANPR mainstay; US border counties run VECTOR trailers with TraffiCatch — see the antenna problem."
     }
   }
 }
