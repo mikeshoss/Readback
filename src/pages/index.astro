@@ -175,13 +175,15 @@ const fleets = fleetsData.fleets;
             : ({ police_alpr: 'Police surveillance ALPR', toll: 'Toll camera — paid service', border: 'Border crossing checkpoint', private: 'Private/institutional ALPR' }[p.category as string] ?? p.category);
           const details = [
             hw ? `<div class="pop-hw"><b>Hardware</b> <span class="pop-dim">(${p.manufacturer}'s typical — model not recorded here)</span>: ${hw.radiosSummary}</div>` : '',
+            p.vendorDisputed ? `<div class="pop-dim">A mapper tagged this camera "Flock Safety," but Flock states it has no Canadian police contracts — "Flock" is often used generically for any pole-mounted ALPR. We can't validate the vendor; treat it as unconfirmed.</div>` : '',
             unverified ? `<div class="pop-dim">No operator is recorded on this map point — it could be police, private, or mistagged.</div>` : '',
+            p.rawOperator ? `<div class="pop-dim">Operator recorded in OpenStreetMap as "${p.rawOperator}" — standardized by Readback.</div>` : '',
             p.id ? `<div class="pop-src">Source of this pin: <a href="https://www.openstreetmap.org/node/${p.id}" rel="noopener">OpenStreetMap record ${p.id}</a> — crowd-maintained; anyone can inspect or correct it</div>` : '',
           ].filter(Boolean).join('');
           const rows = [
             p.photo ? `<img class="pop-photo" src="${p.photo}" alt="Community photo of this camera" loading="lazy" onerror="this.remove()" />` : '',
             p.operator ? `<div><b>Operator:</b> ${p.operator}</div>` : '',
-            p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}</div>` : '',
+            p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}${p.vendorDisputed ? ' <span class="pop-warn">(disputed — see ⓘ)</span>' : ''}</div>` : '',
             p.cameraType ? `<div><b>Type:</b> ${cap(p.cameraType)}</div>` : '',
             p.direction != null ? `<div><b>Facing:</b> ${['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(((p.direction % 360) + 360) % 360 / 22.5) % 16]} (${p.direction}°)</div>` : '',
             p.zone ? `<div><b>Zone:</b> ${cap(p.zone)}</div>` : '',
@@ -299,6 +301,7 @@ const fleets = fleetsData.fleets;
     :global(.pop-more summary:hover) { color: var(--text); }
     :global(.pop-more > div) { margin-top: 0.35rem; }
     :global(.pop-photo) { width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px; margin-bottom: 0.45rem; }
+    :global(.pop-warn) { color: var(--fleet); font-weight: 400; font-size: 0.74rem; }
     @media (max-width: 720px) {
       .map-shell { flex-direction: column; }
       #map { order: -1; flex: none; height: 52vh; min-height: 300px; }

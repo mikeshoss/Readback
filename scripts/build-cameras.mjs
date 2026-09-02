@@ -88,15 +88,40 @@ const normMfr = (raw) => {
   return MFR_ALIASES[raw.trim().toLowerCase()] ?? raw.trim();
 };
 
+// Operator names are free-text in OSM ("YRP", "York Region Police", three
+// spellings of CBSA). We are the standardization layer: canonical names on
+// the map, the raw tag preserved for provenance.
+const OP_ALIASES = {
+  'yrp': 'York Regional Police',
+  'york region police': 'York Regional Police',
+  'cbsa': 'Canada Border Services Agency',
+  'canadian border services agency': 'Canada Border Services Agency',
+  'tps': 'Toronto Police Service',
+  'opp': 'Ontario Provincial Police',
+};
+const normOp = (raw) => {
+  if (!raw) return null;
+  return OP_ALIASES[raw.trim().toLowerCase()] ?? raw.trim();
+};
+
+const POLICE_RE = /police|polizei|gendarmerie|rcmp|opp\b|sûreté/i;
+
 const cameras = elements.map((e) => {
   const t = e.tags || {};
+  const operator = normOp(t.operator || null);
+  const manufacturer = normMfr(t.manufacturer || t.brand || null);
   return {
     id: e.id,
     lat: e.lat,
     lon: e.lon,
     category: classify(t),
-    operator: t.operator || null,
-    manufacturer: normMfr(t.manufacturer || t.brand || null),
+    operator,
+    rawOperator: t.operator && operator !== t.operator.trim() ? t.operator.trim() : null,
+    // Flock states it has no Canadian police contracts; a crowd tag saying a
+    // Canadian police service runs Flock hardware is a disputed claim
+    // ("Flock" is often used generically for any pole ALPR).
+    vendorDisputed: manufacturer === 'Flock Safety' && !!operator && POLICE_RE.test(operator),
+    manufacturer,
     zone: t['surveillance:zone'] || null,
     cameraType: t['camera:type'] || null,
     // Community photo: direct image URL, or a Wikimedia Commons file
