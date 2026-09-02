@@ -1,6 +1,6 @@
 # Readback — session handoff (2026-09-01, end of day 1)
 
-One day: empty folder → readback.ca registered, site built, research base
+One day: empty folder → site built at readback.ofrecord.ca, research base
 assembled, 3 FOI requests filed. This file is the pick-up-where-we-left-off.
 
 ## What exists
@@ -46,8 +46,8 @@ diff feed. Basemap: OpenFreeMap (no key, production-safe).
   status updates (statuses: sent→acknowledged→extended/refused→answered).
 
 ## Open threads / next actions
-1. **Deploy**: Cloudflare Pages + readback.ca DNS + GitHub Action cron for
-   `npm run data`. Set up hello@readback.ca email routing (Cloudflare).
+1. **Deploy**: Cloudflare Pages + readback.ofrecord.ca DNS + GitHub Action cron for
+   `npm run data`. Set up themiltonrecord@gmail.com email routing (Cloudflare).
 2. **Launch plan**: docs/launch-plan.md — findings-led press strategy
    (CBC Tyler Cheese exclusive → 404 Media/EFF → Show HN). Claim-audit
    gate listed there must pass first (Toronto-Axon attribution, Brampton
