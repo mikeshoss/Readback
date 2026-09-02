@@ -75,6 +75,7 @@ const fleets = fleetsData.fleets;
       attributionControl: false,
     });
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+    (window as any)._map = map;
     map.addControl(new maplibregl.AttributionControl({ compact: true }));
 
     map.on('load', async () => {
@@ -106,7 +107,39 @@ const fleets = fleetsData.fleets;
           })),
       });
 
+      // Field-of-view wedge for cameras with a recorded direction: the
+      // bearing is the centre line, spread ±30° (60° cone), ~120m reach.
+      const wedge = (lat: number, lon: number, bearing: number) => {
+        const R = 120, half = 30, step = 6;
+        const pt = (az: number) => {
+          const rad = (az * Math.PI) / 180;
+          return [lon + (R * Math.sin(rad)) / (111320 * Math.cos((lat * Math.PI) / 180)), lat + (R * Math.cos(rad)) / 111320];
+        };
+        const ring = [[lon, lat]];
+        for (let a = bearing - half; a <= bearing + half; a += step) ring.push(pt(a));
+        ring.push([lon, lat]);
+        return ring;
+      };
+      const fovFc = (cat: string) => ({
+        type: 'FeatureCollection' as const,
+        features: data.cameras
+          .filter((c: any) => c.category === cat && c.direction != null)
+          .map((c: any) => ({
+            type: 'Feature' as const,
+            geometry: { type: 'Polygon' as const, coordinates: [wedge(c.lat, c.lon, c.direction)] },
+            properties: {},
+          })),
+      });
+
       for (const cat of ['toll', 'border', 'private', 'police_alpr']) {
+        map.addSource(`${cat}-fov`, { type: 'geojson', data: fovFc(cat) });
+        map.addLayer({
+          id: `${cat}-fov`,
+          type: 'fill',
+          source: `${cat}-fov`,
+          layout: { visibility: cat === 'police_alpr' ? 'visible' : 'none' },
+          paint: { 'fill-color': CAT_COLORS[cat], 'fill-opacity': 0.14 },
+        });
         map.addSource(cat, { type: 'geojson', data: fc(cat) });
         // Police layer honesty: a recorded operator renders solid; an
         // unrecorded one renders hollow — mapped, but unverified.
@@ -136,19 +169,26 @@ const fleets = fleetsData.fleets;
           // Honesty rules: OSM points rarely record the camera model, and an
           // unknown operator means the "police" categorization is unverified.
           const unverified = p.category === 'police_alpr' && !p.operator;
+          const cap = (s: string) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
           const catLabel = unverified
-            ? 'Unverified — mapped as ALPR, but no operator is recorded. Could be police, private, or mistagged.'
+            ? 'Unverified — no operator recorded'
             : ({ police_alpr: 'Police surveillance ALPR', toll: 'Toll camera — paid service', border: 'Border crossing checkpoint', private: 'Private/institutional ALPR' }[p.category as string] ?? p.category);
+          const details = [
+            hw ? `<div class="pop-hw"><b>Hardware</b> <span class="pop-dim">(${p.manufacturer}'s typical — model not recorded here)</span>: ${hw.radiosSummary}</div>` : '',
+            unverified ? `<div class="pop-dim">No operator is recorded on this map point — it could be police, private, or mistagged.</div>` : '',
+            p.id ? `<div class="pop-src">Source of this pin: <a href="https://www.openstreetmap.org/node/${p.id}" rel="noopener">OpenStreetMap record ${p.id}</a> — crowd-maintained; anyone can inspect or correct it</div>` : '',
+          ].filter(Boolean).join('');
           const rows = [
+            p.photo ? `<img class="pop-photo" src="${p.photo}" alt="Community photo of this camera" loading="lazy" onerror="this.remove()" />` : '',
             p.operator ? `<div><b>Operator:</b> ${p.operator}</div>` : '',
             p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}</div>` : '',
-            p.zone ? `<div><b>Zone:</b> ${String(p.zone).charAt(0).toUpperCase() + String(p.zone).slice(1)}</div>` : '',
+            p.cameraType ? `<div><b>Type:</b> ${cap(p.cameraType)}</div>` : '',
+            p.direction != null ? `<div><b>Facing:</b> ${['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(((p.direction % 360) + 360) % 360 / 22.5) % 16]} (${p.direction}°)</div>` : '',
+            p.zone ? `<div><b>Zone:</b> ${cap(p.zone)}</div>` : '',
             p.tollMethod ? `<div><b>Toll method:</b> ${p.tollMethod}</div>` : '',
-            hw ? `<div class="pop-hw"><b>Hardware</b> <span class="pop-dim">(${p.manufacturer}'s typical — model not recorded here)</span>: ${hw.radiosSummary}</div>` : '',
-            hw?.caution && unverified ? `<div class="pop-caution">⚠ ${hw.caution}</div>` : '',
             `<div class="pop-cat">${catLabel}</div>`,
             hw?.slug ? `<div><a class="pop-link" href="/tech/${hw.slug}">Full ${p.manufacturer} specs &amp; sources →</a></div>` : '',
-            p.id ? `<div class="pop-src">Source of this pin: <a href="https://www.openstreetmap.org/node/${p.id}" rel="noopener">OpenStreetMap record ${p.id}</a> — crowd-maintained; anyone can inspect or correct it</div>` : '',
+            details ? `<details class="pop-more"><summary>ⓘ details &amp; data source</summary>${details}</details>` : '',
           ].join('');
           new maplibregl.Popup({ closeButton: false })
             .setLngLat((e.features![0].geometry as any).coordinates)
@@ -198,7 +238,9 @@ const fleets = fleetsData.fleets;
         const layer = label.dataset.layer!;
         const box = label.querySelector('input')!;
         box.addEventListener('change', () => {
-          map.setLayoutProperty(layer, 'visibility', box.checked ? 'visible' : 'none');
+          const vis = box.checked ? 'visible' : 'none';
+          map.setLayoutProperty(layer, 'visibility', vis);
+          if (map.getLayer(`${layer}-fov`)) map.setLayoutProperty(`${layer}-fov`, 'visibility', vis);
           label.classList.toggle('on', box.checked);
         });
       });
@@ -250,8 +292,13 @@ const fleets = fleetsData.fleets;
     :global(.pop-dim) { color: var(--muted); font-weight: 400; font-size: 0.74rem; }
     :global(.pop-caution) { color: var(--police); margin-top: 0.25rem; font-size: 0.76rem; }
     :global(.pop-link) { color: var(--toll); margin-top: 0.3rem; display: inline-block; }
-    :global(.pop-src) { color: var(--muted); font-size: 0.72rem; margin-top: 0.35rem; border-top: 1px dashed var(--line); padding-top: 0.35rem; }
+    :global(.pop-src) { color: var(--muted); font-size: 0.72rem; margin-top: 0.35rem; }
     :global(.pop-src a) { color: var(--toll); }
+    :global(.pop-more) { margin-top: 0.4rem; border-top: 1px dashed var(--line); padding-top: 0.35rem; }
+    :global(.pop-more summary) { cursor: pointer; color: var(--muted); font-size: 0.74rem; }
+    :global(.pop-more summary:hover) { color: var(--text); }
+    :global(.pop-more > div) { margin-top: 0.35rem; }
+    :global(.pop-photo) { width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px; margin-bottom: 0.45rem; }
     @media (max-width: 720px) {
       .map-shell { flex-direction: column; }
       #map { order: -1; flex: none; height: 52vh; min-height: 300px; }

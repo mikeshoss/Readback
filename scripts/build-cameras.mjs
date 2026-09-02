@@ -98,6 +98,14 @@ const cameras = elements.map((e) => {
     operator: t.operator || null,
     manufacturer: normMfr(t.manufacturer || t.brand || null),
     zone: t['surveillance:zone'] || null,
+    cameraType: t['camera:type'] || null,
+    // Community photo: direct image URL, or a Wikimedia Commons file
+    // rendered via Special:FilePath (hotlink-safe thumbnail redirect).
+    photo: /^https?:\/\//.test(t.image || '')
+      ? t.image
+      : t.wikimedia_commons?.startsWith('File:')
+        ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(t.wikimedia_commons.slice(5))}?width=480`
+        : null,
     direction: t.direction ? Number(t.direction) || null : null,
     tollMethod: t.toll_method || null,
   };
