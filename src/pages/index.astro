@@ -15,7 +15,8 @@ const fleets = fleetsData.fleets;
         <label class="layer on" data-layer="police_alpr">
           <input type="checkbox" checked />
           <span class="swatch police"></span>
-          <span class="name">Police surveillance ALPR <em id="count-police"></em></span>
+          <span class="name">Police surveillance ALPR</span>
+          <span class="count-sub" id="count-police"></span>
           <span class="why">Generalized scanning of everyday movement. What this site is about.</span>
         </label>
         <label class="layer" data-layer="fleet">
@@ -91,7 +92,7 @@ const fleets = fleetsData.fleets;
       const policeAll = data.cameras.filter((c: any) => c.category === 'police_alpr');
       const policeKnown = policeAll.filter((c: any) => c.operator).length;
       const cp = document.getElementById('count-police');
-      if (cp) cp.textContent = `${policeKnown} with recorded operator · ${policeAll.length - policeKnown} unverified (hollow dots)`;
+      if (cp) cp.innerHTML = `<b>${policeKnown}</b> verified operator &nbsp;·&nbsp; <b>${policeAll.length - policeKnown}</b> unverified <span class="hollow-dot"></span>`;
       setCount('count-toll', data.counts.toll);
       setCount('count-border', data.counts.border);
       setCount('count-private', data.counts.private);
@@ -266,6 +267,12 @@ const fleets = fleetsData.fleets;
       padding: 0.6rem 0.7rem; cursor: pointer;
     }
     .layer .why { grid-column: 1 / -1; color: var(--muted); font-size: 0.76rem; }
+    .layer .count-sub { grid-column: 1 / -1; color: var(--muted); font-size: 0.76rem; }
+    .layer .count-sub b { color: var(--text); font-weight: 600; }
+    .hollow-dot {
+      display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+      border: 1.5px solid var(--police); vertical-align: -1px; margin-left: 2px;
+    }
     .layer .name { font-weight: 600; font-size: 0.88rem; }
     .layer .name em { font-style: normal; color: var(--muted); font-weight: 400; font-size: 0.78rem; }
     .swatch { width: 12px; height: 12px; border-radius: 50%; }
