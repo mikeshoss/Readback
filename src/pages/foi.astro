@@ -49,7 +49,7 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
         </header>
         {r.events && r.events.length > 0 && (
           <ol class="timeline-foi">
-            {r.events.map((e) => (
+            {[...r.events].reverse().map((e) => (
               <li>
                 <span class="tl-date">{fmt(e.date)}</span>
                 <span class="tl-label">{e.label}</span>
