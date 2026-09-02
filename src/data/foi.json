@@ -18,7 +18,15 @@
         "Any agreements, memoranda of understanding, or system configuration records governing the sharing of ALPR data with other police services or agencies, including whether any vendor cross-agency data-sharing features are enabled or disabled.",
         "Final audit or compliance reports concerning access to or searches of ALPR data, from January 1, 2024 to present.",
         "Records sufficient to identify which initiatives funded under the 'AI Operationalization' line of the 2026 operating/capital budget involve ALPR or licence-plate data."
-      ]
+      ],
+      "submission": {
+        "how": "No online portal — the only service without one. File in person at HQ (pay by debit/credit, no cheque needed) or by mail with a $5 cheque to 'Toronto Police Service'.",
+        "address": "Information Privacy Section, 4th Floor, 40 College Street, Toronto, ON M5G 2J3",
+        "portal": null,
+        "inPerson": "HQ main-floor lobby, 40 College St — 7:00 a.m.–4:30 p.m. Mon/Tue/Thu/Fri (closed Wed). Debit, Visa, Mastercard accepted in person.",
+        "phone": "416-808-7850",
+        "source": "https://www.tps.ca/services/freedom-information-request/"
+      }
     },
     {
       "id": "halton",
@@ -34,7 +42,15 @@
         "Any Privacy Impact Assessment prepared for ALPR or licence-plate-reading technology.",
         "Records showing the configured or approved retention periods for (a) non-hit plate reads and (b) hit records.",
         "Any agreements governing the sharing of ALPR data with other police services or agencies."
-      ]
+      ],
+      "submission": {
+        "how": "Online portal, pays by Visa/Mastercard — no cheque needed.",
+        "address": "Attn: Freedom of Information Unit, 2485 North Service Road West, Oakville, ON L6M 3H8",
+        "portal": "https://forms.haltonpolice.ca/Freedom-of-Information-Request-Form",
+        "inPerson": null,
+        "phone": "905-825-4777 ext. 5192",
+        "source": "https://www.haltonpolice.ca/en/about-us/freedom-of-information.aspx"
+      }
     },
     {
       "id": "peel",
@@ -51,7 +67,15 @@
         "Records showing the currently configured retention periods in the ALPR system for (a) non-matching plate reads, (b) matches/hits, and (c) associated audit logs — for example, a system configuration export or governance procedure stating the configured values.",
         "Any agreements or system configuration records governing the sharing of ALPR data with other police services or agencies.",
         "Final audit or compliance reports concerning access to or searches of ALPR data, from January 1, 2025 to present."
-      ]
+      ],
+      "submission": {
+        "how": "Online portal — no cheque needed if it takes payment (unverified; mail fallback is a $5 cheque to 'Peel Regional Police'). Note: use the Mississauga Rd address — the old Brampton HQ address still circulates.",
+        "address": "Information and Privacy Unit, 7150 Mississauga Road, Mississauga, ON L5N 8M5",
+        "portal": "https://peelpolice.onlinepolicecheck.ca?primessp=FOI",
+        "inPerson": null,
+        "phone": "905-453-2121 ext. 4263",
+        "source": "https://www.peelpolice.ca/en/services/information-and-privacy-requests.aspx"
+      }
     },
     {
       "id": "york",
@@ -68,7 +92,15 @@
         "The analysis, methodology, and underlying data supporting the public statement attributed to Deputy Chief Paulo Da Silva that areas within 1 km of a CCTV camera saw a crime reduction of 6% or more compared to 2024.",
         "The final Privacy Impact Assessment(s) for the camera/ALPR program.",
         "Any agreements governing the sharing of camera or ALPR data with other police services or agencies."
-      ]
+      ],
+      "submission": {
+        "how": "Online portal, pays by Visa/Mastercard — no cheque needed.",
+        "address": "Freedom of Information Unit, 47 Don Hillock Drive, Aurora, ON L4G 0S7",
+        "portal": "https://www.yrp.ca/freedom-information-request-form",
+        "inPerson": null,
+        "phone": "1-866-876-5423 ext. 6740",
+        "source": "https://www.yrp.ca/en/about/freedom-of-information.asp"
+      }
     },
     {
       "id": "waterloo",
@@ -84,7 +116,15 @@
         "Records showing the currently configured retention periods for (a) non-hit plate reads, (b) hit records, and (c) CCTV video.",
         "The funding agreement, terms, or conditions under which the program is funded through Ontario's Guns, Gangs and Violence Reduction Strategy, including any reporting obligations to the Province.",
         "Any agreements governing the sharing of camera or ALPR data with other police services or agencies."
-      ]
+      ],
+      "submission": {
+        "how": "Online form (Microsoft Forms, linked from the official site). Fee payment method unspecified — call to confirm before relying on it.",
+        "address": "Access to Information Unit, P.O. Box 3070, 200 Maple Grove Road, Cambridge, ON N3H 5M1",
+        "portal": "https://wrps.ca/en/about-us/freedom-of-information.aspx",
+        "inPerson": null,
+        "phone": null,
+        "source": "https://wrps.ca/en/about-us/freedom-of-information.aspx"
+      }
     }
   ]
 }

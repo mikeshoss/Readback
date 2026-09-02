@@ -46,6 +46,12 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
           </div>
         </header>
         {r.outcome && <p class="outcome">{r.outcome}</p>}
+        <div class="filing">
+          <span class="filing-how">{r.submission.how}</span>
+          {r.submission.portal && <a href={r.submission.portal} rel="noopener">File online →</a>}
+          <span class="filing-addr">Mail: {r.submission.address}</span>
+          {r.submission.phone && <span class="filing-addr">Phone: {r.submission.phone}</span>}
+        </div>
         <details>
           <summary>Read the full request ({r.items.length} items)</summary>
           <div class="letter">
@@ -85,6 +91,10 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
     .s-bad { background: rgba(255,90,95,0.15); color: var(--police); }
     .s-good { background: rgba(88,214,163,0.18); color: #58d6a3; }
     .outcome { margin-top: 0.6rem; font-size: 0.88rem; }
+    .filing { display: flex; flex-direction: column; gap: 0.15rem; margin-top: 0.6rem; font-size: 0.8rem; }
+    .filing-how { color: var(--text); }
+    .filing a { color: var(--toll); }
+    .filing-addr { color: var(--muted); }
     details { margin-top: 0.7rem; }
     summary { cursor: pointer; color: var(--toll); font-size: 0.86rem; }
     .letter { margin-top: 0.8rem; border-left: 3px solid var(--line); padding-left: 1rem; font-size: 0.86rem; }
