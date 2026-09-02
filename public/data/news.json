@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-09-02T19:46:57.854Z",
+  "lastChecked": "2026-09-02T20:41:11.408Z",
   "items": [
     {
       "title": "Texas and Florida Step Back from ALPRs",
@@ -8,6 +8,7 @@
       "summary": "div class= field field--name-body field--type-text-with-summary field--label-hidden div class= field__items div class= field__item even p span Within the last few days, two important state actions have dealt a big blow to automated license plate reader (ALPR) networks. This is just the latest proof of the growing tide of public opposition to mass surveillance. After /span a href= https://www.eff.o",
       "outlet": "EFF",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-09-02T17:31:31.000Z"
     },
@@ -18,6 +19,7 @@
       "summary": "div class= field field--name-body field--type-text-with-summary field--label-hidden div class= field__items div class= field__item even p span Automated license plate readers (ALPRs) build a searchable map of everywhere a driver goes, fed into databases that police, ICE, and private vendors can query after the fact. Networked across a city, ALPRs are purpose-built to track everyone regardless of s",
       "outlet": "EFF",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-08-26T17:44:34.000Z"
     },
@@ -28,8 +30,20 @@
       "summary": "ARLINGTON, Va.—As backlash grows against the warrantless use of automated license plate reader (ALPR) cameras throughout the country, local governments are increasingly deciding to end [ ] The post Institute for Justice Unveils New Database Tracking Cancelations of License Plate Reader Contracts appeared first on Institute for Justice .",
       "outlet": "Institute for Justice",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-08-26T12:09:38.000Z"
+    },
+    {
+      "title": "Licence plate readers have sparked outrage in the U.S. Now they’re being installed across Canada - Toronto Star",
+      "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxQeEFzTmZCcFU3eU1lMlZuaVZiR1VxSF9vOEJkWGxrd25ZYTctLU9JSjBrNnZqSEl1MnlSM0YxY3F6RE9HdEZPNWdEak5wUkl0QWsyWUtydVlTSGxuNVZib1VBRTk2cHI0bF80X1FPcmE0ejBXREhrR2ozOFlPSFVrNGU2RlVpaWUtMGxBR1hxRkNiM1ZEQVAtNnk2b1UwOF9ja3NLclV2RkY1NHRDSUt1S2s4R05GRGZzWXM0NEVLckV0NVRCRHVyamVESjFReTJyVG0tckl4T1lacVVsR2l0QnNyZW51YzRJbTZ3LWhRREtVU3BvTHA1SGx6TldvejB1SmtFa05Zcw?oc=5",
+      "date": "Thu, 20 Aug 2026 07:00:00 GMT",
+      "summary": "a href=\"https://news.google.com/rss/articles/CBMihwJBVV95cUxQeEFzTmZCcFU3eU1lMlZuaVZiR1VxSF9vOEJkWGxrd25ZYTctLU9JSjBrNnZqSEl1MnlSM0YxY3F6RE9HdEZPNWdEak5wUkl0QWsyWUtydVlTSGxuNVZib1VBRTk2cHI0bF80X1FPcmE0ejBXREhrR2ozOFlPSFVrNGU2RlVpaWUtMGxBR1hxRkNiM1ZEQVAtNnk2b1UwOF9ja3NLclV2RkY1NHRDSUt1S2s4R05GRGZzWXM0NEVLckV0NVRCRHVyamVESjFReTJyVG0tckl4T1lacVVsR2l0QnNyZW51YzRJbTZ3LWhRREtVU3BvTHA1SGx6TldvejB1SmtFa05",
+      "outlet": "Google News (Canada)",
+      "trust": "trusted",
+      "canadaOnly": true,
+      "canada": true,
+      "iso": "2026-08-20T07:00:00.000Z"
     },
     {
       "title": "Too Little, Too Late: Flock Admits Their Technology Needs Reforms",
@@ -38,6 +52,7 @@
       "summary": "div class= field field--name-body field--type-text-with-summary field--label-hidden div class= field__items div class= field__item even p span data-contrast= auto Flock Safety, the embattled vendor of mass surveillance technology, has rolled out a handful of new reforms intended to appease the justified nationwide anger that has seen /span a href= https://www.newsnationnow.com/business/tech/flock-",
       "outlet": "EFF",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-08-13T20:52:35.000Z"
     },
@@ -48,6 +63,7 @@
       "summary": "The Institute for Justice has cataloged more than 100 incidents of ALPR abuse, including romantic stalking, wrongful stops and detentions, non-law enforcement use, and other types of misconduct. The post The IJ Database of ALPR Abuse appeared first on Institute for Justice .",
       "outlet": "Institute for Justice",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-08-12T11:21:21.000Z"
     },
@@ -58,6 +74,7 @@
       "summary": "div class= field field--name-body field--type-text-with-summary field--label-hidden div class= field__items div class= field__item even p span Reversing course, Flock Safety—the surveillance technology vendor most known for its extensive network of /span a href= https://sls.eff.org/technologies/automated-license-plate-readers-alprs span automated license plate readers /span /a span — /span a href=",
       "outlet": "EFF",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-07-17T17:05:57.000Z"
     },
@@ -68,6 +85,7 @@
       "summary": "As the number of automated license plate readers (ALPRs) has skyrocketed nationwide, erroneous stops, detainments and arrests are becoming increasingly common. The post Dozens of Innocent Motorists Have Been Pulled Over, Detained at Gunpoint, or Jailed Due to AI License Plate Camera Errors appeared first on Institute for Justice .",
       "outlet": "Institute for Justice",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-07-01T12:11:02.000Z"
     },
@@ -78,6 +96,7 @@
       "summary": "This article was updated on August 3, 2026 Across the United States, communities are rethinking their use of Flock cameras and other automated license plate [ ] The post Police Have Reportedly Used License Plate Readers to Stalk Romantic Interests Dozens of Times in Recent Years appeared first on Institute for Justice .",
       "outlet": "Institute for Justice",
       "trust": "trusted",
+      "canadaOnly": false,
       "canada": false,
       "iso": "2026-04-27T16:52:36.000Z"
     }

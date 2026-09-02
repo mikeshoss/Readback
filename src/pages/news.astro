@@ -29,12 +29,34 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
     Flock contract.
   </p>
 
+  <div class="origin-note">
+    <strong>This is a Canadian site covering an international story.</strong> Canadian
+    items are marked 🇨🇦; everything else is marked 🌐 and is included because it shows
+    where Canadian deployments are heading — most ALPR policy, litigation and vendor
+    behaviour still originates in the US.
+    <span style="display:block;margin-top:0.4rem">
+      If the 🇨🇦 filter looks sparse, that is the finding rather than a fault: Canada has
+      no dedicated ALPR beat, no DeFlock-equivalent project and no active campaign, so
+      most domestic coverage is local police-blotter items about arrests — which this
+      feed deliberately filters out, since they are the police narrative rather than the
+      accountability story.
+    </span>
+  </div>
+
+  <div class="filter" id="region-filter">
+    <span class="filter-label">Show:</span>
+    <button type="button" data-region="all" class="on">All</button>
+    <button type="button" data-region="canada">🇨🇦 Canada</button>
+    <button type="button" data-region="international">🌐 International</button>
+    <span class="filter-count" id="filter-count"></span>
+  </div>
+
   <p class={`checked ${stale ? 'stale' : ''}`}>
     Feeds checked <strong>{checkedLabel}</strong>
     {stale && ' — automatic check may be stalled'}
     <span class="checked-note">
       · {feed.items.length} stories pulled automatically from EFF, 404 Media, the Institute
-      for Justice, The Record and IPC Ontario; the timeline below is hand-curated.
+      for Justice, The Record and Canada-scoped news searches; the timeline below is hand-curated.
     </span>
   </p>
 
@@ -43,9 +65,10 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
       <h2>Latest — automatically collected</h2>
       <div class="timeline">
         {feed.items.slice(0, 12).map((n: any) => (
-          <article class="story auto">
+          <article class="story auto" data-region={n.canada ? "canada" : "international"}>
             <div class="when">
-              {fmt(n.iso)} · {n.outlet}{n.canada && <span class="ca"> · Canada</span>}
+              <span class="flag">{n.canada ? '🇨🇦' : '🌐'}</span>
+              {fmt(n.iso)} · {n.outlet} · {n.canada ? 'Canada' : 'International'}
             </div>
             <h3><a href={n.url} rel="noopener">{n.title}</a></h3>
           </article>
@@ -57,15 +80,56 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
   <h2>The timeline — curated</h2>
   <div class="timeline">
     {curated.map((n: any) => (
-      <article class="story">
-        <div class="when">{n.d} {n.where}</div>
+      <article class="story" data-region={n.where === "🇨🇦" ? "canada" : "international"}>
+        <div class="when"><span class="flag">{n.where}</span>{n.d}</div>
         <h3><a href={n.url} rel="noopener">{n.t}</a></h3>
         <p>{n.s} <span class="via">— {n.via}</span></p>
       </article>
     ))}
   </div>
 
+  <script>
+    // Progressive enhancement: everything is visible without JS.
+    const bar = document.getElementById('region-filter');
+    const countEl = document.getElementById('filter-count');
+    const stories = () => Array.from(document.querySelectorAll<HTMLElement>('.story'));
+    const apply = (region: string) => {
+      let shown = 0;
+      for (const el of stories()) {
+        const match = region === 'all' || el.dataset.region === region;
+        el.style.display = match ? '' : 'none';
+        if (match) shown++;
+      }
+      // Hide a section heading whose stories are all filtered out.
+      document.querySelectorAll<HTMLElement>('.timeline').forEach((tl) => {
+        const any = Array.from(tl.querySelectorAll<HTMLElement>('.story'))
+          .some((s) => s.style.display !== 'none');
+        tl.style.display = any ? '' : 'none';
+        const h = tl.previousElementSibling as HTMLElement | null;
+        if (h && h.tagName === 'H2') h.style.display = any ? '' : 'none';
+      });
+      if (countEl) countEl.textContent = `${shown} ${shown === 1 ? 'story' : 'stories'}`;
+    };
+    bar?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button');
+      if (!btn) return;
+      bar.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b === btn));
+      apply(btn.dataset.region || 'all');
+    });
+    apply('all');
+  </script>
+
   <style>
+    .filter { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .filter-label { color: var(--muted); font-size: 0.8rem; margin-right: 0.2rem; }
+    .filter button {
+      font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      color: var(--muted); background: var(--panel); border: 1px solid var(--line);
+      border-radius: 999px; padding: 0.3rem 0.75rem;
+    }
+    .filter button:hover { color: var(--text); border-color: var(--toll); }
+    .filter button.on { color: var(--text); border-color: var(--toll); background: var(--panel-2); }
+    .filter-count { color: var(--muted); font-size: 0.78rem; margin-left: 0.3rem; }
     .checked {
       font-size: 0.82rem; color: var(--muted); background: var(--panel);
       border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem 0.8rem;

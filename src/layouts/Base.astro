@@ -109,6 +109,16 @@ const path = Astro.url.pathname;
       th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
       th { background: var(--panel); position: sticky; top: 0; }
       tr:last-child td { border-bottom: none; }
+.flag {
+        display: inline-block; font-size: 0.85em; margin-right: 0.3rem;
+        vertical-align: 1px; font-family: "Apple Color Emoji","Segoe UI Emoji",sans-serif;
+      }
+      .origin-note {
+        background: var(--panel); border: 1px solid var(--line);
+        border-left: 3px solid var(--toll); border-radius: 8px;
+        padding: 0.8rem 1rem; margin: 1rem 0; color: var(--muted); font-size: 0.88rem;
+      }
+      .origin-note strong { color: var(--text); }
       .tag { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
       .tag.hot { background: rgba(255,90,95,0.15); color: var(--police); }
       .tag.cool { background: rgba(77,163,255,0.15); color: var(--toll); }

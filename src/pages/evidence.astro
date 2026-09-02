@@ -2,21 +2,21 @@
 import Base from '../layouts/Base.astro';
 
 const studies = [
-  { s: 'Lum et al. (2011) — RCT, 30 hot spots, Virginia', f: 'No significant effect on any crime outcome', v: 'null' },
-  { s: 'Taylor, Koper & Woods (2012) — RCT, Mesa AZ', f: '3× more stolen-vehicle hits, 2× recoveries — no decline in auto theft rates', v: 'null' },
-  { s: 'Koper, Lum et al. (2021) — 785 patrols, 33 hot spots', f: 'More recoveries, no effect on likelihood/timing/seriousness of next crime', v: 'null' },
-  { s: 'RAND (2014) — literature review', f: 'Anecdotes only; "lack of rigorous outcome evidence"', v: 'null' },
-  { s: 'Mourtgos & Adams (2025) — 216 agencies, fixed Flock networks', f: 'Motor vehicle theft down 11% after deployment (quasi-experimental)', v: 'mixed' },
-  { s: 'Shjarback & Sarkos (2025) — Atlantic City fixed network', f: 'No reduction in violent crime; reductions in shootings, auto theft, property crime', v: 'mixed' },
+  { c: '🇺🇸', s: 'Lum et al. (2011) — RCT, 30 hot spots, Virginia', f: 'No significant effect on any crime outcome', v: 'null' },
+  { c: '🇺🇸', s: 'Taylor, Koper & Woods (2012) — RCT, Mesa AZ', f: '3× more stolen-vehicle hits, 2× recoveries — no decline in auto theft rates', v: 'null' },
+  { c: '🇺🇸', s: 'Koper, Lum et al. (2021) — 785 patrols, 33 hot spots', f: 'More recoveries, no effect on likelihood/timing/seriousness of next crime', v: 'null' },
+  { c: '🇺🇸', s: 'RAND (2014) — literature review', f: 'Anecdotes only; "lack of rigorous outcome evidence"', v: 'null' },
+  { c: '🇺🇸', s: 'Mourtgos & Adams (2025) — 216 agencies, fixed Flock networks', f: 'Motor vehicle theft down 11% after deployment (quasi-experimental)', v: 'mixed' },
+  { c: '🇺🇸', s: 'Shjarback & Sarkos (2025) — Atlantic City fixed network', f: 'No reduction in violent crime; reductions in shootings, auto theft, property crime', v: 'mixed' },
 ];
 
 const hitRates = [
-  { j: 'LAPD (CA State Auditor)', r: '~0.1% — 99.9% of stored images matched nothing' },
-  { j: 'Central Marin, CA', r: '0.02% of ~4M plates' },
-  { j: 'Piedmont, CA', r: '0.0013% — 2M scans, 26 leads' },
-  { j: 'High Point, NC', r: '0.08%' },
-  { j: 'Rhinebeck, NY', r: '0.01%' },
-  { j: 'LAPD Inspector General hotlist audit', r: '1 in 3 alerts were FALSE (stale hotlist data)' },
+  { c: '🇺🇸', j: 'LAPD (CA State Auditor)', r: '~0.1% — 99.9% of stored images matched nothing' },
+  { c: '🇺🇸', j: 'Central Marin, CA', r: '0.02% of ~4M plates' },
+  { c: '🇺🇸', j: 'Piedmont, CA', r: '0.0013% — 2M scans, 26 leads' },
+  { c: '🇺🇸', j: 'High Point, NC', r: '0.08%' },
+  { c: '🇺🇸', j: 'Rhinebeck, NY', r: '0.01%' },
+  { c: '🇺🇸', j: 'LAPD Inspector General hotlist audit', r: '1 in 3 alerts were FALSE (stale hotlist data)' },
 ];
 ---
 <Base title="Evidence" description="Does ALPR reduce crime? Every randomized trial, hit-rate audit, and wrongful-stop record — cited.">
@@ -26,13 +26,23 @@ const hitRates = [
     stolen cars recovered — and no measurable drop in crime. The strongest evidence for fixed
     networks is an 11% auto-theft reduction. Everything bigger is marketing.
   </p>
+
+  <div class="origin-note">
+    <strong>Every study and audit on this page is American 🇺🇸.</strong> That isn't an
+    editorial choice — it's the finding. No Canadian police service has published a
+    peer-reviewed evaluation of its ALPR programme or a hit-rate audit, and there is no
+    Canadian equivalent of California's State Auditor review. So the only rigorous evidence
+    about a technology now deployed across Canada comes from another country's oversight
+    bodies. Canadian entries are flagged 🇨🇦 wherever they exist — on this page, the only
+    Canadian data point is an absence.
+  </div>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Study</th><th>Finding</th><th></th></tr></thead>
       <tbody>
         {studies.map((row) => (
           <tr>
-            <td>{row.s}</td>
+            <td><span class="flag">{row.c}</span>{row.s}</td>
             <td>{row.f}</td>
             <td>{row.v === 'null' ? <span class="tag cool">no deterrence</span> : <span class="tag hot">modest effect</span>}</td>
           </tr>
@@ -64,7 +74,7 @@ const hitRates = [
     <table>
       <thead><tr><th>Audited jurisdiction</th><th>Hit rate</th></tr></thead>
       <tbody>
-        {hitRates.map((row) => <tr><td>{row.j}</td><td>{row.r}</td></tr>)}
+        {hitRates.map((row) => <tr><td><span class="flag">{row.c}</span>{row.j}</td><td>{row.r}</td></tr>)}
       </tbody>
     </table>
   </div>

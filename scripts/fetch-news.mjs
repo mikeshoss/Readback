@@ -21,9 +21,14 @@ const FEEDS = [
   { url: 'https://www.eff.org/rss/updates.xml',       outlet: 'EFF',                  trust: 'trusted' },
   { url: 'https://ij.org/feed/',                      outlet: 'Institute for Justice',trust: 'trusted' },
   { url: 'https://therecord.media/feed',              outlet: 'The Record',           trust: 'trusted' },
-  { url: 'https://www.ipc.on.ca/en/rss.xml',          outlet: 'IPC Ontario',          trust: 'trusted' },
+  // Canada-scoped Google News queries. Canadian ALPR coverage is thin and
+  // scattered across local outlets, so a targeted search finds what no single
+  // Canadian feed does. canadaOnly drops the US spillover these still return.
+  { url: 'https://news.google.com/rss/search?q=(%22licence+plate+reader%22+OR+%22license+plate+reader%22+OR+ALPR)+(Canada+OR+Ontario+OR+Toronto+OR+RCMP+OR+OPP+OR+%22police+service%22)&hl=en-CA&gl=CA&ceid=CA:en',
+    outlet: 'Google News (Canada)', trust: 'trusted', canadaOnly: true },
+  { url: 'https://news.google.com/rss/search?q=%22licence+plate+recognition%22+OR+%22automatic+licence+plate%22&hl=en-CA&gl=CA&ceid=CA:en',
+    outlet: 'Google News (Canada)', trust: 'trusted', canadaOnly: true },
   { url: 'https://stateline.org/feed/',               outlet: 'Stateline',            trust: 'review'  },
-  { url: 'https://www.blueline.ca/feed/',             outlet: 'Blue Line',            trust: 'review'  },
   { url: 'https://www.cbc.ca/webfeed/rss/rss-canada-toronto', outlet: 'CBC Toronto',   trust: 'review'  },
   { url: 'https://evanstonroundtable.com/feed/',      outlet: 'Evanston RoundTable',  trust: 'review'  },
 ];
@@ -34,6 +39,23 @@ const MATCH = /\b(alpr|anpr|licence plate|license plate|plate reader|plate recog
 
 // Canadian relevance is a bonus signal, not a filter — US developments
 // matter here too.
+// Kills the recurring false positive: Ontario plate-sticker renewal stories.
+const EXCLUDE = /\b(renewal|renewals|sticker|licence plate renewal|plate sticker)\b/i;
+
+// Routine enforcement blotter — "ALPR nabs suspended driver", "hit leads to
+// drug seizure". These are police press releases about ALPR successes. They
+// are not what this site covers, and a feed full of them reads as PR.
+const BLOTTER = /\b(charged|arrest\w*|nabbed|seizure|seized|impaired|stolen vehicle|lays? charges|cocaine|fentanyl|drugs?|wanted man|suspended driver|evade|traffic stop|recover\w* stolen)\b/i;
+
+// A story earns a place only if it touches policy, deployment, oversight or
+// privacy — the accountability beat, not the crime beat. Stems matter:
+// "install" must catch "installed"/"installing". Bare "law" is deliberately
+// absent — it matches "law enforcement" in every police blotter item.
+const SIGNAL = /\b(privacy|surveillance|civil liberties|oversight|watchdog|commissioner|retention|policy|policies|council|contract\w*|procurement|tender|expand\w*|install\w*|deploy\w*|rollout|roll out|program\w*|legislation|bill\b|court|lawsuit|ruling|appeal|charter|audit\w*|concern\w*|debate|oppos\w*|ban\b|cancel\w*|scrap|data.?sharing|ICE\b|freedom of information|outrage|backlash|scrutiny|question\w*|new tech\w*|highway|considering|eyes\b)\b/i;
+
+// Only surface reasonably current items in the auto feed.
+const MAX_AGE_DAYS = 550;
+
 const CANADA = /\b(canada|canadian|ontario|toronto|peel|york region|waterloo|halton|ottawa|rcmp|opp|quebec|british columbia|alberta)\b/i;
 
 const strip = (s = '') =>
@@ -75,7 +97,7 @@ async function fetchFeed(feed) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const items = parseItems(await res.text());
     console.log(`  ✓ ${feed.outlet}: ${items.length} items`);
-    return items.map((i) => ({ ...i, outlet: feed.outlet, trust: feed.trust }));
+    return items.map((i) => ({ ...i, outlet: feed.outlet, trust: feed.trust, canadaOnly: !!feed.canadaOnly }));
   } catch (err) {
     // One dead feed must not fail the run.
     console.warn(`  ✗ ${feed.outlet}: ${err.message}`);
@@ -89,22 +111,45 @@ const all = (await Promise.all(FEEDS.map(fetchFeed))).flat();
 const relevant = all
   .filter((i) => i.url && i.title)
   .filter((i) => MATCH.test(`${i.title} ${i.summary}`))
+  .filter((i) => !EXCLUDE.test(`${i.title} ${i.summary}`))
+  // Specialist outlets (EFF, 404 Media, IJ, The Record) only write the
+  // accountability beat, so an ALPR keyword there is enough. The Canada-scoped
+  // searches sweep local news, where most ALPR mentions are arrest blotter —
+  // those must show a policy signal and must not be a blotter item.
+  .filter((i) => {
+    if (!i.canadaOnly) return true;
+    const text = `${i.title} ${i.summary}`;
+    if (BLOTTER.test(i.title)) return false;
+    return SIGNAL.test(text);
+  })
   .map((i) => ({
     ...i,
     canada: CANADA.test(`${i.title} ${i.summary}`),
     iso: (() => { const d = new Date(i.date); return isNaN(d) ? null : d.toISOString(); })(),
-  }));
+  }))
+  // Canada-scoped feeds still return US spillover — drop it rather than
+  // letting a Canada query pad the international pile.
+  .filter((i) => !i.canadaOnly || i.canada);
 
-console.log(`${relevant.length} ALPR-relevant of ${all.length} total items`);
+console.log(`${relevant.length} ALPR-relevant of ${all.length} total items (${relevant.filter(i=>i.canada).length} Canadian)`);
 
 // Dedupe against everything we've already seen or published.
 const pubPath = join(root, 'public/data/news.json');
 const quePath = join(root, 'data/news-queue.json');
 const prevPub = existsSync(pubPath) ? JSON.parse(readFileSync(pubPath, 'utf8')) : { items: [] };
 const prevQue = existsSync(quePath) ? JSON.parse(readFileSync(quePath, 'utf8')) : { items: [] };
-const seen = new Set([...prevPub.items, ...prevQue.items].map((i) => i.url));
+const norm = (t) => t.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim().slice(0, 90);
+const seenUrl = new Set([...prevPub.items, ...prevQue.items].map((i) => i.url));
+const seenTitle = new Set([...prevPub.items, ...prevQue.items].map((i) => norm(i.title)));
 
-const fresh = relevant.filter((i) => !seen.has(i.url));
+const cutoff = Date.now() - MAX_AGE_DAYS * 86400000;
+const fresh = [];
+for (const i of relevant) {
+  if (seenUrl.has(i.url) || seenTitle.has(norm(i.title))) continue;   // same story, two queries
+  if (i.iso && new Date(i.iso).getTime() < cutoff) continue;          // stale
+  seenUrl.add(i.url); seenTitle.add(norm(i.title));
+  fresh.push(i);
+}
 const autoPublish = fresh.filter((i) => i.trust === 'trusted');
 const needsReview = fresh.filter((i) => i.trust === 'review');
 
