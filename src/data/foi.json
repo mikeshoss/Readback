@@ -1,5 +1,5 @@
 {
-  "note": "MFIPPA request tracker. Statuses: drafted, sent, acknowledged, extended, refused, appealed, answered. Submission contacts verified from official sites — see data/research/foi-contacts.md.",
+  "note": "MFIPPA request tracker. Statuses: drafted, sent, acknowledged, extended, refused, appealed, answered. Submission contacts verified from official sites — see data/research/foi-contacts.md. Each request carries fileNumber and an events[] timeline: {date, label, note}. Typical labels: Request drafted, Sent, File number assigned, Acknowledged, Fee estimate received, Time extension claimed, Decision received, Records published, Appeal filed with IPC.",
   "preamble": "Dear Freedom of Information Coordinator,\n\nThis is a request for records under the Municipal Freedom of Information and Protection of Privacy Act (MFIPPA). The $5.00 application fee is enclosed / has been paid.\n\nI request electronic copies of records where they exist in electronic form. Please provide final versions of records; I am not requesting drafts. If any portion of a responsive record is withheld, please cite the specific exemption relied upon and disclose the remainder as required by s. 4(2). If estimated fees will exceed $25, please provide a fee estimate and contact me before proceeding — I am open to narrowing the scope of this request to reduce fees or processing time.",
   "closing": "Thank you for your assistance. I look forward to your response within the 30-day statutory period.\n\nSincerely,\n[Name]\n[Mailing address]\n[Email] · [Phone]",
   "requests": [
@@ -26,7 +26,15 @@
         "inPerson": "HQ main-floor lobby, 40 College St — 7:00 a.m.–4:30 p.m. Mon/Tue/Thu/Fri (closed Wed). Debit, Visa, Mastercard accepted in person.",
         "phone": "416-808-7850",
         "source": "https://www.tps.ca/services/freedom-information-request/"
-      }
+      },
+      "fileNumber": null,
+      "events": [
+        {
+          "date": "2026-09-01",
+          "label": "Request drafted",
+          "note": "Published here before sending — the ask is public from day one."
+        }
+      ]
     },
     {
       "id": "halton",
@@ -50,7 +58,15 @@
         "inPerson": null,
         "phone": "905-825-4777 ext. 5192",
         "source": "https://www.haltonpolice.ca/en/about-us/freedom-of-information.aspx"
-      }
+      },
+      "fileNumber": null,
+      "events": [
+        {
+          "date": "2026-09-01",
+          "label": "Request drafted",
+          "note": "Published here before sending — the ask is public from day one."
+        }
+      ]
     },
     {
       "id": "peel",
@@ -75,7 +91,15 @@
         "inPerson": null,
         "phone": "905-453-2121 ext. 4263",
         "source": "https://www.peelpolice.ca/en/services/information-and-privacy-requests.aspx"
-      }
+      },
+      "fileNumber": null,
+      "events": [
+        {
+          "date": "2026-09-01",
+          "label": "Request drafted",
+          "note": "Published here before sending — the ask is public from day one."
+        }
+      ]
     },
     {
       "id": "york",
@@ -100,7 +124,15 @@
         "inPerson": null,
         "phone": "1-866-876-5423 ext. 6740",
         "source": "https://www.yrp.ca/en/about/freedom-of-information.asp"
-      }
+      },
+      "fileNumber": null,
+      "events": [
+        {
+          "date": "2026-09-01",
+          "label": "Request drafted",
+          "note": "Published here before sending — the ask is public from day one."
+        }
+      ]
     },
     {
       "id": "waterloo",
@@ -124,7 +156,15 @@
         "inPerson": null,
         "phone": null,
         "source": "https://wrps.ca/en/about-us/freedom-of-information.aspx"
-      }
+      },
+      "fileNumber": null,
+      "events": [
+        {
+          "date": "2026-09-01",
+          "label": "Request drafted",
+          "note": "Published here before sending — the ask is public from day one."
+        }
+      ]
     }
   ]
 }

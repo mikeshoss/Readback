@@ -42,9 +42,21 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
           </div>
           <div class="status-wrap">
             <span class={`status ${STATUS_CLASS[r.status]}`}>{STATUS_LABELS[r.status]}</span>
+            {r.fileNumber && <div class="dates">File #{r.fileNumber}</div>}
             {r.dateSent && <div class="dates">Sent {fmt(r.dateSent)}{r.dateDue ? ` · due ${fmt(r.dateDue)}` : ''}</div>}
           </div>
         </header>
+        {r.events && r.events.length > 0 && (
+          <ol class="timeline">
+            {r.events.map((e) => (
+              <li>
+                <span class="tl-date">{fmt(e.date)}</span>
+                <span class="tl-label">{e.label}</span>
+                {e.note && <span class="tl-note">{e.note}</span>}
+              </li>
+            ))}
+          </ol>
+        )}
         {r.outcome && <p class="outcome">{r.outcome}</p>}
         <div class="filing">
           <span class="filing-how">{r.submission.how}</span>
@@ -91,6 +103,12 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
     .s-bad { background: rgba(255,90,95,0.15); color: var(--police); }
     .s-good { background: rgba(88,214,163,0.18); color: #58d6a3; }
     .outcome { margin-top: 0.6rem; font-size: 0.88rem; }
+    .timeline { list-style: none; padding: 0; margin: 0.7rem 0 0; border-left: 2px solid var(--line); }
+    .timeline li { padding: 0.15rem 0 0.15rem 0.9rem; position: relative; font-size: 0.8rem; }
+    .timeline li::before { content: ''; position: absolute; left: -5px; top: 0.55rem; width: 8px; height: 8px; border-radius: 50%; background: var(--toll); }
+    .tl-date { color: var(--muted); margin-right: 0.5rem; font-variant-numeric: tabular-nums; }
+    .tl-label { font-weight: 600; }
+    .tl-note { display: block; color: var(--muted); }
     .filing { display: flex; flex-direction: column; gap: 0.15rem; margin-top: 0.6rem; font-size: 0.8rem; }
     .filing-how { color: var(--text); }
     .filing a { color: var(--toll); }
