@@ -24,38 +24,19 @@ const retention = [
   { j: '~34 US states with no statute', r: 'Agency discretion — up to indefinite', a: 'LAPD audit found 320M stored images', hl: true },
 ];
 
-const studies = [
-  { s: 'Lum et al. (2011) — RCT, 30 hot spots, Virginia', f: 'No significant effect on any crime outcome', v: 'null' },
-  { s: 'Taylor, Koper & Woods (2012) — RCT, Mesa AZ', f: '3× more stolen-vehicle hits, 2× recoveries — no decline in auto theft rates', v: 'null' },
-  { s: 'Koper, Lum et al. (2021) — 785 patrols, 33 hot spots', f: 'More recoveries, no effect on likelihood/timing/seriousness of next crime', v: 'null' },
-  { s: 'RAND (2014) — literature review', f: 'Anecdotes only; "lack of rigorous outcome evidence"', v: 'null' },
-  { s: 'Mourtgos & Adams (2025) — 216 agencies, fixed Flock networks', f: 'Motor vehicle theft down 11% after deployment (quasi-experimental)', v: 'mixed' },
-  { s: 'Shjarback & Sarkos (2025) — Atlantic City fixed network', f: 'No reduction in violent crime; reductions in shootings, auto theft, property crime', v: 'mixed' },
-];
 
-const hitRates = [
-  { j: 'LAPD (CA State Auditor)', r: '~0.1% — 99.9% of stored images matched nothing' },
-  { j: 'Central Marin, CA', r: '0.02% of ~4M plates' },
-  { j: 'Piedmont, CA', r: '0.0013% — 2M scans, 26 leads' },
-  { j: 'High Point, NC', r: '0.08%' },
-  { j: 'Rhinebeck, NY', r: '0.01%' },
-  { j: 'LAPD Inspector General hotlist audit', r: '1 in 3 alerts were FALSE (stale hotlist data)' },
-];
 ---
 <Base title="The rules">
-  <h1>The rules: what's allowed, and whether it works</h1>
+  <h1>The rules: retention is a setting, not a standard</h1>
   <p class="lede">
     The same technology keeps your plate read for 3 minutes in New Hampshire, 24 hours in
     Peel Region, 7 days in Toronto, a year in the UK — and forever in most US states.
-    Five orders of magnitude, decided by a dropdown menu. And the evidence that any of it
-    reduces crime is far thinner than the sales pitch.
+    Five orders of magnitude, decided by a dropdown menu.
   </p>
   <nav class="pills">
     <a href="#retention">Retention</a>
     <a href="#oversight">Oversight</a>
     <a href="#ontario">Ontario</a>
-    <a href="#evidence">Does it work?</a>
-    <a href="#sources">Sources</a>
   </nav>
 
   <div class="note">
@@ -120,94 +101,12 @@ const hitRates = [
     </table>
   </div>
 
-  <h2 id="evidence">Does it actually reduce crime — or move it?</h2>
-  <p class="lede">
-    Every randomized trial of patrol ALPR finds the same thing: more plates checked, more
-    stolen cars recovered — and no measurable drop in crime. The strongest evidence for fixed
-    networks is an 11% auto-theft reduction. Everything bigger is marketing.
-  </p>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Study</th><th>Finding</th><th></th></tr></thead>
-      <tbody>
-        {studies.map((row) => (
-          <tr>
-            <td>{row.s}</td>
-            <td>{row.f}</td>
-            <td>{row.v === 'null' ? <span class="tag cool">no deterrence</span> : <span class="tag hot">modest effect</span>}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-
-  <h3>Displacement: does crime just move?</h3>
-  <p class="lede">
-    The 40-year CCTV literature (Piza et al. 2019, 80 studies) — the closest proxy for fixed
-    ALPR — finds a modest overall decrease driven almost entirely by <strong>vehicle crime in car
-    parks</strong>. Violent crime doesn't respond. Displacement to nearby areas is rarer than
-    feared, but so is city-wide benefit: effects stay local. When York Region's deputy chief
-    cites a 6% crime reduction within 1 km of cameras, the honest question is what happened
-    at 2 km — and no Canadian service publishes that analysis.
-  </p>
-
   <div class="note">
-    <strong>Flock's "reduces crime by up to 70%"</strong> came from San Marino, CA — whose own
-    police chief later said the figure isn't accurate. Forbes found the company handpicked and
-    oversimplified data in four flagship cities. The academic who oversaw Flock's "10% of US
-    crime" study later said the data was "too varied and incomplete… to do any type of
-    meaningful statistical analysis."
+    <strong>Does any of this actually reduce crime?</strong> The randomized trials say no
+    deterrence; the best fixed-network study finds an 11% auto-theft drop. The full studies,
+    hit rates, and wrongful-stop record: <a href="/evidence">the evidence →</a>
   </div>
-
-  <h3>Hit rates: what a billion scans actually catch</h3>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Audited jurisdiction</th><th>Hit rate</th></tr></thead>
-      <tbody>
-        {hitRates.map((row) => <tr><td>{row.j}</td><td>{row.r}</td></tr>)}
-      </tbody>
-    </table>
-  </div>
-  <p class="lede" style="margin-top: 0.8rem">
-    Toronto has never published a hit-rate audit. At 1.25M scans/day capacity and typical
-    hit rates, roughly 999 of every 1,000 records the system keeps for 7 days belong to
-    drivers suspected of nothing.
-  </p>
-
-  <h3>When it's wrong</h3>
-  <p class="lede">
-    At least 27 documented wrongful stops in the US since 2018 — including the Gilliam family
-    in Aurora, CO: four Black children held at gunpoint because an ALPR matched their SUV's
-    plate to a stolen <em>motorcycle</em> from another state ($1.9M settlement). Vallejo, CA
-    trials found 37% of stationary ALPR hits were misreads. These are system failures —
-    stale hotlists, no plate-state verification — not one vendor's bug.
-  </p>
-
-  <h2 id="sources">Sources</h2>
-  <details class="sources">
-    <summary>Every claim on this page, cited — expand for the full list</summary>
-    <ul>
-      <li>Lum, Merola, Willis &amp; Cave — LPR patrols in crime hot spots: <a href="https://nij.ojp.gov/library/publications/license-plate-reader-lpr-police-patrols-crime-hot-spots-experimental" rel="noopener">NIJ summary</a> · <a href="https://link.springer.com/article/10.1007/s11292-011-9133-9" rel="noopener">J. Experimental Criminology (2011)</a></li>
-      <li>Taylor, Koper &amp; Woods (2012), Mesa AZ randomized experiment: <a href="https://doi.org/10.1177/0734016811425858" rel="noopener">Criminal Justice Review</a></li>
-      <li>Koper, Lum et al. (2021), LPR patrols and deterrence: <a href="https://link.springer.com/article/10.1007/s11292-021-09473-y" rel="noopener">J. Experimental Criminology</a></li>
-      <li>RAND (2014), RR-467: <a href="https://www.rand.org/pubs/research_reports/RR467.html" rel="noopener">License Plate Readers for Law Enforcement</a></li>
-      <li>Mourtgos &amp; Adams (2025), 216-agency Flock event study: <a href="https://www.crimrxiv.com/pub/zleg04q3/release/1" rel="noopener">CrimRxiv working paper</a></li>
-      <li>Shjarback &amp; Sarkos (2025), Atlantic City: <a href="https://www.tandfonline.com/doi/full/10.1080/24751979.2025.2473363" rel="noopener">Justice Evaluation Journal</a></li>
-      <li>Welsh &amp; Farrington, CCTV meta-analysis: <a href="https://dx.doi.org/10.4073/csr.2008.17" rel="noopener">Campbell Systematic Review</a></li>
-      <li>Piza, Welsh, Farrington &amp; Thomas (2019), 40-year CCTV meta-analysis: <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/1745-9133.12419" rel="noopener">Criminology &amp; Public Policy</a></li>
-      <li>Flock's "70%" claim examined: <a href="https://www.forbes.com/sites/cyrusfarivar/2024/02/29/flock-ai-cameras-may-not-reduce-crime/" rel="noopener">Forbes (2024)</a> · "10% of US crime" study: <a href="https://www.404media.co/researcher-who-oversaw-flock-surveillance-study-now-has-concerns-about-it/" rel="noopener">404 Media</a> · <a href="https://www.flocksafety.com/blog/how-effective-is-flock" rel="noopener">Flock's Impact Census</a></li>
-      <li>Hit rates &amp; compliance: <a href="https://information.auditor.ca.gov/reports/2019-118/summary.html" rel="noopener">California State Auditor, Report 2019-118</a></li>
-      <li>Wrongful stops: <a href="https://ij.org/dozens-of-innocent-motorists-have-been-pulled-over-detained-at-gunpoint-or-jailed-due-to-ai-license-plate-camera-errors/" rel="noopener">Institute for Justice</a> · <a href="https://www.eff.org/deeplinks/2024/11/human-toll-alpr-errors" rel="noopener">EFF, "The Human Toll of ALPR Errors"</a></li>
-      <li>Peel retention: <a href="https://www.peelpolice.ca/community-safety/automated-licence-plate-recognition/" rel="noopener">Peel Regional Police official page</a> · Toronto: <a href="https://www.tps.ca/use-technology/automatic-licence-plate-reader/" rel="noopener">TPS official page</a></li>
-    </ul>
-  </details>
 
   <style>
-    .sources { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem 1.1rem; }
-    .sources summary { cursor: pointer; color: var(--toll); font-size: 0.9rem; }
-    .sources ul { margin: 0.8rem 0 0; padding-left: 1.2rem; font-size: 0.84rem; }
-    .sources li { margin-bottom: 0.5rem; }
-    .sources a { color: var(--toll); }
-    h3 { margin-top: 1.5rem; }
   </style>
 </Base>

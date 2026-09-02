@@ -7,8 +7,6 @@ export default defineConfig({
     '/vendors': '/tech',
     '/cameras': '/tech',
     '/systems': '/tech',
-    '/evidence': '/rules#evidence',
-    '/news': '/latest',
-    '/foi': '/latest#foi',
+    '/latest': '/news',
   },
 });

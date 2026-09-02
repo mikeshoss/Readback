@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+
+const stories = [
+  { d: 'Aug 2026', where: '🇨🇦', t: 'Toronto police AI plate readers draw "constant eyes" warning', s: 'CBC covers the fully deployed fleet: every marked cruiser scans plates, makes and models. TPS 2026 budget adds $5.6M for "AI Operationalization."' },
+  { d: 'Aug 2026', where: '🇨🇦', t: 'ALPR quietly expanding across Canada — without Flock', s: 'Ottawa grew 5→65 equipped vehicles; Sudbury added 16 fixed sites; Waterloo went live in June. Flock confirms zero Canadian police partnerships; the OPP says it has no plans to use them.' },
+  { d: 'Jun 2026', where: '🇺🇸', t: 'Supreme Court: geofence data is a Fourth Amendment search', s: 'Chatrie v. US (6-3) — widely read as a legal time bomb for ALPR dragnets. The Norfolk Flock case is at the Fourth Circuit.' },
+  { d: 'Mar 2026', where: '🇺🇸', t: 'Washington signs the Driver Privacy Act', s: '21-day retention cap, immigration-enforcement ban, no cameras near schools, courts, or places of worship.' },
+  { d: 'Feb 2026', where: '🇺🇸', t: 'The cancellation wave hits 50+ cities', s: 'Denver removed all 110 Flock cameras (then bought a smaller Axon network over ACLU objections). NPR counts contract cancellations nationwide — even as Flock crosses 100,000 total cameras.' },
+  { d: 'Jan 2026', where: '🇺🇸', t: 'Researchers find Flock camera feeds exposed online', s: '60+ live camera feeds and debug interfaces open to the internet with no password; 50+ vulnerabilities; stolen customer credentials on crime forums. Cited by several cities in cancellations.' },
+  { d: 'Oct 2025', where: '🇺🇸', t: 'California sues El Cajon over plate-data sharing', s: 'AG Bonta: sharing ALPR data with 100+ out-of-state agencies violates SB 34.' },
+  { d: 'Aug 2025', where: '🇺🇸', t: 'Illinois audit: Flock let CBP into state cameras', s: 'Trigger: a Texas deputy searched 83,000 cameras nationwide for a woman who self-administered an abortion — hitting Illinois. Evanston and Oak Park terminated contracts.' },
+  { d: 'Jun 2025', where: '🇺🇸', t: 'Austin cancels its Flock contract', s: 'First major-city cancellation, after organizers surfaced the ICE search revelations. Texas DPS later installed its own readers in the city over local objections.' },
+  { d: 'May 2025', where: '🇺🇸', t: '404 Media: police ran ~4,000 Flock searches for ICE', s: 'Despite ICE having no Flock contract. Separate reporting: CBP had quiet access to 80,000+ cameras via an undisclosed pilot. The story that started the backlash.' },
+  { d: '2025', where: '🇺🇸', t: 'Flock builds "Nova" people-lookup on breach data', s: 'Leaked audio: jumping "from LPR to person" using data brokers and hacked datasets, no warrant. Flock said it dropped the breach data after internal objections; later analysis disputed that.' },
+  { d: 'Feb 2025', where: '🇨🇦', t: 'Toronto completes fleet-wide ALPR rollout', s: 'Every marked vehicle scans at up to 225 km/h — 1.25M+ plate reads/day capacity. Reads kept 7 days, hits 365.' },
+];
+---
+<Base title="News">
+  <h1>The last 18 months</h1>
+  <p class="lede">
+    Adoption and backlash are growing at the same time: Flock crossed 100,000 cameras while
+    50+ US cities cancelled; Canada expanded fleet ALPR in a dozen cities without a single
+    Flock contract. Curated timeline — automated feed coming.
+  </p>
+  <div class="timeline">
+    {stories.map((n) => (
+      <article class="story">
+        <div class="when">{n.d} {n.where}</div>
+        <h3>{n.t}</h3>
+        <p>{n.s}</p>
+      </article>
+    ))}
+  </div>
+  <style>
+    .timeline { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1rem; }
+    .story { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem 1.1rem; }
+    .when { color: var(--muted); font-size: 0.78rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .story h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+    .story p { color: var(--muted); font-size: 0.88rem; }
+  </style>
+</Base>
