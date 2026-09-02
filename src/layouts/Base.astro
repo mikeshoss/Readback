@@ -6,12 +6,13 @@ interface Props {
 }
 const { title, description = 'Mapping automated licence plate readers in Canada — where they are, what they can do, and what the settings say.', fullBleed = false } = Astro.props;
 const nav = [
-  { href: '/', label: 'Map' },
-  { href: '/regions', label: 'Regions' },
-  { href: '/vendors', label: 'Vendors' },
-  { href: '/evidence', label: 'Evidence' },
+  { href: '/', label: 'The map' },
+  { href: '/cameras', label: 'The cameras' },
+  { href: '/systems', label: 'The systems' },
+  { href: '/rules', label: 'The rules' },
+  { href: '/evidence', label: 'Does it work?' },
   { href: '/news', label: 'News' },
-  { href: '/foi', label: 'FOI' },
+  { href: '/foi', label: 'Paper trail' },
 ];
 const path = Astro.url.pathname;
 ---
