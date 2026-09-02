@@ -22,6 +22,11 @@ const { v } = Astro.props;
           {v.platform.features.map((x) => <li><strong>{x.f}.</strong> {x.d}</li>)}
         </ul>
         <p class="record">📎 On the record: {v.platform.onRecord}</p>
+        {v.platform.sources && (
+          <p class="srcline">Sources: {v.platform.sources.map((s, i) => (
+            <>{i > 0 && ' · '}<a href={s.url} rel="noopener">{s.label}</a></>
+          ))}</p>
+        )}
       </section>
     </>
   )}
@@ -37,10 +42,24 @@ const { v } = Astro.props;
         <dt>Power</dt><dd>{h.power}</dd>
         {h.notes && <><dt>Notes</dt><dd>{h.notes}</dd></>}
       </dl>
+      {h.sources && (
+        <p class="srcline">Sources: {h.sources.map((s, i) => (
+          <>{i > 0 && ' · '}<a href={s.url} rel="noopener">{s.label}</a></>
+        ))}</p>
+      )}
     </section>
   ))}
 
-  {v.certNote && <div class="note"><strong>Certification record:</strong> {v.certNote}</div>}
+  {v.certNote && (
+    <div class="note">
+      <strong>Certification record:</strong> {v.certNote}
+      {v.certSources && (
+        <span class="srcline block">Verify: {v.certSources.map((s, i) => (
+          <>{i > 0 && ' · '}<a href={s.url} rel="noopener">{s.label}</a></>
+        ))}</span>
+      )}
+    </div>
+  )}
   {v.flags && <p class="flags">⚠ {v.flags}</p>}
 
   <p class="src">
@@ -65,6 +84,10 @@ const { v } = Astro.props;
     dt { color: var(--muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 0.1rem; }
     dd { margin: 0; }
     .flags { margin-top: 1rem; font-size: 0.88rem; color: var(--fleet); }
+    .srcline { margin-top: 0.7rem; padding-top: 0.55rem; border-top: 1px dashed var(--line); font-size: 0.78rem; color: var(--muted); }
+    .srcline a { color: var(--toll); text-decoration: none; }
+    .srcline a:hover { text-decoration: underline; }
+    .srcline.block { display: block; margin-top: 0.5rem; border-top: none; padding-top: 0; }
     .src { margin-top: 1.2rem; color: var(--muted); font-size: 0.82rem; }
     .src a { color: var(--toll); }
     @media (max-width: 640px) { dl { grid-template-columns: 1fr; gap: 0.05rem; } dt { margin-top: 0.5rem; } }

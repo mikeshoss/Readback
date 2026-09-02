@@ -11,23 +11,155 @@
         "name": "FlockOS + TALON",
         "what": "The network is the product: ~5,000 agencies can search each other's cameras through one lookup (TALON).",
         "features": [
-          { "f": "Convoy Analysis", "d": "Enter a plate; the system finds vehicles that frequently travel with it — flagged as potential associates even if they only share a commute." },
-          { "f": "Multi-Geo Search", "d": "Follows vehicles between cities and states; case documents describe building \"patterns of life.\"" },
-          { "f": "Nova", "d": "A person-lookup layer that \"jumps from LPR to person\" using data-broker records — reported to have drawn on breached datasets." },
-          { "f": "Drone dispatch", "d": "Aerodome drones launch automatically to camera hits." },
-          { "f": "Audit logs", "d": "Every search logs a typed reason — the mechanism that exposed the Texas abortion search and a police chief's stalking. Also the mechanism where \"hehehe\" passed as a search reason." }
+          {
+            "f": "Convoy Analysis",
+            "d": "Enter a plate; the system finds vehicles that frequently travel with it — flagged as potential associates even if they only share a commute."
+          },
+          {
+            "f": "Multi-Geo Search",
+            "d": "Follows vehicles between cities and states; case documents describe building \"patterns of life.\""
+          },
+          {
+            "f": "Nova",
+            "d": "A person-lookup layer that \"jumps from LPR to person\" using data-broker records — reported to have drawn on breached datasets."
+          },
+          {
+            "f": "Drone dispatch",
+            "d": "Aerodome drones launch automatically to camera hits."
+          },
+          {
+            "f": "Audit logs",
+            "d": "Every search logs a typed reason — the mechanism that exposed the Texas abortion search and a police chief's stalking. Also the mechanism where \"hehehe\" passed as a search reason."
+          }
         ],
-        "onRecord": "Grand Prairie, TX police ran a slur through Convoy Analysis six times — targeting a traveling community with no crime specified (EFF, from audit logs)."
+        "onRecord": "Grand Prairie, TX police ran a slur through Convoy Analysis six times — targeting a traveling community with no crime specified (EFF, from audit logs).",
+        "sources": [
+          {
+            "label": "Flock Convoy/Multi-Geo docs (Maryville records)",
+            "url": "https://www.maryvilleprivacy.org/maryville-residents-for-privacy/flocks-multi-geo-and-convoy-tools/"
+          },
+          {
+            "label": "EFF 2025 investigations review",
+            "url": "https://www.eff.org/deeplinks/2025/12/effs-investigations-expose-flock-safetys-surveillance-abuses-2025-review"
+          },
+          {
+            "label": "404 Media on Nova",
+            "url": "https://www.404media.co/license-plate-reader-company-flock-is-building-a-massive-people-lookup-tool-leak-shows/"
+          },
+          {
+            "label": "ACLU Flock roundup",
+            "url": "https://www.aclu.org/news/privacy-technology/tracking-alpr-cameras/flock-roundup"
+          }
+        ]
       },
       "hardware": [
-        { "model": "Falcon V2 (current)", "type": "Fixed ALPR, solar/battery, pole-mount", "radios": "LTE Cat 4 (Sierra RC7611 — FCC ID N7NRC76B; Aug 2026 grant update adds satellite coverage) + Wi-Fi 5 802.11ac + Bluetooth 4.2 LE (LiteOn WCBN3510A — FCC ID PPQ-WCBN3510A) + GNSS", "imaging": "~5MP class; newest board revision uses a Sony IMX477-based 12.3MP IR-optimized sensor; IR LED board", "power": "Solar + Li-ion battery (grid option); runs Android Things 8.1 on a Snapdragon SOM", "notes": "Active \"Flock-XXXX\" Wi-Fi hotspot; 18,000+ Flock devices identifiable on the public WiGLE wardriving database. Security researchers demonstrated remote code execution over its Wi-Fi. Newer units reportedly carry an unlabeled radar module with no FCC ID (reported, not cert-verified)." },
-        { "model": "Falcon V1", "type": "Fixed ALPR (older generation)", "radios": "LTE Cat 1 (NimbeLink/Sierra HL7648 — FCC ID N7NHL7648) + same Wi-Fi/BT module + Taoglas GPS", "imaging": "~5MP, 16mm M12 lens, IR filter, IR LED array", "power": "Solar + 205Wh Li-ion; microphones present on the board (teardown)", "notes": "Generations distinguishable by the modem FCC ID printed on the label." },
-        { "model": "Sparrow", "type": "Fixed ALPR — the HOA/residential product", "radios": "Same platform as Falcon: LTE + Wi-Fi + BT (security researchers analyze Falcon/Sparrow as one device family)", "imaging": "~5MP class; IR; 24/7 capture", "power": "Fully solar + battery — \"completely infrastructure-free\"", "notes": "Same 8.75\" × 5\" × 2.875\", 3 lb housing as Falcon." },
-        { "model": "Condor", "type": "PTZ video (dome), intersections/parking", "radios": "LTE per vendor; full radio loadout unverifiable — the only Flock model with no cert trail at all", "imaging": "Dual-lens: 90° wide context + zoom sensor; AI human detection and auto-follow; 30-day recorded video", "power": "AC/grid or solar variant", "notes": "~60 Condors were found streaming openly on the internet with no password (Jan 2026)." },
-        { "model": "Raven", "type": "Acoustic gunshot sensor (not a camera)", "radios": "Wi-Fi 2.4GHz + Bluetooth/BLE (ESP32-WROOM-32D — FCC ID 2AC7Z-ESPWROOM32D) + LTE fallback", "imaging": "None — microphone array; ML audio processor classifies gunshot vs background in 5-second increments; triangulates across 3+ sensors", "power": "Solar + battery", "notes": "Broadcasts BLE beacons — fingerprintable in the field. Researchers found no secure boot and no flash encryption." }
+        {
+          "model": "Falcon V2 (current)",
+          "type": "Fixed ALPR, solar/battery, pole-mount",
+          "radios": "LTE Cat 4 (Sierra RC7611 — FCC ID N7NRC76B; Aug 2026 grant update adds satellite coverage) + Wi-Fi 5 802.11ac + Bluetooth 4.2 LE (LiteOn WCBN3510A — FCC ID PPQ-WCBN3510A) + GNSS",
+          "imaging": "~5MP class; newest board revision uses a Sony IMX477-based 12.3MP IR-optimized sensor; IR LED board",
+          "power": "Solar + Li-ion battery (grid option); runs Android Things 8.1 on a Snapdragon SOM",
+          "notes": "Active \"Flock-XXXX\" Wi-Fi hotspot; 18,000+ Flock devices identifiable on the public WiGLE wardriving database. Security researchers demonstrated remote code execution over its Wi-Fi. Newer units reportedly carry an unlabeled radar module with no FCC ID (reported, not cert-verified).",
+          "sources": [
+            {
+              "label": "FCC grant N7NRC76B (LTE modem)",
+              "url": "https://fccid.io/N7NRC76B"
+            },
+            {
+              "label": "Field ID guide (O'Horo)",
+              "url": "https://www.ryanohoro.com/post/spotting-flock-safety-s-falcon-cameras"
+            },
+            {
+              "label": "FlockCamRE chip inventory",
+              "url": "https://github.com/nxpatterns/flockcamre"
+            },
+            {
+              "label": "GainSec security research",
+              "url": "https://gainsec.com/2025/06/19/grounded-flight-device-2-root-shell-on-flock-safetys-falcon-sparrow-automated-license-plate-reader/"
+            }
+          ]
+        },
+        {
+          "model": "Falcon V1",
+          "type": "Fixed ALPR (older generation)",
+          "radios": "LTE Cat 1 (NimbeLink/Sierra HL7648 — FCC ID N7NHL7648) + same Wi-Fi/BT module + Taoglas GPS",
+          "imaging": "~5MP, 16mm M12 lens, IR filter, IR LED array",
+          "power": "Solar + 205Wh Li-ion; microphones present on the board (teardown)",
+          "notes": "Generations distinguishable by the modem FCC ID printed on the label.",
+          "sources": [
+            {
+              "label": "Hardware teardown (CEHRP)",
+              "url": "https://www.cehrp.org/dissection-of-flock-safety-camera/"
+            },
+            {
+              "label": "FCC grant N7NHL7648 (LTE modem)",
+              "url": "https://fccid.io/N7NHL7648"
+            }
+          ]
+        },
+        {
+          "model": "Sparrow",
+          "type": "Fixed ALPR — the HOA/residential product",
+          "radios": "Same platform as Falcon: LTE + Wi-Fi + BT (security researchers analyze Falcon/Sparrow as one device family)",
+          "imaging": "~5MP class; IR; 24/7 capture",
+          "power": "Fully solar + battery — \"completely infrastructure-free\"",
+          "notes": "Same 8.75\" × 5\" × 2.875\", 3 lb housing as Falcon.",
+          "sources": [
+            {
+              "label": "GainSec: Falcon/Sparrow analysis",
+              "url": "https://gainsec.com/2025/06/19/grounded-flight-device-2-root-shell-on-flock-safetys-falcon-sparrow-automated-license-plate-reader/"
+            },
+            {
+              "label": "Flock technical spec sheet (PDF)",
+              "url": "https://cdn.fs.pathlms.com/ZNfvIpMjSSubvIt16JuT"
+            }
+          ]
+        },
+        {
+          "model": "Condor",
+          "type": "PTZ video (dome), intersections/parking",
+          "radios": "LTE per vendor; full radio loadout unverifiable — the only Flock model with no cert trail at all",
+          "imaging": "Dual-lens: 90° wide context + zoom sensor; AI human detection and auto-follow; 30-day recorded video",
+          "power": "AC/grid or solar variant",
+          "notes": "~60 Condors were found streaming openly on the internet with no password (Jan 2026).",
+          "sources": [
+            {
+              "label": "Police1 product launch coverage",
+              "url": "https://www.police1.com/police-products/investigation/video-surveillance/up-close-flock-safety-unveils-solar-condor-ptz-and-mobile-security-trailer"
+            },
+            {
+              "label": "GainSec: 67 exposed feeds",
+              "url": "https://gainsec.com/2026/01/09/bird-hunting-season-finding-67-live-camera-feeds-and-debug-web-interfaces-accidentally-exposed-by-flock-safety/"
+            }
+          ]
+        },
+        {
+          "model": "Raven",
+          "type": "Acoustic gunshot sensor (not a camera)",
+          "radios": "Wi-Fi 2.4GHz + Bluetooth/BLE (ESP32-WROOM-32D — FCC ID 2AC7Z-ESPWROOM32D) + LTE fallback",
+          "imaging": "None — microphone array; ML audio processor classifies gunshot vs background in 5-second increments; triangulates across 3+ sensors",
+          "power": "Solar + battery",
+          "notes": "Broadcasts BLE beacons — fingerprintable in the field. Researchers found no secure boot and no flash encryption.",
+          "sources": [
+            {
+              "label": "GainSec Raven teardown",
+              "url": "https://gainsec.com/2025/06/19/plucked-and-rooted-device-1-debug-shell-on-flock-safetys-raven-gunshot-detection-system/"
+            },
+            {
+              "label": "FCC module cert 2AC7Z-ESPWROOM32D",
+              "url": "https://fccid.io/2AC7Z-ESPWROOM32D"
+            }
+          ]
+        }
       ],
       "certNote": "Flock's own FCC grantee code (2BKG8) contains zero filings, and a live query of Canada's ISED Radio Equipment List returns no Flock entries — every device ships on third-party module certifications.",
-      "flags": "ICE side-door searches; abortion-related search across 83,000 cameras; 50+ security vulnerabilities and a congressional inquiry; 50+ cities cancelled since 2025."
+      "flags": "ICE side-door searches; abortion-related search across 83,000 cameras; 50+ security vulnerabilities and a congressional inquiry; 50+ cities cancelled since 2025.",
+      "certSources": [
+        {
+          "label": "Flock's empty FCC grantee code 2BKG8",
+          "url": "https://fccid.io/2BKG8"
+        }
+      ]
     },
     {
       "slug": "axon",
@@ -39,19 +171,123 @@
         "name": "Fusus + Evidence.com",
         "what": "A real-time crime centre fusing any-vendor ALPR, private and community camera registries, CAD, and drones into one operational picture.",
         "features": [
-          { "f": "Camera registries", "d": "Businesses and residents enrol private cameras; police get live or on-request access without owning the hardware." },
-          { "f": "ALPR Sharing", "d": "Partner agencies search each other's plate data. Axon's own docs note the sharing audit report contains hardcoded placeholder fields — it records that a config changed, not what changed." },
-          { "f": "Face recognition trajectory", "d": "A 2019 ethics commitment against face matching; a December 2025 world-first facial-recognition bodycam trial with Edmonton Police (50 officers, ~7,000-face watch list)." }
+          {
+            "f": "Camera registries",
+            "d": "Businesses and residents enrol private cameras; police get live or on-request access without owning the hardware."
+          },
+          {
+            "f": "ALPR Sharing",
+            "d": "Partner agencies search each other's plate data. Axon's own docs note the sharing audit report contains hardcoded placeholder fields — it records that a config changed, not what changed."
+          },
+          {
+            "f": "Face recognition trajectory",
+            "d": "A 2019 ethics commitment against face matching; a December 2025 world-first facial-recognition bodycam trial with Edmonton Police (50 officers, ~7,000-face watch list)."
+          }
         ],
-        "onRecord": "Retention and permissions are customer-set with no vendor limit — Toronto sets 7 days where Axon's default is 30."
+        "onRecord": "Retention and permissions are customer-set with no vendor limit — Toronto sets 7 days where Axon's default is 30.",
+        "sources": [
+          {
+            "label": "Axon Fusus acquisition announcement",
+            "url": "https://investor.axon.com/2024-02-01-Axon-Accelerates-Real-Time-Operations-Solution-with-Strategic-Acquisition-of-Fusus"
+          },
+          {
+            "label": "ACLU vendor analysis (ALPR Sharing, audit gaps)",
+            "url": "https://www.aclu.org/news/privacy-technology/other-alpr-vendors"
+          },
+          {
+            "label": "Axon ethics board on face matching (2019)",
+            "url": "https://www.policingproject.org/axon-fr"
+          },
+          {
+            "label": "CBC: Edmonton FR bodycam trial",
+            "url": "https://www.cbc.ca/news/canada/edmonton/edmonton-police-facial-recognition-cameras-9.7000389"
+          }
+        ]
       },
       "hardware": [
-        { "model": "Outpost (AX1054)", "type": "Fixed ALPR — pole, building, trailer, vehicle, or tree mount", "radios": "LTE across 9 bands incl. FirstNet B14 + dual-band Wi-Fi (2.4/5GHz) + BLE — one certification for the whole unit (FCC ID X4GS06009, granted Dec 10 2025; ISED 8803A-S06009, approved Jan 29 2026)", "imaging": "Separate LPR and livestream sensors; resolution not published by Axon", "power": "Solar + internal battery (~3 days without sun), 12–24VDC, or 110VAC", "notes": "The ISED approval means Axon's fixed ALPR hardware is regulatory-ready for the Canadian market as of January 2026." },
-        { "model": "Fleet 3 (Toronto's in-car class)", "type": "In-car system: windshield dual-view camera + interior camera + hub", "radios": "Wi-Fi 2.4/5GHz + Bluetooth in camera (FCC X4GS00947C) and hub (X4GS01405, ISED 8803A-S01405); 900MHz FHSS wireless mic link (X4GS01351); GNSS. LTE via a separate Cradlepoint router", "imaging": "ALPR lens: 4K sensor, 60° field of view; wide-angle evidence lens 160°; recordings up to 1080p", "power": "Vehicle 12V via Fleet Hub, ignition-triggered", "notes": "Reads at highway speeds; the platform behind fleet-wide scanning." },
-        { "model": "Lightpost", "type": "Streetlight-mounted ALPR", "radios": "Radios and power come from partner Ubicquia's streetlight hub (FCC grantee 2AECK) — certification sits with Ubicquia, not Axon", "imaging": "The camera is an Axis Q1800-LE: 1080p with WDR, plate capture up to ~155 mph, ~100m daylight range", "power": "Municipal streetlight power (NEMA photocell interface) — no battery or solar", "notes": "Installs on existing streetlights in under an hour, no trenching." }
+        {
+          "model": "Outpost (AX1054)",
+          "type": "Fixed ALPR — pole, building, trailer, vehicle, or tree mount",
+          "radios": "LTE across 9 bands incl. FirstNet B14 + dual-band Wi-Fi (2.4/5GHz) + BLE — one certification for the whole unit (FCC ID X4GS06009, granted Dec 10 2025; ISED 8803A-S06009, approved Jan 29 2026)",
+          "imaging": "Separate LPR and livestream sensors; resolution not published by Axon",
+          "power": "Solar + internal battery (~3 days without sun), 12–24VDC, or 110VAC",
+          "notes": "The ISED approval means Axon's fixed ALPR hardware is regulatory-ready for the Canadian market as of January 2026.",
+          "sources": [
+            {
+              "label": "FCC grant X4GS06009",
+              "url": "https://fccid.io/X4GS06009"
+            },
+            {
+              "label": "Axon Outpost user guide (PDF, radio + compliance pages)",
+              "url": "https://cdn.mediavalet.com/usva/axon/Jzw3zRJc7EW1Px37-blUsg/HAb27RrSpk-wvTKxFeXWAw/Original/Axon%20Outpost%20User%20Guide%20EN_US.pdf"
+            },
+            {
+              "label": "Axon Outpost product page",
+              "url": "https://www.axon.com/products/axon-outpost"
+            },
+            {
+              "label": "ISED Radio Equipment List (search company 8803A)",
+              "url": "https://sms-sgs.ic.gc.ca/equipmentSearch/searchRadioEquipments"
+            }
+          ]
+        },
+        {
+          "model": "Fleet 3 (Toronto's in-car class)",
+          "type": "In-car system: windshield dual-view camera + interior camera + hub",
+          "radios": "Wi-Fi 2.4/5GHz + Bluetooth in camera (FCC X4GS00947C) and hub (X4GS01405, ISED 8803A-S01405); 900MHz FHSS wireless mic link (X4GS01351); GNSS. LTE via a separate Cradlepoint router",
+          "imaging": "ALPR lens: 4K sensor, 60° field of view; wide-angle evidence lens 160°; recordings up to 1080p",
+          "power": "Vehicle 12V via Fleet Hub, ignition-triggered",
+          "notes": "Reads at highway speeds; the platform behind fleet-wide scanning.",
+          "sources": [
+            {
+              "label": "FCC grant X4GS00947C (camera)",
+              "url": "https://fccid.io/X4GS00947C"
+            },
+            {
+              "label": "FCC grant X4GS01405 (Fleet Hub)",
+              "url": "https://fccid.io/X4GS01405"
+            },
+            {
+              "label": "FCC grant X4GS01351 (900MHz mic)",
+              "url": "https://fccid.io/X4GS01351"
+            },
+            {
+              "label": "Axon Fleet 3 FAQ (Cradlepoint LTE, lenses)",
+              "url": "https://www.axon.com/help/fleet-3/cameras-and-sensors/fleet/3/user-guide/faq-general.htm"
+            }
+          ]
+        },
+        {
+          "model": "Lightpost",
+          "type": "Streetlight-mounted ALPR",
+          "radios": "Radios and power come from partner Ubicquia's streetlight hub (FCC grantee 2AECK) — certification sits with Ubicquia, not Axon",
+          "imaging": "The camera is an Axis Q1800-LE: 1080p with WDR, plate capture up to ~155 mph, ~100m daylight range",
+          "power": "Municipal streetlight power (NEMA photocell interface) — no battery or solar",
+          "notes": "Installs on existing streetlights in under an hour, no trenching.",
+          "sources": [
+            {
+              "label": "Axon Lightpost product page",
+              "url": "https://www.axon.com/products/axon-lightpost"
+            },
+            {
+              "label": "Ubicquia FCC grantee 2AECK",
+              "url": "https://fccid.io/2AECK"
+            },
+            {
+              "label": "Axon-Ubicquia partnership announcement",
+              "url": "https://www.ubicquia.com/newsroom/axon-and-ubicquia-to-transform-community-collaboration-in-public-safety"
+            }
+          ]
+        }
       ],
       "certNote": "Axon holds FCC grantee code X4G and ISED company number 8803A with 37 Canadian registry entries.",
-      "flags": "NCIC hotlists include ICE's immigration violator file. Retention and permissions are admin settings, not policy guarantees."
+      "flags": "NCIC hotlists include ICE's immigration violator file. Retention and permissions are admin settings, not policy guarantees.",
+      "certSources": [
+        {
+          "label": "ISED Radio Equipment List (company 8803A)",
+          "url": "https://sms-sgs.ic.gc.ca/equipmentSearch/searchRadioEquipments"
+        }
+      ]
     },
     {
       "slug": "genetec",
@@ -63,18 +299,99 @@
         "name": "Security Center / AutoVu",
         "what": "Agency-controlled deployments with no vendor-run national search pool. Canada's most-deployed ALPR software.",
         "features": [
-          { "f": "Attribute search", "d": "Vehicle type, colour, direction, speed — works with partial or no plate (Cloudrunner ML Core)." },
-          { "f": "Customer-owned data", "d": "Sharing beyond the agency requires the agency to build it; Canadian cloud hosting available." }
+          {
+            "f": "Attribute search",
+            "d": "Vehicle type, colour, direction, speed — works with partial or no plate (Cloudrunner ML Core)."
+          },
+          {
+            "f": "Customer-owned data",
+            "d": "Sharing beyond the agency requires the agency to build it; Canadian cloud hosting available."
+          }
         ],
-        "onRecord": "Genetec holds zero radio certifications and runs no cross-agency lookup — the counter-example showing the dragnet is a business-model choice, not a technical necessity."
+        "onRecord": "Genetec holds zero radio certifications and runs no cross-agency lookup — the counter-example showing the dragnet is a business-model choice, not a technical necessity.",
+        "sources": [
+          {
+            "label": "Genetec AutoVu product page",
+            "url": "https://www.genetec.com/products/unified-security/autovu"
+          },
+          {
+            "label": "Cloudrunner launch release",
+            "url": "https://www.genetec.com/press-center/press-releases/2022/03/genetec-introduces-autovu-cloudrunner-an-advanced-vehicle-centric-investigation-system"
+          }
+        ]
       },
       "hardware": [
-        { "model": "AutoVu SharpV G3", "type": "Fixed ALPR — pole/wall", "radios": "Optional LTE Cat-4 module (PTCRB-certified; AT&T/Verizon/FirstNet B14) + multi-constellation GNSS. No Wi-Fi, no Bluetooth. No-radio variants are certified as unintentional radiators only", "imaging": "ALPR sensor 1920×1200 @30fps monochrome global shutter + colour context sensor; pulsed LED illuminator (940/850/740/590nm), works at 0 lux; capture range 3–45m; motorized remote focus/zoom", "power": "PoE++ (802.3bt) or 24VDC; IP66/IP67, −40 to +65°C", "notes": "Brampton's intersection cameras are this family." },
-        { "model": "AutoVu SharpZ3", "type": "In-car ALPR — trunk unit + roof camera pods", "radios": "NO radios at all — FCC Part 15B only. Optional GNSS+IMU expansion is receive-only. Data rides the patrol vehicle's own network", "imaging": "ALPR + context sensors 1456×1088 @30fps (mono global shutter + colour); pulsed illuminator options", "power": "Vehicle 12/24VDC, ~50–98W system", "notes": "An ALPR unit that physically cannot transmit anything itself." },
-        { "model": "Cloudrunner CR-H2", "type": "Quick-deploy solar ALPR — straps to poles", "radios": "LTE Cat-4 (bands 2/4/5/13/66 + FirstNet B14) + GNSS only — no Wi-Fi, no Bluetooth (verified via its Verizon device certification)", "imaging": "High-definition day/night capture; exact sensor specs not published", "power": "Solar panel + internal LiFePO4 battery; optional 12VDC", "notes": "The quick-deploy answer to Flock's Falcon — minus the Wi-Fi and Bluetooth." }
+        {
+          "model": "AutoVu SharpV G3",
+          "type": "Fixed ALPR — pole/wall",
+          "radios": "Optional LTE Cat-4 module (PTCRB-certified; AT&T/Verizon/FirstNet B14) + multi-constellation GNSS. No Wi-Fi, no Bluetooth. No-radio variants are certified as unintentional radiators only",
+          "imaging": "ALPR sensor 1920×1200 @30fps monochrome global shutter + colour context sensor; pulsed LED illuminator (940/850/740/590nm), works at 0 lux; capture range 3–45m; motorized remote focus/zoom",
+          "power": "PoE++ (802.3bt) or 24VDC; IP66/IP67, −40 to +65°C",
+          "notes": "Brampton's intersection cameras are this family.",
+          "sources": [
+            {
+              "label": "SharpV datasheet (PDF)",
+              "url": "https://info.genetec.com/rs/752-WRB-240/images/EN-Genetec-Autovu-Sharpv-Datasheet.pdf"
+            },
+            {
+              "label": "SharpV 4G LTE release (PTCRB/FirstNet)",
+              "url": "https://www.genetec.com/product-releases/sharpv-4g-lte-alpr"
+            },
+            {
+              "label": "FCC applicant search: zero Genetec filings",
+              "url": "https://apps.fcc.gov/oetcf/eas/reports/GenericSearch.cfm"
+            }
+          ]
+        },
+        {
+          "model": "AutoVu SharpZ3",
+          "type": "In-car ALPR — trunk unit + roof camera pods",
+          "radios": "NO radios at all — FCC Part 15B only. Optional GNSS+IMU expansion is receive-only. Data rides the patrol vehicle's own network",
+          "imaging": "ALPR + context sensors 1456×1088 @30fps (mono global shutter + colour); pulsed illuminator options",
+          "power": "Vehicle 12/24VDC, ~50–98W system",
+          "notes": "An ALPR unit that physically cannot transmit anything itself.",
+          "sources": [
+            {
+              "label": "SharpZ3 specifications (Genetec techdocs)",
+              "url": "https://techdocs.genetec.com/r/en-US/AutoVuTM-SharpZ3-Administrator-Guide-13.7/Specifications-for-the-SharpZ3"
+            },
+            {
+              "label": "SharpZ3 datasheet",
+              "url": "https://resources.genetec.com/en-datasheets/autovu-sharpz3"
+            }
+          ]
+        },
+        {
+          "model": "Cloudrunner CR-H2",
+          "type": "Quick-deploy solar ALPR — straps to poles",
+          "radios": "LTE Cat-4 (bands 2/4/5/13/66 + FirstNet B14) + GNSS only — no Wi-Fi, no Bluetooth (verified via its Verizon device certification)",
+          "imaging": "High-definition day/night capture; exact sensor specs not published",
+          "power": "Solar panel + internal LiFePO4 battery; optional 12VDC",
+          "notes": "The quick-deploy answer to Flock's Falcon — minus the Wi-Fi and Bluetooth.",
+          "sources": [
+            {
+              "label": "Verizon device certification listing (LTE+GPS, no Wi-Fi/BT)",
+              "url": "https://opendevelopment.verizonwireless.com/device-showcase/device/34928"
+            },
+            {
+              "label": "Cloudrunner installation guide",
+              "url": "https://techdocs.genetec.com/v/u/en-US/Genetec-CloudrunnerTM-CR-H2-Installation-Guide"
+            }
+          ]
+        }
       ],
       "certNote": "Direct queries of both regulators come back empty: zero FCC applications and zero ISED listings under Genetec's name — LTE rides pre-certified third-party modules.",
-      "flags": "The counter-example: no cross-agency pool, customer-owned data, radio-silent hardware. Retention is still customer-set."
+      "flags": "The counter-example: no cross-agency pool, customer-owned data, radio-silent hardware. Retention is still customer-set.",
+      "certSources": [
+        {
+          "label": "FCC applicant search (no Genetec records)",
+          "url": "https://apps.fcc.gov/oetcf/eas/reports/GenericSearch.cfm"
+        },
+        {
+          "label": "ISED Radio Equipment List (no Genetec records)",
+          "url": "https://sms-sgs.ic.gc.ca/equipmentSearch/searchRadioEquipments"
+        }
+      ]
     },
     {
       "slug": "motorola",
@@ -86,19 +403,89 @@
         "name": "LEARN / PlateSearch",
         "what": "The oldest inference engine in the industry, pooling 1.5B+ police reads with 5B+ commercial scans from repossession fleets.",
         "features": [
-          { "f": "Stakeout", "d": "Lists every plate seen at a chosen location and time — the ACLU's reading of NYPD records: who was at a political rally, an abortion clinic, or a gay bar." },
-          { "f": "Associate Analysis", "d": "Flags \"possible associates\" of a target vehicle — family, friends, and partners get swept in." },
-          { "f": "Locate Analysis", "d": "Predicts the most likely locations to find a vehicle from its historical reads." },
-          { "f": "Commercial pipeline", "d": "The DRN half of the database is collected by private repo drivers and also sold to insurers and lenders." }
+          {
+            "f": "Stakeout",
+            "d": "Lists every plate seen at a chosen location and time — the ACLU's reading of NYPD records: who was at a political rally, an abortion clinic, or a gay bar."
+          },
+          {
+            "f": "Associate Analysis",
+            "d": "Flags \"possible associates\" of a target vehicle — family, friends, and partners get swept in."
+          },
+          {
+            "f": "Locate Analysis",
+            "d": "Predicts the most likely locations to find a vehicle from its historical reads."
+          },
+          {
+            "f": "Commercial pipeline",
+            "d": "The DRN half of the database is collected by private repo drivers and also sold to insurers and lenders."
+          }
         ],
-        "onRecord": "NYPD retains LEARN data for 5 years; ICE bought query access via a $6.8M Thomson Reuters contract."
+        "onRecord": "NYPD retains LEARN data for 5 years; ICE bought query access via a $6.8M Thomson Reuters contract.",
+        "sources": [
+          {
+            "label": "ACLU: NYPD's LEARN database (Stakeout, Associate Analysis)",
+            "url": "https://www.aclu.org/news/privacy-technology/documents-uncover-nypds-vast-license-plate-reader-database"
+          },
+          {
+            "label": "Vigilant PlateSearch user guide (PDF)",
+            "url": "https://learnfl.vigilantsolutions.com/learn/Vigilant_PlateSearch_User_Guide.pdf"
+          },
+          {
+            "label": "LEARN reseller feature list (Locate Analysis)",
+            "url": "https://www.ra-comm.com/vigilant-solutions/learn.htm"
+          },
+          {
+            "label": "CDT: ICE access to commercial LPR data",
+            "url": "https://cdt.org/insights/ice-accesses-commercial-license-plate-reader-database-we-want-access-to-ice/"
+          }
+        ]
       },
       "hardware": [
-        { "model": "L6Q", "type": "Quick-deploy ALPR — pole, wall, or trailer", "radios": "Internal LTE (microSIM) + Wi-Fi 802.11ac + Bluetooth 5 LE + embedded radar trigger (speed/direction to 100 mph) — all via pre-certified modules; no host FCC ID exists", "imaging": "2.1MP starlight sensor (1920×1080); pulsed 850nm IR", "power": "Solar (45W panel + 12Ah battery), 12VDC, or 120VAC; ~20,000 scans per swappable battery charge", "notes": "IP67, paintable shroud — designed to disappear into streetscape." },
-        { "model": "ReaperHD", "type": "In-car dual-lens ALPR (also fixed packages)", "radios": "ZERO radios — pure PoE+ wired camera. GPS antenna connects to the in-car processor, not the camera", "imaging": "Dual-lens IR + colour, ~60 images/sec, capture up to 150 mph", "power": "PoE+ (802.3at), single Cat6 run to 100m", "notes": "IP67/NEMA4, −40 to +65°C. Vigilant Solutions never held any FCC equipment authorization." }
+        {
+          "model": "L6Q",
+          "type": "Quick-deploy ALPR — pole, wall, or trailer",
+          "radios": "Internal LTE (microSIM) + Wi-Fi 802.11ac + Bluetooth 5 LE + embedded radar trigger (speed/direction to 100 mph) — all via pre-certified modules; no host FCC ID exists",
+          "imaging": "2.1MP starlight sensor (1920×1080); pulsed 850nm IR",
+          "power": "Solar (45W panel + 12Ah battery), 12VDC, or 120VAC; ~20,000 scans per swappable battery charge",
+          "notes": "IP67, paintable shroud — designed to disappear into streetscape.",
+          "sources": [
+            {
+              "label": "L6Q datasheet (PDF)",
+              "url": "https://www.pelco.com/fs/documents/Pelco-L6Q-Camera-Datasheet.pdf"
+            },
+            {
+              "label": "L6Q manual (Part 15 SDoC)",
+              "url": "https://www.manualslib.com/manual/3274287/Motorola-L6q.html"
+            }
+          ]
+        },
+        {
+          "model": "ReaperHD",
+          "type": "In-car dual-lens ALPR (also fixed packages)",
+          "radios": "ZERO radios — pure PoE+ wired camera. GPS antenna connects to the in-car processor, not the camera",
+          "imaging": "Dual-lens IR + colour, ~60 images/sec, capture up to 150 mph",
+          "power": "PoE+ (802.3at), single Cat6 run to 100m",
+          "notes": "IP67/NEMA4, −40 to +65°C. Vigilant Solutions never held any FCC equipment authorization.",
+          "sources": [
+            {
+              "label": "ReaperHD spec sheet (PDF)",
+              "url": "https://www.daywireless.com/downloads/motorola/motorola-reaper-hd-camera-spec-sheet.pdf"
+            },
+            {
+              "label": "ReaperHD install manual",
+              "url": "https://www.manualslib.com/manual/3280638/Motorola-Reaperhd.html"
+            }
+          ]
+        }
       ],
       "certNote": "No Motorola LPR camera has its own FCC filing; the portfolio's facial recognition (BriefCam) and appearance search (Avigilon) are separate products.",
-      "flags": "The commercial-collection outlier: repo-fleet scans sold to police, insurers, and lenders alike."
+      "flags": "The commercial-collection outlier: repo-fleet scans sold to police, insurers, and lenders alike.",
+      "certSources": [
+        {
+          "label": "FCC applicant search: no Motorola/Vigilant LPR filings",
+          "url": "https://apps.fcc.gov/oetcf/eas/reports/GenericSearch.cfm"
+        }
+      ]
     },
     {
       "slug": "leonardo",
@@ -110,20 +497,121 @@
         "name": "EOC + SignalTrace",
         "what": "The back office (Enterprise Operations Center) plus the system that drops the plate entirely: SignalTrace fingerprints the wireless devices in and around a vehicle.",
         "features": [
-          { "f": "Device co-travel", "d": "Leonardo's own marketing: \"identify groups of consumer electronic devices that routinely travel together\" — Convoy Analysis for your Bluetooth." },
-          { "f": "Plate-optional", "d": "Their words: works \"with or without license plate readers.\"" },
-          { "f": "Certification-invisible", "d": "A receive-only sensor needs no radio authorization — there is no FCC or ISED paper trail for it, by design of the rules." }
+          {
+            "f": "Device co-travel",
+            "d": "Leonardo's own marketing: \"identify groups of consumer electronic devices that routinely travel together\" — Convoy Analysis for your Bluetooth."
+          },
+          {
+            "f": "Plate-optional",
+            "d": "Their words: works \"with or without license plate readers.\""
+          },
+          {
+            "f": "Certification-invisible",
+            "d": "A receive-only sensor needs no radio authorization — there is no FCC or ISED paper trail for it, by design of the rules."
+          }
         ],
-        "onRecord": "No confirmed paying customers yet — a product looking for its first buyer."
+        "onRecord": "No confirmed paying customers yet — a product looking for its first buyer.",
+        "sources": [
+          {
+            "label": "Leonardo's SignalTrace page (their own claims)",
+            "url": "https://www.leonardocompany-us.com/lpr/elsag-signaltrace"
+          },
+          {
+            "label": "404 Media on SignalTrace",
+            "url": "https://www.404media.co/this-company-will-add-phone-airpod-and-smartwatch-trackers-to-license-plate-readers/"
+          },
+          {
+            "label": "Forbes on EOC Plus (2024, no customers)",
+            "url": "https://www.forbes.com/sites/thomasbrewster/2024/05/14/police-car-surveillance-tech-uncovers-phones-pet-trackers-and-library-books/"
+          },
+          {
+            "label": "Independent RF analysis (O'Horo)",
+            "url": "https://www.ryanohoro.com/post/thinking-critically-about-signaltrace"
+          }
+        ]
       },
       "hardware": [
-        { "model": "Mobile Plate Hunter (MPH900)", "type": "In-car: dual roof cameras + trunk processor", "radios": "Cameras radio-free. The company's only FCC certification ever is a 2009 2.4GHz Wi-Fi access point inside the trunk processor (FCC ID VTFADM3)", "imaging": "Dual colour+IR CMOS, 1280×1024; reads at up to 150 mph closing speed; GPS-tagged reads", "power": "Vehicle 12V", "notes": "Seventh-generation product line." },
-        { "model": "Street Sentry", "type": "Solar pole-mounted fixed ALPR", "radios": "None in the camera — \"cellular connectivity in a weatherproof utility box\": an off-the-shelf router with its own certification", "imaging": "AI LPR camera, GPS-tagged reads", "power": "Solar + battery", "notes": "" },
-        { "model": "Covert line", "type": "Disguised fixed units", "radios": "Per unit configuration", "imaging": "Cameras + processing in disguised housings", "power": "Independent power", "notes": "From ELSAG's own catalog: pole cameras disguised as weathered utility boxes, toolboxes, cargo carriers — plus radar/message-board trailers." },
-        { "model": "SignalTrace sensor", "type": "Passive RF device-signature sensor", "radios": "Receive-only — captures identifiers from phones, Bluetooth wearables, RFID tags/key fobs, tire-pressure sensors, car infotainment. No FCC/ISED filing exists because passive receivers need none", "imaging": "None — pairs with (or works without) a co-sited plate camera", "power": "Not disclosed", "notes": "Independent RF analysis suggests the visible antennas support Wi-Fi, Bluetooth, and 915MHz RFID — not every claim in the marketing." }
+        {
+          "model": "Mobile Plate Hunter (MPH900)",
+          "type": "In-car: dual roof cameras + trunk processor",
+          "radios": "Cameras radio-free. The company's only FCC certification ever is a 2009 2.4GHz Wi-Fi access point inside the trunk processor (FCC ID VTFADM3)",
+          "imaging": "Dual colour+IR CMOS, 1280×1024; reads at up to 150 mph closing speed; GPS-tagged reads",
+          "power": "Vehicle 12V",
+          "notes": "Seventh-generation product line.",
+          "sources": [
+            {
+              "label": "FCC grant VTFADM3 (2009 processor Wi-Fi AP)",
+              "url": "https://fccid.io/VTFADM3"
+            },
+            {
+              "label": "ELSAG mobile product page",
+              "url": "https://www.leonardocompany-us.com/lpr/elsag-mobile"
+            },
+            {
+              "label": "ELSAG product catalog (PDF)",
+              "url": "https://www.leonardocompany-us.com/hubfs/LPR/LPR-Product-Sheets/US/ELSAG-LPR-Product-Catalog-us.pdf"
+            }
+          ]
+        },
+        {
+          "model": "Street Sentry",
+          "type": "Solar pole-mounted fixed ALPR",
+          "radios": "None in the camera — \"cellular connectivity in a weatherproof utility box\": an off-the-shelf router with its own certification",
+          "imaging": "AI LPR camera, GPS-tagged reads",
+          "power": "Solar + battery",
+          "notes": "",
+          "sources": [
+            {
+              "label": "Street Sentry product sheet (PDF)",
+              "url": "https://www.leonardocompany-us.com/hubfs/LPR/2021%20Product%20Sheets%20for%20QR%20Codes/Street%20Sentry%20Product%20Sheet.pdf"
+            }
+          ]
+        },
+        {
+          "model": "Covert line",
+          "type": "Disguised fixed units",
+          "radios": "Per unit configuration",
+          "imaging": "Cameras + processing in disguised housings",
+          "power": "Independent power",
+          "notes": "From ELSAG's own catalog: pole cameras disguised as weathered utility boxes, toolboxes, cargo carriers — plus radar/message-board trailers.",
+          "sources": [
+            {
+              "label": "ELSAG product catalog (covert solutions section, PDF)",
+              "url": "https://www.leonardocompany-us.com/hubfs/LPR/LPR-Product-Sheets/US/ELSAG-LPR-Product-Catalog-us.pdf"
+            }
+          ]
+        },
+        {
+          "model": "SignalTrace sensor",
+          "type": "Passive RF device-signature sensor",
+          "radios": "Receive-only — captures identifiers from phones, Bluetooth wearables, RFID tags/key fobs, tire-pressure sensors, car infotainment. No FCC/ISED filing exists because passive receivers need none",
+          "imaging": "None — pairs with (or works without) a co-sited plate camera",
+          "power": "Not disclosed",
+          "notes": "Independent RF analysis suggests the visible antennas support Wi-Fi, Bluetooth, and 915MHz RFID — not every claim in the marketing.",
+          "sources": [
+            {
+              "label": "Leonardo's SignalTrace page",
+              "url": "https://www.leonardocompany-us.com/lpr/elsag-signaltrace"
+            },
+            {
+              "label": "Independent RF analysis (O'Horo)",
+              "url": "https://www.ryanohoro.com/post/thinking-critically-about-signaltrace"
+            },
+            {
+              "label": "The Drive: expert analysis of the claims",
+              "url": "https://www.thedrive.com/news/license-plate-camera-companies-want-you-to-believe-they-can-track-everything-an-expert-explains-why-they-cant"
+            }
+          ]
+        }
       ],
       "certNote": "FCC applicant search for \"elsag\" returns exactly one record in company history; ISED returns zero.",
-      "flags": "See the antenna problem: the fastest-growing capability class has no certification trail and no retention statute anywhere mentions it."
+      "flags": "See the antenna problem: the fastest-growing capability class has no certification trail and no retention statute anywhere mentions it.",
+      "certSources": [
+        {
+          "label": "FCC applicant search: one ELSAG record ever",
+          "url": "https://apps.fcc.gov/oetcf/eas/reports/GenericSearch.cfm"
+        }
+      ]
     },
     {
       "slug": "jenoptik",
@@ -135,17 +623,77 @@
         "name": "TraffiData + TraffiCatch",
         "what": "Back office storing billions of reads with hotlist comparison and pattern analysis; TraffiCatch merges captured Bluetooth device addresses with plate reads.",
         "features": [
-          { "f": "TraffiCatch", "d": "Detects Bluetooth device addresses from phones, smartwatches, earbuds, and car entertainment systems, and merges them with the licence plate — Jenoptik's own marketing." },
-          { "f": "National scale", "d": "Jenoptik hardware feeds the UK's National ANPR Service: ~14,000 cameras, 100M+ reads per day, 12-month retention, no statutory basis." }
+          {
+            "f": "TraffiCatch",
+            "d": "Detects Bluetooth device addresses from phones, smartwatches, earbuds, and car entertainment systems, and merges them with the licence plate — Jenoptik's own marketing."
+          },
+          {
+            "f": "National scale",
+            "d": "Jenoptik hardware feeds the UK's National ANPR Service: ~14,000 cameras, 100M+ reads per day, 12-month retention, no statutory basis."
+          }
         ],
-        "onRecord": "Deployed with Vector ALPR trailers in Webb and Val Verde counties, Texas, funded by DHS Operation Stonegarden and Operation Lone Star."
+        "onRecord": "Deployed with Vector ALPR trailers in Webb and Val Verde counties, Texas, funded by DHS Operation Stonegarden and Operation Lone Star.",
+        "sources": [
+          {
+            "label": "NOTUS investigation (Jenoptik marketing quote)",
+            "url": "https://www.notus.org/technology/war-zone-surveillance-border-us"
+          },
+          {
+            "label": "EFF: Bluetooth border surveillance (TraffiCatch)",
+            "url": "https://www.eff.org/deeplinks/2024/05/add-bluetooth-long-list-border-surveillance-technologies"
+          },
+          {
+            "label": "EFF: identifying border ALPRs (Vector + TraffiCatch trailers)",
+            "url": "https://www.eff.org/deeplinks/2025/11/how-identify-automated-license-plate-readers-us-mexico-border"
+          }
+        ]
       },
       "hardware": [
-        { "model": "VECTOR / VECTOR2 / VECTOR3", "type": "Fixed multi-lane ALPR (also portable/trailer)", "radios": "No transmit radios in the camera — built-in GPS is receive-only; wired LAN backhaul; trailer variant runs 2×330W solar", "imaging": "Dual 3.2MP sensors (monochrome ANPR + colour context), integrated IR — captures on completely dark roads; motorized zoom/focus", "power": "Mains/low-voltage; solar on trailers", "notes": "IP67 + IK10, under 8kg (VECTOR SR variant)." },
-        { "model": "24GHz enforcement radar", "type": "Companion radar for speed/red-light systems", "radios": "The certified transmitter in Jenoptik deployments: 24GHz K-band 3D tracking radar, FCC grantee QJJ (e.g. QJJ-590113, 2024) — tracks up to 186 mph across 3 lanes", "imaging": "None", "power": "System-powered", "notes": "The camera is passive; the radar beside it carries the FCC grant." }
+        {
+          "model": "VECTOR / VECTOR2 / VECTOR3",
+          "type": "Fixed multi-lane ALPR (also portable/trailer)",
+          "radios": "No transmit radios in the camera — built-in GPS is receive-only; wired LAN backhaul; trailer variant runs 2×330W solar",
+          "imaging": "Dual 3.2MP sensors (monochrome ANPR + colour context), integrated IR — captures on completely dark roads; motorized zoom/focus",
+          "power": "Mains/low-voltage; solar on trailers",
+          "notes": "IP67 + IK10, under 8kg (VECTOR SR variant).",
+          "sources": [
+            {
+              "label": "Jenoptik ALPR product pages",
+              "url": "https://www.jenoptik.us/products/civil-security/alpr.aspx"
+            },
+            {
+              "label": "Police1 VECTOR overview",
+              "url": "https://www.policemag.com/products/vector-alpr-cameras"
+            }
+          ]
+        },
+        {
+          "model": "24GHz enforcement radar",
+          "type": "Companion radar for speed/red-light systems",
+          "radios": "The certified transmitter in Jenoptik deployments: 24GHz K-band 3D tracking radar, FCC grantee QJJ (e.g. QJJ-590113, 2024) — tracks up to 186 mph across 3 lanes",
+          "imaging": "None",
+          "power": "System-powered",
+          "notes": "The camera is passive; the radar beside it carries the FCC grant.",
+          "sources": [
+            {
+              "label": "FCC grantee QJJ (Jenoptik Robot GmbH)",
+              "url": "https://fccid.io/QJJ"
+            },
+            {
+              "label": "FCC grant QJJ-590113 (2024 radar)",
+              "url": "https://fccid.io/QJJ-590113"
+            }
+          ]
+        }
       ],
       "certNote": "FCC grantee QJJ (JENOPTIK Robot GmbH) covers the radar line; the cameras carry no transmitters.",
-      "flags": "TraffiCatch is the first documented plate+device tracking in the field — see the antenna problem."
+      "flags": "TraffiCatch is the first documented plate+device tracking in the field — see the antenna problem.",
+      "certSources": [
+        {
+          "label": "FCC grantee QJJ filings",
+          "url": "https://fccid.io/QJJ"
+        }
+      ]
     },
     {
       "slug": "dahua",
@@ -155,11 +703,47 @@
       "radioBadge": "Wired PoE — no radios",
       "platform": null,
       "hardware": [
-        { "model": "ITC415 (DHI-ITC415-PW6M-IZ-BH)", "type": "Fixed access ANPR bullet — parking, gates, community roads", "radios": "None — Gigabit Ethernet RJ-45 only, plus RS-485/RS-232 and alarm I/O for barrier control. No FCC ID exists (unintentional radiator)", "imaging": "4MP (2688×1520) 1/1.8\" CMOS; 2.7–12mm motorized varifocal; 6 adjustable 850nm IR illuminators (12m); capture 3–6m at up to 30 km/h. Datasheet: \"supports recognizing... features of driver and front-seat passenger\"", "power": "PoE+ / 12VDC / 24VAC, under 20W; IP67", "notes": "Their ALPR camera's own spec sheet claims recognition of the people in the front seat." },
-        { "model": "ITC215", "type": "Fixed access ANPR (2MP sibling)", "radios": "None — wired PoE+ only", "imaging": "2MP, 3.2–10.5mm motorized, built-in IR ~12m, reads 3–8m at up to 30 km/h", "power": "PoE+ or 12VDC", "notes": "" }
+        {
+          "model": "ITC415 (DHI-ITC415-PW6M-IZ-BH)",
+          "type": "Fixed access ANPR bullet — parking, gates, community roads",
+          "radios": "None — Gigabit Ethernet RJ-45 only, plus RS-485/RS-232 and alarm I/O for barrier control. No FCC ID exists (unintentional radiator)",
+          "imaging": "4MP (2688×1520) 1/1.8\" CMOS; 2.7–12mm motorized varifocal; 6 adjustable 850nm IR illuminators (12m); capture 3–6m at up to 30 km/h. Datasheet: \"supports recognizing... features of driver and front-seat passenger\"",
+          "power": "PoE+ / 12VDC / 24VAC, under 20W; IP67",
+          "notes": "Their ALPR camera's own spec sheet claims recognition of the people in the front seat.",
+          "sources": [
+            {
+              "label": "Dahua ITC415 datasheet (PDF — incl. driver/passenger claim)",
+              "url": "https://material.dahuasecurity.com/uploads/soft/20211008/DHI-ITC415-PW6M-IZ-BH_Datasheet_20210625.pdf"
+            }
+          ]
+        },
+        {
+          "model": "ITC215",
+          "type": "Fixed access ANPR (2MP sibling)",
+          "radios": "None — wired PoE+ only",
+          "imaging": "2MP, 3.2–10.5mm motorized, built-in IR ~12m, reads 3–8m at up to 30 km/h",
+          "power": "PoE+ or 12VDC",
+          "notes": "",
+          "sources": [
+            {
+              "label": "Dahua ITC215 datasheet (PDF)",
+              "url": "https://www.dahuasecurity.com/asset/upload/uploads/soft/20201023/DHI-ITC215-PW6M-IRLZF_datasheet_20201020.pdf"
+            }
+          ]
+        }
       ],
       "certNote": "Banned from US federal procurement under NDAA §889 (2018); added to the US Entity List (2019) over Xinjiang surveillance; FCC halted new equipment authorizations (2022). No equivalent Canadian restriction exists.",
-      "flags": "Equipment the US government won't allow on its own networks is scanning plates for Canadian institutions."
+      "flags": "Equipment the US government won't allow on its own networks is scanning plates for Canadian institutions.",
+      "certSources": [
+        {
+          "label": "FY2019 NDAA (H.R.5515, §889)",
+          "url": "https://www.congress.gov/bill/115th-congress/house-bill/5515"
+        },
+        {
+          "label": "FCC order halting authorizations (Nov 2022)",
+          "url": "https://www.fcc.gov/document/fcc-bans-authorizations-devices-pose-national-security-threat"
+        }
+      ]
     },
     {
       "slug": "axis",
@@ -169,8 +753,34 @@
       "radioBadge": "Wired PoE — no radios",
       "platform": null,
       "hardware": [
-        { "model": "P1445-LE-3 (License Plate Verifier Kit)", "type": "Fixed bullet — single-lane access control (≤30 km/h)", "radios": "None of any kind — approvals list only unintentional-radiator class marks; no FCC ID exists by design", "imaging": "1080p 1/2.8\" CMOS; 2.8–8.5mm varifocal with remote zoom; built-in 850nm OptimizedIR", "power": "PoE 802.3af/at; IP66/IP67/IK10", "notes": "" },
-        { "model": "Q1700-LE", "type": "Fixed bullet — highway-grade capture", "radios": "None — PoE or 20–28VDC wired only", "imaging": "1080p; 18–137mm 8× zoom; OptimizedIR 40–50m; captures at 130 km/h on-camera (250 km/h with server analytics)", "power": "PoE 802.3af/at or DC; wind-rated to 60 m/s", "notes": "Discontinued, replaced by Q1800-LE — the camera inside Axon's Lightpost." }
+        {
+          "model": "P1445-LE-3 (License Plate Verifier Kit)",
+          "type": "Fixed bullet — single-lane access control (≤30 km/h)",
+          "radios": "None of any kind — approvals list only unintentional-radiator class marks; no FCC ID exists by design",
+          "imaging": "1080p 1/2.8\" CMOS; 2.8–8.5mm varifocal with remote zoom; built-in 850nm OptimizedIR",
+          "power": "PoE 802.3af/at; IP66/IP67/IK10",
+          "notes": "",
+          "sources": [
+            {
+              "label": "Axis P1445-LE-3 datasheet (PDF)",
+              "url": "https://www.axis.com/dam/public/49/8c/0b/datasheet-axis-p1445-le-3-license-plate-verifier-kit-en-US-443262.pdf"
+            }
+          ]
+        },
+        {
+          "model": "Q1700-LE",
+          "type": "Fixed bullet — highway-grade capture",
+          "radios": "None — PoE or 20–28VDC wired only",
+          "imaging": "1080p; 18–137mm 8× zoom; OptimizedIR 40–50m; captures at 130 km/h on-camera (250 km/h with server analytics)",
+          "power": "PoE 802.3af/at or DC; wind-rated to 60 m/s",
+          "notes": "Discontinued, replaced by Q1800-LE — the camera inside Axon's Lightpost.",
+          "sources": [
+            {
+              "label": "Axis Q1700-LE datasheet (PDF)",
+              "url": "https://www.axis.com/dam/public/2f/8c/d9/datasheet-axis-q1700-le-license-plate-camera-en-US-352173.pdf"
+            }
+          ]
+        }
       ],
       "certNote": "Both models carry only FCC Part 15B / ICES-003 class marks — the absence of an FCC ID is itself the proof of no radio.",
       "flags": ""
@@ -183,12 +793,65 @@
       "radioBadge": "PoE (gen-1: dormant Wi-Fi)",
       "platform": null,
       "hardware": [
-        { "model": "CB62-TE (current LPR bullet)", "type": "Fixed telephoto bullet — LPR to 80 mph across 3 lanes (edge AI)", "radios": "None — RJ-45 PoE only; absent from Verkada's FCC grant list (unintentional radiator)", "imaging": "4K (3840×2160) 1/2.8\" CMOS; 8–20mm motorized varifocal; 50m IR", "power": "PoE+ 802.3at; IP67, IK10", "notes": "" },
-        { "model": "CB61-TE (gen-1, discontinued)", "type": "Fixed telephoto bullet", "radios": "Contains a DORMANT Wi-Fi radio — disabled by default; enabling requires org-level action via Verkada Support, per Verkada's own help documentation", "imaging": "4K; 8–20mm motorized zoom; 50m IR", "power": "PoE 802.3af/at", "notes": "The documented \"dormant radio, vendor-enabled\" pattern in the wild." },
-        { "model": "Outdoor Remote Deployment Camera", "type": "Off-grid remote camera (Verkada's newest direction)", "radios": "BLE + cellular LTE — Verkada's only FCC-certified camera (FCC ID 2AWUU68B66001, granted January 2026)", "imaging": "Per filing: camera + IR modules on a CV75 platform", "power": "Solar/remote deployment", "notes": "Shows where the cloud vendors are heading: off-grid, radio-equipped poles." }
+        {
+          "model": "CB62-TE (current LPR bullet)",
+          "type": "Fixed telephoto bullet — LPR to 80 mph across 3 lanes (edge AI)",
+          "radios": "None — RJ-45 PoE only; absent from Verkada's FCC grant list (unintentional radiator)",
+          "imaging": "4K (3840×2160) 1/2.8\" CMOS; 8–20mm motorized varifocal; 50m IR",
+          "power": "PoE+ 802.3at; IP67, IK10",
+          "notes": "",
+          "sources": [
+            {
+              "label": "Verkada CB62-TE datasheet (PDF)",
+              "url": "https://docs.verkada.com/docs/video-security-cb62-te-datasheet.pdf"
+            },
+            {
+              "label": "Verkada FCC grantee 2AWUU (no camera grants)",
+              "url": "https://fccid.io/2AWUU"
+            }
+          ]
+        },
+        {
+          "model": "CB61-TE (gen-1, discontinued)",
+          "type": "Fixed telephoto bullet",
+          "radios": "Contains a DORMANT Wi-Fi radio — disabled by default; enabling requires org-level action via Verkada Support, per Verkada's own help documentation",
+          "imaging": "4K; 8–20mm motorized zoom; 50m IR",
+          "power": "PoE 802.3af/at",
+          "notes": "The documented \"dormant radio, vendor-enabled\" pattern in the wild.",
+          "sources": [
+            {
+              "label": "Verkada help: enabling Wi-Fi on select cameras",
+              "url": "https://help.verkada.com/verkada-cameras/configuration/camera-network-settings/enable-wi-fi-on-select-verkada-cameras"
+            },
+            {
+              "label": "Bullet series datasheet (PDF)",
+              "url": "https://docs.verkada.com/docs/video-security-bullet-series-datasheet.pdf"
+            }
+          ]
+        },
+        {
+          "model": "Outdoor Remote Deployment Camera",
+          "type": "Off-grid remote camera (Verkada's newest direction)",
+          "radios": "BLE + cellular LTE — Verkada's only FCC-certified camera (FCC ID 2AWUU68B66001, granted January 2026)",
+          "imaging": "Per filing: camera + IR modules on a CV75 platform",
+          "power": "Solar/remote deployment",
+          "notes": "Shows where the cloud vendors are heading: off-grid, radio-equipped poles.",
+          "sources": [
+            {
+              "label": "FCC grant 2AWUU68B66001 (BLE + LTE)",
+              "url": "https://fccid.io/2AWUU68B66001"
+            }
+          ]
+        }
       ],
       "certNote": "2021: a breach of Verkada's cloud exposed ~150,000 customer camera feeds.",
-      "flags": "Cloud management means footage exits the building by design — a different threat model than on-prem PoE."
+      "flags": "Cloud management means footage exits the building by design — a different threat model than on-prem PoE.",
+      "certSources": [
+        {
+          "label": "Bloomberg: 2021 Verkada breach (150,000 feeds)",
+          "url": "https://www.bloomberg.com/news/articles/2021-03-09/hackers-expose-tesla-jails-in-breach-of-150-000-security-cams"
+        }
+      ]
     },
     {
       "slug": "neology",
@@ -200,16 +863,69 @@
         "name": "BC provincial program",
         "what": "Hotlists generated daily from ICBC and CPIC; non-hit plate data deleted at end of officer's shift — the strictest retention in Canada.",
         "features": [
-          { "f": "End-of-shift deletion", "d": "The proof that minimal retention is operationally viable: BC has run it this way since the 2012 OIPC ruling." }
+          {
+            "f": "End-of-shift deletion",
+            "d": "The proof that minimal retention is operationally viable: BC has run it this way since the 2012 OIPC ruling."
+          }
         ],
-        "onRecord": "The BC OIPC's 2012 ruling that retaining non-hit data was unlawful is the template ruling for Canadian ALPR governance."
+        "onRecord": "The BC OIPC's 2012 ruling that retaining non-hit data was unlawful is the template ruling for Canadian ALPR governance.",
+        "sources": [
+          {
+            "label": "BC government: provincial ALPR program (ICBC/CPIC hotlists)",
+            "url": "https://www2.gov.bc.ca/gov/content/justice/criminal-justice/policing-in-bc/road-safety-auto-crime/auto-licence-place-recognition"
+          },
+          {
+            "label": "RCMP BC: ALPR practice post-2012 ruling",
+            "url": "https://www.rcmp.ca/en/bc/traffic-services/automatic-license-plate-recognition-technology"
+          },
+          {
+            "label": "OIPC BC Investigation Report F12-04",
+            "url": "https://www.oipc.bc.ca/documents/investigation-reports/1410"
+          }
+        ]
       },
       "hardware": [
-        { "model": "neoForce", "type": "Fixed multi-lane ANPR (4 lanes, edge AI — 100 images/sec; make/model/colour)", "radios": "Integrated 4G/5G + GPS per Neology's product page; no standalone FCC/ISED certification (module-based)", "imaging": "IR + colour dual-channel; resolution not published", "power": "PoE", "notes": "Not listed in Canada's radio-equipment registry — connectivity rides pre-certified modules." },
-        { "model": "P500 IRIS (P520/P525)", "type": "Fixed ALPR, 1–2 lane", "radios": "Optional internal 4G modem + Wi-Fi (\"configure from the street\") + GPS — FCC ID 2AKNFP500FAW (granted 2021) covers the loaded variant", "imaging": "5MP IR + 5MP colour sensors; motorized 12–50mm zoom on both channels; 28-LED pulsed illuminator (740–940nm options, to 40m); 50fps per channel", "power": "48VDC, 40W; IP67, −40 to +60°C", "notes": "" }
+        {
+          "model": "neoForce",
+          "type": "Fixed multi-lane ANPR (4 lanes, edge AI — 100 images/sec; make/model/colour)",
+          "radios": "Integrated 4G/5G + GPS per Neology's product page; no standalone FCC/ISED certification (module-based)",
+          "imaging": "IR + colour dual-channel; resolution not published",
+          "power": "PoE",
+          "notes": "Not listed in Canada's radio-equipment registry — connectivity rides pre-certified modules.",
+          "sources": [
+            {
+              "label": "Neology neoForce product page",
+              "url": "https://neology.com/solutions/enforcement/products/neoforce-anpr-camera/"
+            }
+          ]
+        },
+        {
+          "model": "P500 IRIS (P520/P525)",
+          "type": "Fixed ALPR, 1–2 lane",
+          "radios": "Optional internal 4G modem + Wi-Fi (\"configure from the street\") + GPS — FCC ID 2AKNFP500FAW (granted 2021) covers the loaded variant",
+          "imaging": "5MP IR + 5MP colour sensors; motorized 12–50mm zoom on both channels; 28-LED pulsed illuminator (740–940nm options, to 40m); 50fps per channel",
+          "power": "48VDC, 40W; IP67, −40 to +60°C",
+          "notes": "",
+          "sources": [
+            {
+              "label": "FCC grant 2AKNFP500FAW",
+              "url": "https://fccid.io/2AKNFP500FAW"
+            },
+            {
+              "label": "P500 IRIS datasheet (PDF)",
+              "url": "https://symbiotesolutions.com/wp-content/uploads/Iris-Data-Sheet.pdf"
+            }
+          ]
+        }
       ],
       "certNote": "Neology's only Canadian registry entries are three RFID toll readers — no LPR camera appears.",
-      "flags": "Shows what the technology looks like under strong rules."
+      "flags": "Shows what the technology looks like under strong rules.",
+      "certSources": [
+        {
+          "label": "ISED Radio Equipment List (Neology: 3 RFID readers only)",
+          "url": "https://sms-sgs.ic.gc.ca/equipmentSearch/searchRadioEquipments"
+        }
+      ]
     },
     {
       "slug": "perceptics",
@@ -219,7 +935,24 @@
       "radioBadge": "Border-lane infrastructure",
       "platform": null,
       "hardware": [
-        { "model": "Border primary-inspection LPR", "type": "Fixed border-lane readers", "radios": "Government infrastructure — specifications not public", "imaging": "Plate capture plus driver imaging at primary inspection lanes", "power": "Lane infrastructure", "notes": "2019: as a CBP subcontractor, Perceptics copied plate images and ~184,000 traveler face photos to its own network without authorization; the network was hacked and data posted to the dark web. CBP suspended the company (later reinstated); CBSA investigated its Canadian exposure." }
+        {
+          "model": "Border primary-inspection LPR",
+          "type": "Fixed border-lane readers",
+          "radios": "Government infrastructure — specifications not public",
+          "imaging": "Plate capture plus driver imaging at primary inspection lanes",
+          "power": "Lane infrastructure",
+          "notes": "2019: as a CBP subcontractor, Perceptics copied plate images and ~184,000 traveler face photos to its own network without authorization; the network was hacked and data posted to the dark web. CBP suspended the company (later reinstated); CBSA investigated its Canadian exposure.",
+          "sources": [
+            {
+              "label": "DHS OIG report on the 2019 breach (PDF)",
+              "url": "https://www.oig.dhs.gov/sites/default/files/assets/2020-09/OIG-20-71-Sep20.pdf"
+            },
+            {
+              "label": "CBC: CBSA investigates Perceptics link",
+              "url": "https://www.cbc.ca/news/politics/cbsa-perceptics-licence-plate-breach-1.5172152"
+            }
+          ]
+        }
       ],
       "certNote": "",
       "flags": "Every land border crossing runs plate readers — this is who builds them."
@@ -234,12 +967,42 @@
         "name": "SafetySmart",
         "what": "Gunshot detection (ShotSpotter), ALPR (PlateRanger, powered by Rekor), and a person-records search engine (CrimeTracer) integrated in one platform.",
         "features": [
-          { "f": "Sensor-to-person pipeline", "d": "An acoustic event, a plate read, and a records search live in the same workflow — escalation from sensor trigger to person file is the product design." }
+          {
+            "f": "Sensor-to-person pipeline",
+            "d": "An acoustic event, a plate read, and a records search live in the same workflow — escalation from sensor trigger to person file is the product design."
+          }
         ],
-        "onRecord": "Chicago ended its ~$49M ShotSpotter contract in 2024; about 70% of residents in covered neighbourhoods were Black or Latino."
+        "onRecord": "Chicago ended its ~$49M ShotSpotter contract in 2024; about 70% of residents in covered neighbourhoods were Black or Latino.",
+        "sources": [
+          {
+            "label": "SoundThinking-Rekor partnership announcement",
+            "url": "https://ir.soundthinking.com/news-events/press-releases/detail/290/soundthinking-and-rekor-systems-announce-strategic"
+          },
+          {
+            "label": "SafetySmart integration release (April 2025)",
+            "url": "https://www.soundthinking.com/press-releases/soundthinking-enhances-plateranger-investigative-capabilities-with-integrations-into-safetysmart-platform-and-partner-technologies-providing-a-force-multiplier/"
+          },
+          {
+            "label": "The Record: Chicago ends ShotSpotter contract",
+            "url": "https://therecord.media/chicago-stops-using-shotspotter-gunshot-surveillance"
+          }
+        ]
       },
       "hardware": [
-        { "model": "PlateRanger", "type": "Fixed + mobile ALPR (Rekor hardware, NVIDIA-based AI)", "radios": "Inherits Rekor platform characteristics; retention defaults not published", "imaging": "HD cameras with vehicle recognition (make/model/colour)", "power": "Per deployment", "notes": "Launched via the 2024 Rekor partnership; integrated into SafetySmart April 2025." }
+        {
+          "model": "PlateRanger",
+          "type": "Fixed + mobile ALPR (Rekor hardware, NVIDIA-based AI)",
+          "radios": "Inherits Rekor platform characteristics; retention defaults not published",
+          "imaging": "HD cameras with vehicle recognition (make/model/colour)",
+          "power": "Per deployment",
+          "notes": "Launched via the 2024 Rekor partnership; integrated into SafetySmart April 2025.",
+          "sources": [
+            {
+              "label": "PlateRanger product page",
+              "url": "https://www.soundthinking.com/law-enforcement/license-plate-recognition-plateranger/"
+            }
+          ]
+        }
       ],
       "certNote": "",
       "flags": "The only vendor with native gunshot-detection + ALPR in one platform."
