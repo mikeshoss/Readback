@@ -559,7 +559,7 @@
     {
       "slug": "flock",
       "name": "Flock Safety",
-      "where": "US only — zero Canadian police contracts",
+      "where": "No Canadian police contracts (Flock's own statement; the OPP says it has no plans to use Flock). Flock-tagged cameras on the Canadian map are likely private/HOA installs, or mistagged",
       "summary": "The network-as-product vendor: ~5,000 agencies searching each other's cameras, plus drones, audio sensors, and a people-lookup layer. 50+ US cities have cancelled since 2025.",
       "radioBadge": "LTE + Wi-Fi + BT",
       "platform": {
@@ -715,7 +715,7 @@
           "url": "https://fccid.io/2BKG8"
         }
       ],
-      "country": "🇺🇸 US only — zero Canadian police contracts",
+      "country": "🇺🇸 US — no Canadian police contracts; Flock-tagged pins in Canada are likely private/HOA",
       "region": "us",
       "company": "Privately held, headquartered in Atlanta; founded 2017. Backed by Andreessen Horowitz at an ~$8.4B valuation (April 2026) on roughly $300M revenue; 6,000+ US communities. Zero Canadian police contracts, and the OPP has said it has no plans to use Flock. Because of this, Flock-tagged cameras appearing on Canadian maps are most likely private/HOA installs — or mistagged by the volunteer who mapped them.",
       "flagSources": [
