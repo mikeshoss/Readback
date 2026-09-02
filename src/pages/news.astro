@@ -11,7 +11,26 @@ const feed = existsSync(feedPath)
   : { lastChecked: null, items: [] };
 
 const fmt = (iso: string | null) =>
-  iso ? new Date(iso).toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+  iso ? new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : '')).toLocaleDateString('en-CA',
+    { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+
+// One feed. Curated and auto-fetched items are merged and sorted by real
+// publication date — each date was read from the article itself, not inferred
+// from the label it was originally filed under.
+type Item = {
+  iso: string; canada: boolean; title: string; url: string;
+  outlet: string; summary?: string; kind?: string;
+};
+const items: Item[] = [
+  ...curated.map((n: any): Item => ({
+    iso: n.iso, canada: n.where === '🇨🇦', title: n.t,
+    url: n.url, outlet: n.via, summary: n.s,
+  })),
+  ...feed.items.map((n: any): Item => ({
+    iso: (n.iso || '').slice(0, 10), canada: !!n.canada, title: n.title,
+    url: n.url, outlet: n.outlet, kind: n.kind,
+  })),
+].filter((i) => i.iso).sort((a, b) => b.iso.localeCompare(a.iso));
 
 const checked = feed.lastChecked ? new Date(feed.lastChecked) : null;
 const daysSinceCheck = checked ? Math.floor((Date.now() - checked.getTime()) / 86400000) : null;
@@ -48,36 +67,22 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
     Feeds checked <strong>{checkedLabel}</strong>
     {stale && ' — automatic check may be stalled'}
     <span class="checked-note">
-      · {feed.items.length} stories pulled automatically from EFF, 404 Media, the Institute
-      for Justice, The Record and Canada-scoped news searches; the timeline below is hand-curated.
+      · {feed.items.length} of these arrived automatically from EFF, 404 Media, the Institute
+      for Justice, The Record and Canada-scoped news searches; the rest are hand-picked. Dates
+      are each story's own publication date.
     </span>
   </p>
 
-  {feed.items.length > 0 && (
-    <>
-      <h2>Latest — automatically collected</h2>
-      <div class="timeline">
-        {feed.items.slice(0, 12).map((n: any) => (
-          <article class="story auto" data-region={n.canada ? "canada" : "international"}>
-            <div class="when">
-              <span class="flag">{n.canada ? '🇨🇦' : '🌐'}</span>
-              {fmt(n.iso)} · {n.outlet} · {n.canada ? 'Canada' : 'International'}
-              {n.kind === 'enforcement' && <span class="kind">enforcement</span>}
-            </div>
-            <h3><a href={n.url} rel="noopener">{n.title}</a></h3>
-          </article>
-        ))}
-      </div>
-    </>
-  )}
-
-  <h2>The timeline — curated</h2>
   <div class="timeline">
-    {curated.map((n: any) => (
-      <article class="story" data-region={n.where === "🇨🇦" ? "canada" : "international"}>
-        <div class="when"><span class="flag">{n.where}</span>{n.d}</div>
-        <h3><a href={n.url} rel="noopener">{n.t}</a></h3>
-        <p>{n.s} <span class="via">— {n.via}</span></p>
+    {items.map((n) => (
+      <article class="story" data-region={n.canada ? 'canada' : 'international'}>
+        <div class="when">
+          <span class="flag">{n.canada ? '🇨🇦' : '🌐'}</span>
+          {fmt(n.iso)} · {n.outlet}
+          {n.kind === 'enforcement' && <span class="kind">enforcement</span>}
+        </div>
+        <h3><a href={n.url} rel="noopener">{n.title}</a></h3>
+        {n.summary && <p>{n.summary}</p>}
       </article>
     ))}
   </div>

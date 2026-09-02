@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "build": "astro build",
     "data": "node scripts/build-cameras.mjs",
     "news": "node scripts/fetch-news.mjs",
