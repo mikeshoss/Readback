@@ -60,7 +60,12 @@
     "via": "CA AG",
     "url": "https://www.oag.ca.gov/news/press-releases/attorney-general-bonta-sues-el-cajon-illegally-sharing-license-plate-data-out",
     "s": "AG Bonta: sharing ALPR data with 100+ out-of-state agencies violates SB 34.",
-    "iso": "2025-10-02"
+    "iso": "2025-10-02",
+    "official": {
+      "label": "California Attorney General — press release",
+      "url": "https://www.oag.ca.gov/news/press-releases/attorney-general-bonta-sues-el-cajon-illegally-sharing-license-plate-data-out",
+      "status": "litigation filed"
+    }
   },
   {
     "d": "Aug 2025",
@@ -69,7 +74,12 @@
     "via": "IL Secretary of State",
     "url": "https://www.ilsos.gov/news/2025/august-25-2025-giannoulias-audit-finds-license-plate-reader-company-in-violation-of-state-law.html",
     "s": "Trigger: a Texas deputy searched 83,000 cameras nationwide for a woman who self-administered an abortion — hitting Illinois. Evanston and Oak Park terminated contracts.",
-    "iso": "2025-08-25"
+    "iso": "2025-08-25",
+    "official": {
+      "label": "Illinois Secretary of State — audit finding",
+      "url": "https://www.ilsos.gov/news/2025/august-25-2025-giannoulias-audit-finds-license-plate-reader-company-in-violation-of-state-law.html",
+      "status": "audit published"
+    }
   },
   {
     "d": "Jun 2025",

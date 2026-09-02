@@ -20,11 +20,14 @@ const fmt = (iso: string | null) =>
 type Item = {
   iso: string; canada: boolean; title: string; url: string;
   outlet: string; summary?: string; kind?: string;
+  // Legislative / court items carry the primary source alongside the
+  // journalism: the bill, statute, opinion or government release itself.
+  official?: { label: string; url: string; status?: string };
 };
 const items: Item[] = [
   ...curated.map((n: any): Item => ({
     iso: n.iso, canada: n.where === '🇨🇦', title: n.t,
-    url: n.url, outlet: n.via, summary: n.s,
+    url: n.url, outlet: n.via, summary: n.s, official: n.official,
   })),
   ...feed.items.map((n: any): Item => ({
     iso: (n.iso || '').slice(0, 10), canada: !!n.canada, title: n.title,
@@ -75,14 +78,24 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
 
   <div class="timeline">
     {items.map((n) => (
-      <article class="story" data-region={n.canada ? 'canada' : 'international'}>
+      <article class={`story ${n.official ? 'legislative' : ''}`} data-region={n.canada ? 'canada' : 'international'}>
         <div class="when">
           <span class="flag">{n.canada ? '🇨🇦' : '🌐'}</span>
           {fmt(n.iso)} · {n.outlet}
+          {n.official && <span class="kind law">legislation</span>}
           {n.kind === 'enforcement' && <span class="kind">enforcement</span>}
         </div>
         <h3><a href={n.url} rel="noopener">{n.title}</a></h3>
         {n.summary && <p>{n.summary}</p>}
+        {n.official && (
+          <p class="sources">
+            <a class="primary" href={n.official.url} rel="noopener">📄 {n.official.label}</a>
+            {n.official.status && <span class="status">{n.official.status}</span>}
+            {n.official.url !== n.url && (
+              <a class="secondary" href={n.url} rel="noopener">Coverage: {n.outlet} →</a>
+            )}
+          </p>
+        )}
       </article>
     ))}
   </div>
@@ -151,6 +164,20 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
     .story h3 a { color: var(--text); text-decoration: none; }
     .story h3 a:hover { color: var(--toll); }
     .story p { color: var(--muted); font-size: 0.88rem; }
+    .story.legislative { border-left: 3px solid var(--border-cat); }
+    .kind.law { color: var(--border-cat); background: rgba(176,122,255,0.14); }
+    .sources {
+      margin-top: 0.55rem; padding-top: 0.5rem; border-top: 1px dashed var(--line);
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; font-size: 0.8rem;
+    }
+    .sources .primary { color: var(--border-cat); font-weight: 600; text-decoration: none; }
+    .sources .primary:hover { text-decoration: underline; }
+    .sources .secondary { color: var(--toll); text-decoration: none; }
+    .sources .secondary:hover { text-decoration: underline; }
+    .sources .status {
+      color: var(--muted); font-size: 0.72rem; border: 1px solid var(--line);
+      border-radius: 999px; padding: 0.02rem 0.45rem;
+    }
     .via { color: var(--toll); font-size: 0.8rem; }
   </style>
 </Base>
