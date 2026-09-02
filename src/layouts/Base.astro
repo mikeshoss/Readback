@@ -22,6 +22,18 @@ const path = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} · Readback</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url)} />
+    <meta property="og:site_name" content="Readback" />
+    <meta property="og:title" content={`${title} · Readback`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site ?? Astro.url)} />
+    <meta property="og:locale" content="en_CA" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} · Readback`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="theme-color" content="#101418" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
   <body>
     <header class="site-header">
@@ -37,7 +49,11 @@ const path = Astro.url.pathname;
     </main>
     {!fullBleed && (
       <footer class="site-footer">
-        <p>Camera data © OpenStreetMap contributors (ODbL). Retention and capability claims are sourced; see Evidence.</p>
+        <p>
+          Camera data © OpenStreetMap contributors (ODbL). Every claim on this site is sourced.
+          <a href="/about">About &amp; contact</a> · <a href="mailto:hello@readback.ca">hello@readback.ca</a> ·
+          <a href="https://github.com/mikeshoss/Readback" rel="noopener">Open research base</a>
+        </p>
       </footer>
     )}
     <style is:global>
@@ -79,9 +95,12 @@ const path = Astro.url.pathname;
       }
       .site-header nav a:hover { color: var(--text); background: var(--panel-2); }
       .site-header nav a.active { color: var(--text); background: var(--panel-2); }
-      main.page { max-width: 62rem; width: 100%; margin: 0 auto; padding: 2rem 1.25rem 3rem; flex: 1; }
+      main.page { max-width: 76rem; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 3rem; flex: 1; }
+      main.page > * { overflow-wrap: break-word; }
       main.full-bleed { flex: 1; display: flex; min-height: 0; }
       .site-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem; }
+      .site-footer a { color: var(--muted); }
+      .site-footer a:hover { color: var(--text); }
       h1 { font-size: 1.7rem; line-height: 1.25; margin-bottom: 0.5rem; }
       h2 { font-size: 1.2rem; margin: 2rem 0 0.6rem; }
       p.lede { color: var(--muted); max-width: 46rem; margin-bottom: 1rem; }
@@ -90,7 +109,7 @@ const path = Astro.url.pathname;
       th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
       th { background: var(--panel); position: sticky; top: 0; }
       tr:last-child td { border-bottom: none; }
-      .tag { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+      .tag { display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
       .tag.hot { background: rgba(255,90,95,0.15); color: var(--police); }
       .tag.cool { background: rgba(77,163,255,0.15); color: var(--toll); }
       .pills { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0.8rem 0 1.2rem; }

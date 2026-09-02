@@ -17,7 +17,7 @@ const STATUS_CLASS: Record<string, string> = {
 };
 const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' }) : null;
 ---
-<Base title="Paper trail">
+<Base title="Paper trail" description="Our freedom-of-information requests to Ontario police services, published in full and tracked in public.">
   <h1>The paper trail: our freedom-of-information requests</h1>
   <p class="lede">
     Crowdsourced maps show where cameras are. Only the institutions themselves can show the
@@ -62,8 +62,6 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
         <div class="filing">
           <span class="filing-how">{r.submission.how}</span>
           {r.submission.portal && <a href={r.submission.portal} rel="noopener">File online →</a>}
-          <span class="filing-addr">Mail: {r.submission.address}</span>
-          {r.submission.phone && <span class="filing-addr">Phone: {r.submission.phone}</span>}
         </div>
         <details>
           <summary>Read the full request ({r.items.length} items)</summary>

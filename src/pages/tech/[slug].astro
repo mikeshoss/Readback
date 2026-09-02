@@ -7,11 +7,14 @@ export function getStaticPaths() {
 }
 const { v } = Astro.props;
 ---
-<Base title={v.name}>
+<Base title={v.name} description={v.summary}>
   <p class="crumb"><a href="/tech">← All providers</a></p>
   <h1>{v.name}</h1>
-  <p class="where">{v.where}</p>
+  <p class="where">{v.country}</p>
   <p class="lede">{v.summary}</p>
+
+  <h2>The company</h2>
+  <p class="company">{v.company} <span class="company-where">{v.where}.</span></p>
 
   {v.platform && (
     <>
@@ -60,7 +63,15 @@ const { v } = Astro.props;
       )}
     </div>
   )}
-  {v.flags && <p class="flags">⚠ {v.flags}</p>}
+  {v.flags && (
+    <p class="flags">⚠ {v.flags}
+      {v.flagSources && (
+        <span class="srcline block">Sources: {v.flagSources.map((s, i) => (
+          <>{i > 0 && ' · '}<a href={s.url} rel="noopener">{s.label}</a></>
+        ))}</span>
+      )}
+    </p>
+  )}
 
   <p class="src">
     Every specification above traces to a certification filing, teardown, carrier device
@@ -73,6 +84,8 @@ const { v } = Astro.props;
     .crumb a { color: var(--muted); text-decoration: none; }
     .crumb a:hover { color: var(--text); }
     .where { color: var(--toll); font-size: 0.88rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .company { font-size: 0.92rem; max-width: 52rem; }
+    .company-where { color: var(--muted); }
     .panel-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.25rem; margin-top: 0.8rem; }
     .panel-card ul { margin: 0; padding-left: 1.15rem; font-size: 0.88rem; }
     .panel-card li { margin-bottom: 0.4rem; }

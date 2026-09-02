@@ -10,6 +10,7 @@
     "data": "node scripts/build-cameras.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.0.0",
     "maplibre-gl": "^5.0.0"
   }

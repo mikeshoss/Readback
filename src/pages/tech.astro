@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import tech from '../data/tech.json';
 ---
-<Base title="The tech">
+<Base title="The tech" description="What ALPR systems collect and infer: every provider's platform and hardware, model by model, sourced to certification filings and vendor documentation.">
   <h1>The technology: what it collects, what it infers</h1>
   <p class="lede">
     A camera produces a plate, a timestamp, and a location. The software turns those reads
@@ -15,27 +15,41 @@ import tech from '../data/tech.json';
     <table>
       <thead><tr><th>Use case</th><th>The shipping feature</th></tr></thead>
       <tbody>
-        <tr><td>Map who travels with whom</td><td><a href="/tech/flock">Flock Convoy Analysis</a>; <a href="/tech/motorola">Vigilant Associate Analysis</a></td></tr>
-        <tr><td>List everyone at a sensitive location</td><td><a href="/tech/motorola">Vigilant Stakeout</a></td></tr>
-        <tr><td>Predict where a vehicle will be</td><td><a href="/tech/motorola">Vigilant Locate Analysis</a></td></tr>
-        <tr><td>Track a driver across states</td><td><a href="/tech/flock">Flock Multi-Geo</a> (the Texas abortion search touched 83,000 cameras)</td></tr>
-        <tr><td>Turn a plate into a person</td><td><a href="/tech/flock">Flock Nova</a></td></tr>
-        <tr><td>Fingerprint the devices in your car</td><td><a href="/tech/leonardo">Leonardo SignalTrace</a>; <a href="/tech/jenoptik">Jenoptik TraffiCatch</a> (deployed since ~2019)</td></tr>
-        <tr><td>Screen for immigration status via local alerts</td><td>NCIC hotlist ingestion (ICE's Immigration Violator File — Flock, Axon, Vigilant, ELSAG)</td></tr>
-        <tr><td>Stalk an ex</td><td>Any of them — ~50 documented US cases; the audit log is the only thing that caught anyone</td></tr>
+        <tr><td>Map who travels with whom</td><td><a href="/tech/flock">Flock Convoy Analysis</a>; <a href="/tech/motorola">Vigilant Associate Analysis</a> <a class="cite" href="https://www.maryvilleprivacy.org/maryville-residents-for-privacy/flocks-multi-geo-and-convoy-tools/" rel="noopener">[source]</a></td></tr>
+        <tr><td>List everyone at a sensitive location</td><td><a href="/tech/motorola">Vigilant Stakeout</a> <a class="cite" href="https://www.aclu.org/news/privacy-technology/documents-uncover-nypds-vast-license-plate-reader-database" rel="noopener">[ACLU/NYPD records]</a></td></tr>
+        <tr><td>Predict where a vehicle will be</td><td><a href="/tech/motorola">Vigilant Locate Analysis</a> <a class="cite" href="https://learnfl.vigilantsolutions.com/learn/Vigilant_PlateSearch_User_Guide.pdf" rel="noopener">[vendor user guide]</a></td></tr>
+        <tr><td>Track a driver across states</td><td><a href="/tech/flock">Flock Multi-Geo</a> — the Texas abortion search touched 83,000 cameras <a class="cite" href="https://www.404media.co/flock-removes-states-from-national-lookup-tool-after-ice-and-abortion-searches-revealed/" rel="noopener">[404 Media]</a></td></tr>
+        <tr><td>Turn a plate into a person</td><td><a href="/tech/flock">Flock Nova</a> <a class="cite" href="https://www.404media.co/license-plate-reader-company-flock-is-building-a-massive-people-lookup-tool-leak-shows/" rel="noopener">[404 Media]</a></td></tr>
+        <tr><td>Fingerprint the devices in your car</td><td><a href="/tech/leonardo">Leonardo SignalTrace</a>; <a href="/tech/jenoptik">Jenoptik TraffiCatch</a> (deployed since ~2019) <a class="cite" href="https://www.eff.org/deeplinks/2024/05/add-bluetooth-long-list-border-surveillance-technologies" rel="noopener">[EFF]</a></td></tr>
+        <tr><td>Screen for immigration status via local alerts</td><td>NCIC hotlist ingestion (ICE's Immigration Violator File — Flock, Axon, Vigilant, ELSAG) <a class="cite" href="https://www.eff.org/deeplinks/2026/06/are-your-local-police-using-flock-safety-alprs-scan-immigrants" rel="noopener">[EFF]</a></td></tr>
+        <tr><td>Stalk an ex</td><td>At least ~50 documented US cases of officers using ALPR networks to track romantic interests — the audit log is the only thing that caught anyone <a class="cite" href="https://www.404media.co/cops-keep-getting-arrested-for-using-flock-to-stalk-people/" rel="noopener">[404 Media]</a> <a class="cite" href="https://ipvm.com/reports/police-chiefs-track" rel="noopener">[IPVM]</a></td></tr>
       </tbody>
     </table>
   </div>
 
-  <h2>The providers</h2>
-  <p class="lede">Each page covers one company's platform and its hardware — radios, sensors, and certifications, model by model.</p>
+  <h2>The providers in Canada</h2>
+  <p class="lede">Each page covers one company: who they are, their platform, and their hardware — radios, sensors, and certifications, model by model.</p>
   <div class="grid">
-    {tech.vendors.map((v) => (
+    {tech.vendors.filter((v) => v.region === 'canada').map((v) => (
       <a class="vcard" href={`/tech/${v.slug}`}>
         <h3>{v.name}</h3>
+        <span class="country">{v.country}</span>
         <span class="badge">{v.radioBadge}</span>
         <p>{v.summary}</p>
-        <span class="go">Hardware + platform →</span>
+        <span class="go">Company + hardware + platform →</span>
+      </a>
+    ))}
+  </div>
+
+  <h2>US &amp; international — the context Canada is heading into</h2>
+  <div class="grid">
+    {tech.vendors.filter((v) => v.region === 'us').map((v) => (
+      <a class="vcard" href={`/tech/${v.slug}`}>
+        <h3>{v.name}</h3>
+        <span class="country">{v.country}</span>
+        <span class="badge">{v.radioBadge}</span>
+        <p>{v.summary}</p>
+        <span class="go">Company + hardware + platform →</span>
       </a>
     ))}
   </div>
@@ -95,6 +109,8 @@ import tech from '../data/tech.json';
     }
     .vcard:hover { border-color: var(--toll); }
     .vcard h3 { font-size: 1rem; margin: 0; }
+    .country { color: var(--muted); font-size: 0.76rem; }
+    .cite { font-size: 0.76rem; white-space: nowrap; }
     .badge {
       align-self: flex-start; font-size: 0.72rem; font-weight: 700;
       padding: 0.1rem 0.5rem; border-radius: 999px;

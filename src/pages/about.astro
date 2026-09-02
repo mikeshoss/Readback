@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="About" description="What Readback is, how it works, and how to reach us.">
+  <h1>About Readback</h1>
+  <p class="lede">
+    In aviation, a <em>readback</em> is repeating a transmission back to prove you received
+    it correctly. This site reads back to the public what the state collects about them:
+    where the licence plate readers are, what the hardware and software can actually do,
+    what rules govern them — and what the documents say when we ask.
+  </p>
+
+  <h2>The method: facts only</h2>
+  <p class="lede">
+    Every claim on this site is backed by a primary source — certification filings,
+    vendor datasheets and marketing, statutes, tribunal decisions, audits, peer-reviewed
+    studies, or on-the-record reporting. Where we analyze rather than report, the analysis
+    is explicitly marked, and it extends only capabilities the vendors document themselves.
+    Where something is unverified, we either say so or don't publish it. The entire
+    research base — every source behind every page — is
+    <a href="https://github.com/mikeshoss/Readback" rel="noopener">open on GitHub</a>.
+  </p>
+
+  <h2>What this site is not</h2>
+  <p class="lede">
+    Readback is not anti-police, and it does not claim anyone is breaking the rules.
+    Its core observation is narrower and better documented: on these systems, nearly every
+    safeguard is a configuration setting — retention, sharing, permissions — and no one
+    outside each police service checks what the settings are. Toll cameras and border
+    readers are mapped but shown separately, because a toll you pay and a border you cross
+    are not the same as a dragnet on your commute.
+  </p>
+
+  <h2>Data &amp; licensing</h2>
+  <p class="lede">
+    Camera locations come from OpenStreetMap (© OpenStreetMap contributors,
+    <a href="https://opendatacommons.org/licenses/odbl/" rel="noopener">ODbL</a>) and are
+    re-published under the same licence. Fleet, policy, and hardware data are compiled
+    from the public record with citations throughout. Corrections: if anything on this
+    site is wrong, tell us — we fix fast and log the change publicly in the repository
+    history.
+  </p>
+
+  <h2>Who runs this</h2>
+  <p class="lede">
+    Readback is built and maintained by Mike Shoss, drawing on professional experience
+    building AI systems — which is the lens behind the marked analysis sections. It is
+    independent: no funding from, and no affiliation with, any vendor, police service,
+    or political organization.
+  </p>
+
+  <h2>Contact</h2>
+  <p class="lede">
+    <a href="mailto:hello@readback.ca">hello@readback.ca</a> — tips, corrections, camera
+    reports, FOI results from your region, and media inquiries all welcome. To add a
+    camera to the map, the best route is tagging it in
+    <a href="https://www.openstreetmap.org" rel="noopener">OpenStreetMap</a>
+    (<code>man_made=surveillance</code> + <code>surveillance:type=ALPR</code>) — that way
+    every project built on the shared data benefits, not just this one.
+  </p>
+</Base>

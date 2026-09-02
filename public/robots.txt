@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://readback.ca/sitemap-index.xml
