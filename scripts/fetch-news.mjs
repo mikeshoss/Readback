@@ -42,9 +42,9 @@ const MATCH = /\b(alpr|anpr|licence plate|license plate|plate reader|plate recog
 // Kills the recurring false positive: Ontario plate-sticker renewal stories.
 const EXCLUDE = /\b(renewal|renewals|sticker|licence plate renewal|plate sticker)\b/i;
 
-// Routine enforcement blotter — "ALPR nabs suspended driver", "hit leads to
-// drug seizure". These are police press releases about ALPR successes. They
-// are not what this site covers, and a feed full of them reads as PR.
+// Enforcement stories — "ALPR nabs suspended driver", "hit leads to drug
+// seizure". Kept and labelled rather than dropped: they are a real part of
+// what is happening, and readers can weigh them knowing what they are.
 const BLOTTER = /\b(charged|arrest\w*|nabbed|seizure|seized|impaired|stolen vehicle|lays? charges|cocaine|fentanyl|drugs?|wanted man|suspended driver|evade|traffic stop|recover\w* stolen)\b/i;
 
 // A story earns a place only if it touches policy, deployment, oversight or
@@ -112,19 +112,14 @@ const relevant = all
   .filter((i) => i.url && i.title)
   .filter((i) => MATCH.test(`${i.title} ${i.summary}`))
   .filter((i) => !EXCLUDE.test(`${i.title} ${i.summary}`))
-  // Specialist outlets (EFF, 404 Media, IJ, The Record) only write the
-  // accountability beat, so an ALPR keyword there is enough. The Canada-scoped
-  // searches sweep local news, where most ALPR mentions are arrest blotter —
-  // those must show a policy signal and must not be a blotter item.
-  .filter((i) => {
-    if (!i.canadaOnly) return true;
-    const text = `${i.title} ${i.summary}`;
-    if (BLOTTER.test(i.title)) return false;
-    return SIGNAL.test(text);
-  })
+
   .map((i) => ({
     ...i,
     canada: CANADA.test(`${i.title} ${i.summary}`),
+    // 'enforcement' = police-blotter style (an arrest, a seizure, a stop).
+    // 'policy' = deployment, oversight, litigation, privacy. Labelled on the
+    // page so readers can tell the police narrative from the accountability one.
+    kind: BLOTTER.test(i.title) && !SIGNAL.test(i.title) ? 'enforcement' : 'policy',
     iso: (() => { const d = new Date(i.date); return isNaN(d) ? null : d.toISOString(); })(),
   }))
   // Canada-scoped feeds still return US spillover — drop it rather than

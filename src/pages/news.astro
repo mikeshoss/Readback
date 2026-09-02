@@ -34,13 +34,6 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
     items are marked 🇨🇦; everything else is marked 🌐 and is included because it shows
     where Canadian deployments are heading — most ALPR policy, litigation and vendor
     behaviour still originates in the US.
-    <span style="display:block;margin-top:0.4rem">
-      If the 🇨🇦 filter looks sparse, that is the finding rather than a fault: Canada has
-      no dedicated ALPR beat, no DeFlock-equivalent project and no active campaign, so
-      most domestic coverage is local police-blotter items about arrests — which this
-      feed deliberately filters out, since they are the police narrative rather than the
-      accountability story.
-    </span>
   </div>
 
   <div class="filter" id="region-filter">
@@ -69,6 +62,7 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
             <div class="when">
               <span class="flag">{n.canada ? '🇨🇦' : '🌐'}</span>
               {fmt(n.iso)} · {n.outlet} · {n.canada ? 'Canada' : 'International'}
+              {n.kind === 'enforcement' && <span class="kind">enforcement</span>}
             </div>
             <h3><a href={n.url} rel="noopener">{n.title}</a></h3>
           </article>
@@ -129,6 +123,11 @@ const stale = daysSinceCheck !== null && daysSinceCheck > 10;
     }
     .filter button:hover { color: var(--text); border-color: var(--toll); }
     .filter button.on { color: var(--text); border-color: var(--toll); background: var(--panel-2); }
+    .kind {
+      display: inline-block; margin-left: 0.4rem; padding: 0.02rem 0.4rem;
+      border-radius: 999px; font-size: 0.7rem; font-weight: 600;
+      color: var(--fleet); background: rgba(255,181,77,0.14);
+    }
     .filter-count { color: var(--muted); font-size: 0.78rem; margin-left: 0.3rem; }
     .checked {
       font-size: 0.82rem; color: var(--muted); background: var(--panel);
