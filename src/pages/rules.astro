@@ -2,26 +2,26 @@
 import Base from '../layouts/Base.astro';
 
 const retention = [
-  { j: 'New Hampshire', flag: '🇺🇸', r: '3 minutes', a: 'RSA 261:75-b (repeal slated Jan 2027)', hl: true },
-  { j: 'BC, Canada (police)', flag: '🇨🇦', r: 'End of shift / immediate', a: 'OIPC BC ruling F12-04 (2012)', hl: true },
-  { j: 'Peel Regional Police, ON', flag: '🇨🇦', r: '24 hours (matches: 30 days)', a: 'Peel Regional Police official policy', hl: true },
-  { j: 'Toronto Police, ON', flag: '🇨🇦', r: '7 days (hits: 365 days)', a: 'TPS policy + PIA', hl: true },
-  { j: 'Maine', flag: '🇺🇸', r: '21 days', a: '29-A M.R.S. §2117-A' },
-  { j: 'Virginia', flag: '🇺🇸', r: '21 days', a: 'HB 2724 (2025)' },
-  { j: 'Washington State', flag: '🇺🇸', r: '21 days', a: 'Driver Privacy Act, SB 6002 (2026)' },
-  { j: 'Flock default (US)', flag: '🇺🇸', r: '30 days', a: 'Vendor default setting' },
-  { j: 'Oregon', flag: '🇺🇸', r: '30 days', a: '2026 statute' },
-  { j: 'Minnesota', flag: '🇺🇸', r: '60 days', a: 'Statute' },
-  { j: 'California (CHP)', flag: '🇺🇸', r: '60 days', a: 'SB 34 (2015)' },
-  { j: 'Tennessee', flag: '🇺🇸', r: '90 days', a: 'Statute' },
-  { j: 'Arkansas', flag: '🇺🇸', r: '150 days', a: 'Statute' },
-  { j: 'Utah', flag: '🇺🇸', r: '9 months', a: 'Statute' },
-  { j: 'United Kingdom (national ANPR)', flag: '🇬🇧', r: '12 months', a: 'NPCC standards — no statute' },
-  { j: 'Vermont', flag: '🇺🇸', r: '18 months', a: '23 V.S.A. §1607' },
-  { j: 'Georgia', flag: '🇺🇸', r: '30 months', a: 'Statute' },
-  { j: 'Colorado', flag: '🇺🇸', r: '3 years', a: 'C.R.S. §24-72-113' },
-  { j: 'New Jersey', flag: '🇺🇸', r: '3 years (was 5)', a: 'AG Directive 2022-12' },
-  { j: '~34 US states with no statute', flag: '🇺🇸', r: 'Agency discretion — up to indefinite', a: 'LAPD audit found 320M stored images', hl: true },
+  { j: 'New Hampshire', r: '3 minutes', a: 'RSA 261:75-b (repeal slated Jan 2027)', hl: true },
+  { j: 'BC, Canada (police)', r: 'End of shift / immediate', a: 'OIPC BC ruling F12-04 (2012)', hl: true },
+  { j: 'Peel Regional Police, ON', r: '24 hours (matches: 30 days)', a: 'Peel Regional Police official policy', hl: true },
+  { j: 'Toronto Police, ON', r: '7 days (hits: 365 days)', a: 'TPS policy + PIA', hl: true },
+  { j: 'Maine', r: '21 days', a: '29-A M.R.S. §2117-A' },
+  { j: 'Virginia', r: '21 days', a: 'HB 2724 (2025)' },
+  { j: 'Washington State', r: '21 days', a: 'Driver Privacy Act, SB 6002 (2026)' },
+  { j: 'Flock default (US)', r: '30 days', a: 'Vendor default setting' },
+  { j: 'Oregon', r: '30 days', a: '2026 statute' },
+  { j: 'Minnesota', r: '60 days', a: 'Statute' },
+  { j: 'California (CHP)', r: '60 days', a: 'SB 34 (2015)' },
+  { j: 'Tennessee', r: '90 days', a: 'Statute' },
+  { j: 'Arkansas', r: '150 days', a: 'Statute' },
+  { j: 'Utah', r: '9 months', a: 'Statute' },
+  { j: 'United Kingdom (national ANPR)', r: '12 months', a: 'NPCC standards — no statute' },
+  { j: 'Vermont', r: '18 months', a: '23 V.S.A. §1607' },
+  { j: 'Georgia', r: '30 months', a: 'Statute' },
+  { j: 'Colorado', r: '3 years', a: 'C.R.S. §24-72-113' },
+  { j: 'New Jersey', r: '3 years (was 5)', a: 'AG Directive 2022-12' },
+  { j: '~34 US states with no statute', r: 'Agency discretion — up to indefinite', a: 'LAPD audit found 320M stored images', hl: true },
 ];
 
 
@@ -46,22 +46,13 @@ const retention = [
   </div>
 
   <h2 id="retention">How long they keep the plates of innocent drivers</h2>
-
-  <div class="filter" id="region-filter">
-    <span class="filter-label">Show:</span>
-    <button type="button" data-region="all" class="on">All</button>
-    <button type="button" data-region="canada">🇨🇦 Canada</button>
-    <button type="button" data-region="us">🇺🇸 United States</button>
-    <button type="button" data-region="uk">🇬🇧 UK</button>
-    <span class="filter-count" id="filter-count"></span>
-  </div>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Jurisdiction</th><th>Non-hit read retention</th><th>Authority</th></tr></thead>
       <tbody>
         {retention.map((row) => (
-          <tr data-region={row.flag === '🇨🇦' ? 'canada' : row.flag === '🇬🇧' ? 'uk' : 'us'}>
-            <td><span class="flag">{row.flag}</span>{row.hl ? <strong>{row.j}</strong> : row.j}</td>
+          <tr>
+            <td>{row.hl ? <strong>{row.j}</strong> : row.j}</td>
             <td>{row.hl ? <span class="tag hot">{row.r}</span> : row.r}</td>
             <td style="color: var(--muted)">{row.a}</td>
           </tr>
@@ -116,37 +107,6 @@ const retention = [
     hit rates, and wrongful-stop record: <a href="/evidence">the evidence →</a>
   </div>
 
-  <script>
-    const bar = document.getElementById('region-filter');
-    const countEl = document.getElementById('filter-count');
-    const apply = (region: string) => {
-      let shown = 0;
-      document.querySelectorAll<HTMLElement>('tr[data-region]').forEach((tr) => {
-        const match = region === 'all' || tr.dataset.region === region;
-        tr.style.display = match ? '' : 'none';
-        if (match) shown++;
-      });
-      if (countEl) countEl.textContent = `${shown} of 20 jurisdictions`;
-    };
-    bar?.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest('button');
-      if (!btn) return;
-      bar.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b === btn));
-      apply(btn.dataset.region || 'all');
-    });
-    apply('all');
-  </script>
-
   <style>
-    .filter { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin: 0.8rem 0 1rem; }
-    .filter-label { color: var(--muted); font-size: 0.8rem; margin-right: 0.2rem; }
-    .filter button {
-      font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      color: var(--muted); background: var(--panel); border: 1px solid var(--line);
-      border-radius: 999px; padding: 0.3rem 0.75rem;
-    }
-    .filter button:hover { color: var(--text); border-color: var(--toll); }
-    .filter button.on { color: var(--text); border-color: var(--toll); background: var(--panel-2); }
-    .filter-count { color: var(--muted); font-size: 0.78rem; margin-left: 0.3rem; }
   </style>
 </Base>
