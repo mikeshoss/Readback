@@ -1,81 +1,57 @@
-# How to push an update live
+# Seeing changes, and putting them live
 
-Live site: **https://readback.ofrecord.ca**
+Two URLs, one command each. Nothing else to keep in sync.
 
-## The short version
+| | URL | Command |
+|---|---|---|
+| **Staging** — check your changes | https://staging.readback-bpq.pages.dev | `npm run stage` |
+| **Live** — the public site | https://readback.ofrecord.ca | `npm run deploy` |
 
-```bash
-npm run deploy
-```
-
-That builds the site and pushes it to Cloudflare Pages. Live in ~30
-seconds. That's the whole thing.
-
-## The three kinds of update
-
-**1. You changed content or code** — edited a page, added an FOI status,
-fixed a vendor detail:
+## The normal loop
 
 ```bash
-npm run deploy
+npm run dev      # edit with live reload at localhost:4321
+npm run stage    # push it to the staging URL and look at it properly
+npm run deploy   # happy with it? put it live
 ```
 
-**2. You want fresh camera data from OpenStreetMap** — pulls Overpass,
-re-classifies, then builds and deploys in one go:
+`npm run stage` is safe — it never touches the live site. The staging URL
+is stable, so it's also the link to send someone for a second opinion.
+
+## Refresh the data and publish in one go
 
 ```bash
-npm run refresh
+npm run refresh   # pull OSM cameras + news feeds, build, deploy live
 ```
 
-(This also runs automatically every Monday via GitHub Actions — see the
-Git gap below.)
-
-**3. You just want to look at it locally before shipping:**
+Stop before publishing if you'd rather eyeball it first:
 
 ```bash
-npm run dev          # live-reload dev server at localhost:4321
+npm run data && npm run news && npm run stage
 ```
 
-## Commit your work too
+## Rolling back
 
-Deploying and committing are separate. `npm run deploy` ships the site
-but doesn't touch git. Keep the repo in sync so the research base and
-history stay accurate:
+Cloudflare keeps every deployment. Pages → `readback` → Deployments →
+pick an earlier one → **Rollback**. Or:
 
 ```bash
-git add -A && git commit -m "what changed" && git push
+npx wrangler pages deployment list --project-name readback
 ```
 
-Habit: **commit, then deploy.**
+## Why Docker is gone
 
-## The Git gap (why pushing doesn't deploy)
+The old setup served a copy of `dist/` baked into a container image at
+`192.168.2.226:4321`. It only changed when the image was rebuilt, so it
+silently served hours-old content while the live site was current — which
+is exactly how a change can look "missing" when it shipped fine. Staging
+replaces it: same purpose, always current, no second thing to remember.
+The files are kept in `archive/` if that setup is ever wanted back.
 
-The Pages project uses direct upload, so it has no Git provider attached.
-Pushing to GitHub does *not* trigger a deploy — only `npm run deploy`
-does. The weekly data Action commits new camera data but can't publish it
-on its own.
+## The Git gap (unchanged)
 
-To close it, pick one:
-
-**A. Connect the repo** (dashboard only — no API exists for this):
-Pages → `readback` → Settings → Builds & deployments → Connect to Git →
-authorize the Cloudflare GitHub app → pick `mikeshoss/Readback` → build
-command `npm run build`, output `dist`. Then every push deploys itself.
-
-**B. Deploy from the Action**: create a Cloudflare API token (Pages:Edit),
-add `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` as repo secrets, and
-append a wrangler deploy step to `.github/workflows/refresh-data.yml`.
-
-## Rollback
-
-Every deploy is kept. To revert:
-Pages → `readback` → Deployments → find a previous one → **Rollback**.
-Or `npx wrangler pages deployment list --project-name readback`.
-
-## Local Docker preview (optional)
-
-Unrelated to production; useful for checking on other devices:
-
-```bash
-npm run build && docker compose up -d --build   # http://<your-ip>:4321
-```
+The Pages project uses direct upload, so pushing to GitHub does **not**
+deploy. Only `npm run deploy` does. The weekly data workflow commits fresh
+data but can't publish it — run `npm run deploy` afterwards, or close the
+gap by connecting the repo in the Pages dashboard (Settings → Builds &
+deployments → Connect to Git, build command `npm run build`, output `dist`).

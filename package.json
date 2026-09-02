@@ -6,11 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
     "data": "node scripts/build-cameras.mjs",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name readback",
-    "refresh": "npm run data && npm run deploy",
-    "news": "node scripts/fetch-news.mjs"
+    "news": "node scripts/fetch-news.mjs",
+    "stage": "npm run build && wrangler pages deploy dist --project-name readback --branch staging --commit-dirty=true",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name readback --branch main --commit-dirty=true",
+    "refresh": "npm run data && npm run news && npm run deploy"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
