@@ -65,7 +65,7 @@ Research agent report, 2026-09-01. Caveats at bottom; verify flagged items befor
 |---|---|---|
 | New Hampshire | **3 minutes** | RSA 261:75-b |
 | BC, Canada (police) | Immediate deletion of non-hits | OIPC BC F12-04 (2012) |
-| Peel Regional Police (ON) | 24 hours (matches 30 days) | user-provided; verify |
+| Peel Regional Police (ON) | 24 hours (matches 30 days) | VERIFIED: Peel Regional Police official page https://www.peelpolice.ca/community-safety/automated-licence-plate-recognition/ |
 | Toronto Police | 7 days (reads) / 365 days (hits) | TPS policy + PIA |
 | Maine | 21 days | 29-A §2117-A |
 | Virginia | 21 days | HB 2724 (2025) |
@@ -119,4 +119,5 @@ Research agent report, 2026-09-01. Caveats at bottom; verify flagged items befor
 - Colorado SB 26-70 and NH repeal (eff. Jan 1, 2027) in flux.
 - UK retention is 12 months, not 2 years.
 - Virginia HB 2724 status/effective dates: check LIS Virginia.
-- Peel 24h retention: user-provided, needs primary source.
+- ~~Peel 24h retention~~ VERIFIED 2026-09-01: Peel's official ALPR page states no-match scans kept 24 hours, matches 30 days.
+- ~~Axon/Edmonton FR~~ VERIFIED 2026-09-01: CBC + Biometric Update — world-first Axon FR bodycam trial, Dec 3–31 2025, 50 officers, ~7,000-face watch list, PIA filed with Alberta OIPC, phase-2 pending.
