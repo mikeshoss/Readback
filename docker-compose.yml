@@ -4,5 +4,19 @@ services:
     image: readback:latest
     container_name: readback
     ports:
-      - "4321:80"
+      - "4321:80"          # LAN access: http://<your-ip>:4321
+    restart: unless-stopped
+
+  # Cloudflare Tunnel — publishes the site at readback.ca without opening
+  # any router ports and without exposing your home IP.
+  # Token lives in .env (gitignored). See docs/cloudflare-tunnel.md.
+  # Comment this service out if you only want LAN access.
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: readback-tunnel
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    depends_on:
+      - readback
     restart: unless-stopped
