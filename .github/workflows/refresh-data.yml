@@ -64,7 +64,7 @@ jobs:
           {
             echo "### Camera data refresh"
             if [ "${{ steps.commit.outputs.changed }}" = "true" ]; then
-              echo "Committed — Cloudflare Pages will deploy automatically."
+              echo "Committed. NOTE: the Pages project is direct-upload, so this does NOT auto-deploy yet — connect the repo in Pages, or add a wrangler deploy step here."
             else
               echo "No changes this week. Nothing committed."
             fi
