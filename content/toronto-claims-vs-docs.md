@@ -1,5 +1,10 @@
 # What Toronto police say vs. what the system does
 
+> **DRAFT — unpublished.** The vendor attribution below ("Axon Fusus")
+> is reported by CBC/Blue Line but still pending primary-source
+> confirmation via TPSB minutes or procurement records. Not to be
+> published or cited until that gate clears.
+
 Draft content piece (user-provided). Candidate for a site feature page:
 each official claim paired with the vendor's own documentation.
 

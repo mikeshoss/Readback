@@ -99,8 +99,7 @@ ISED cert for Canadian enforcement use (not verified).
   filing — potential Part 15 labeling gap. [reported, not cert-verified]
 - **Sparrow**: same platform/BOM as Falcon (GainSec treats as one family).
 - **Condor PTZ**: only Flock model with no verifiable radio BOM; LTE per
-  vendor; one unverified lead suggests a rebadged Shenzhen OEM PTZ
-  (FCC 2A4SK-HSP01H2Z20). ~60 Condors found streaming openly (Jan 2026).
+  vendor; ~60 Condors found streaming openly (Jan 2026).
 - **Raven**: not a camera — acoustic sensor. ESP32-WROOM-32D (FCC
   2AC7Z-ESPWROOM32D): Wi-Fi 2.4GHz + BT/BLE, BLE-beaconing
   (fingerprintable), LTE fallback, Syntiant NDP120 ML audio processor,

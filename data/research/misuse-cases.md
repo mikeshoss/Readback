@@ -15,11 +15,11 @@ untested in court" wherever used.
   2026). https://www.cp24.com/news/canada/2026/04/24/ottawa-police-officer-demoted-after-69-unauthorized-database-searches-into-ex-partners-members-of-public/
   Decision: https://www.policearbitration.gov.on.ca/wp-content/uploads/2026/04/ADJ-26-013-Ottawa-Section-202-Demotion-and-Termination-of-a-Police-Officer-Cst.-Rabiha-Stevens-April-20-2026-Consent-Ord.pdf
 - **Const. Andrew Reesor (Ottawa, charged 2026, pending):** alleged **77
-  unauthorized searches on 44 women (incl. his sister), 27 men, 6
+  unauthorized searches on 44 women, 27 men, 6
   colleagues** in an MTO database; admitted motives of "curiosity" and
   "attraction." OPS seeking termination. Chief publicly warned officers to
   "change your behaviour or quit." https://www.cbc.ca/news/canada/ottawa/ottawa-police-officer-accused-of-unauthorized-database-searches-into-women-colleagues-9.7181538
-- **Toronto Police (Globe and Mail review, Feb 2026):** Gaudino (2018,
+- **Toronto Police** — as reported in the Globe and Mail's Feb 2026 review of TPS disciplinary decisions: Gaudino (2018,
   Versadex/CPIC/IntelliBook searches on acquaintance); **Collymore (2018,
   licence-plate query "no justification")**; Smith (2019, contacted DV
   victim from prior case); Price (2022, docked 8 days' pay, repeat

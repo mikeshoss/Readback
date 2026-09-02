@@ -5,3 +5,10 @@ dist/
 
 # Secrets — never commit
 .env
+
+# Press strategy — kept private (see ~/Documents/readback-private/)
+docs/launch-emails.md
+docs/launch-plan.md
+
+# Wrangler state
+.wrangler/

@@ -35,8 +35,7 @@ diff feed. Basemap: OpenFreeMap (no key, production-safe).
 
 ## FOI status (the clock is running)
 - **Sent Sept 1** (due ~Nov 5, 45 business days): Halton (ref
-  2026-09-01-005), Peel (payment ref [redacted]; sent letter published
-  as-sent), York (payment ref [redacted]).
+  2026-09-01-005), Peel, York.
 - **Waterloo**: online form done; must MAIL printed request + ID copy + $5
   (payee unconfirmed — money order to WRPS or call first). Address on
   /foi page.
