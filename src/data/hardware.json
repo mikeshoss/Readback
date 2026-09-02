@@ -37,9 +37,9 @@
       "notes": "General-purpose IP cameras running plate-reading analytics."
     },
     "Neology": {
-      "radios": "Unconfirmed — verifying via certification filings",
-      "radiosSummary": "Radio loadout unconfirmed",
-      "confidence": "pending",
+      "radios": "neoForce: unconfirmed; legacy PIPS TS-500 offered optional Wi-Fi, Bluetooth and internal modem",
+      "radiosSummary": "Radio loadout unconfirmed (legacy PIPS units offered optional Wi-Fi/BT/modem)",
+      "confidence": "partial (legacy PIPS docs; neoForce datasheet not public)",
       "formFactor": "Fixed + in-car (PIPS heritage)",
       "notes": "BC provincial program vendor; BC deletes non-hit reads at end of shift."
     },
@@ -51,18 +51,18 @@
       "notes": "Vigilant/DRN parent — the commercial-collection outlier in the US."
     },
     "Dahua": {
-      "radios": "Unconfirmed — verifying via certification filings",
-      "radiosSummary": "Radio loadout unconfirmed",
-      "confidence": "pending",
-      "formFactor": "Fixed ITC-series ALPR cameras",
-      "notes": "PRC vendor; banned from US federal procurement (NDAA s.889); still sold in Canada."
+      "radios": "None — Ethernet RJ-45 only; PoE+/12VDC/24VAC power",
+      "radiosSummary": "No radios — wired PoE. But vendor datasheet claims recognition of driver and front-seat passenger features",
+      "confidence": "confirmed (Dahua DHI-ITC415-PW6M-IZ-BH datasheet, 2021)",
+      "formFactor": "Fixed bullet, vertical pole mount, built-in IR",
+      "notes": "PRC vendor; banned from US federal procurement (NDAA s.889), FCC equipment authorizations halted 2022; still sold in Canada. Datasheet: 'supports recognizing... features of driver and front-seat passenger.'"
     },
     "Verkada": {
-      "radios": "Unconfirmed — verifying via certification filings",
-      "radiosSummary": "Radio loadout unconfirmed",
-      "confidence": "pending",
-      "formFactor": "Fixed cloud-managed camera",
-      "notes": "Cloud-first vendor; 2021 breach exposed 150,000 customer camera feeds."
+      "radios": "None on LPR-capable bullets (CB52-TE/CB62-TE etc.) — PoE wired; cloud-managed",
+      "radiosSummary": "No radios on LPR models — wired PoE, cloud-managed (footage leaves premises by design)",
+      "confidence": "vendor docs (Verkada LPR guide + power requirements)",
+      "formFactor": "Fixed bullet (telephoto/wide), LPR as cloud analytics",
+      "notes": "2021 breach exposed ~150,000 customer camera feeds. Separate CR63-E 'remote' line has LTE."
     },
     "Leonardo ELSAG": {
       "radios": "Plate readers: wireless alarm broadcast (~0.5 mi); SignalTrace sensor adds Wi-Fi/BT/RF capture by design",
