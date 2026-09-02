@@ -121,14 +121,20 @@ const fleets = fleetsData.fleets;
         map.on('click', cat, (e) => {
           const p: any = e.features?.[0]?.properties ?? {};
           const hw = p.manufacturer ? (hardwareData.manufacturers as any)[p.manufacturer] : null;
+          // Honesty rules: OSM points rarely record the camera model, and an
+          // unknown operator means the "police" categorization is unverified.
+          const catLabel = p.category === 'police_alpr' && !p.operator
+            ? 'Mapped as ALPR — operator not recorded in OpenStreetMap (unverified)'
+            : ({ police_alpr: 'Police surveillance ALPR', toll: 'Toll camera — paid service', border: 'Border crossing checkpoint', private: 'Private/institutional ALPR' }[p.category as string] ?? p.category);
           const rows = [
-            p.operator ? `<div><b>Operator:</b> ${p.operator}</div>` : '',
-            p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}</div>` : '',
-            p.zone ? `<div><b>Zone:</b> ${p.zone}</div>` : '',
+            p.operator ? `<div><b>Operator:</b> ${p.operator}</div>` : '<div><b>Operator:</b> not recorded</div>',
+            p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer} <span class="pop-dim">(per map tag)</span></div>` : '',
+            p.zone ? `<div><b>Zone:</b> ${String(p.zone).charAt(0).toUpperCase() + String(p.zone).slice(1)}</div>` : '',
             p.tollMethod ? `<div><b>Toll method:</b> ${p.tollMethod}</div>` : '',
-            hw ? `<div class="pop-hw"><b>Hardware:</b> ${hw.radiosSummary}</div>` : '',
-            hw?.formFactor ? `<div class="pop-hw-ff">${hw.formFactor}</div>` : '',
-            `<div class="pop-cat">${{ police_alpr: 'Police surveillance ALPR', toll: 'Toll camera — paid service', border: 'Border crossing checkpoint', private: 'Private/institutional ALPR' }[p.category as string] ?? p.category}</div>`,
+            hw ? `<div class="pop-hw"><b>Hardware</b> <span class="pop-dim">(${p.manufacturer}'s typical — exact model not recorded on this point)</span>: ${hw.radiosSummary}</div>` : '',
+            hw?.caution ? `<div class="pop-caution">⚠ ${hw.caution}</div>` : '',
+            `<div class="pop-cat">${catLabel}</div>`,
+            hw?.slug ? `<div><a class="pop-link" href="/tech/${hw.slug}">Full ${p.manufacturer} specs &amp; sources →</a></div>` : '',
           ].join('');
           new maplibregl.Popup({ closeButton: false })
             .setLngLat((e.features![0].geometry as any).coordinates)
@@ -227,6 +233,9 @@ const fleets = fleetsData.fleets;
     :global(.pop-cat) { color: var(--muted); margin-top: 0.3rem; }
     :global(.pop-hw) { color: var(--fleet); margin-top: 0.25rem; }
     :global(.pop-hw-ff) { color: var(--muted); font-size: 0.74rem; }
+    :global(.pop-dim) { color: var(--muted); font-weight: 400; font-size: 0.74rem; }
+    :global(.pop-caution) { color: var(--police); margin-top: 0.25rem; font-size: 0.76rem; }
+    :global(.pop-link) { color: var(--toll); margin-top: 0.3rem; display: inline-block; }
     @media (max-width: 720px) {
       .map-shell { flex-direction: column; }
       #map { order: -1; flex: none; height: 52vh; min-height: 300px; }

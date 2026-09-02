@@ -6,21 +6,25 @@
       "radiosSummary": "Full radio stack — LTE, Wi-Fi, Bluetooth, GNSS; active hotspot; sniff-capable hardware",
       "confidence": "confirmed (teardowns + module FCC IDs). Flock's own FCC grantee (2BKG8) has zero filings; no ISED Radio Equipment List entries found for Flock (live query) — devices ride third-party module certs.",
       "formFactor": "Fixed, solar/battery, pole-mount",
-      "notes": "No Canadian police contracts; Canadian pins are likely HOA/private or mistagged."
+      "notes": "No Canadian police contracts; Canadian pins are likely HOA/private or mistagged.",
+      "slug": "flock",
+      "caution": "Flock states it has no Canadian police contracts and the OPP says it has no plans to use Flock — a Flock-tagged camera in Canada is likely a private/HOA install, or mistagged. Unverified."
     },
     "Genetec": {
       "radios": "SharpV: optional LTE Cat-4 module + multi-GNSS; no Wi-Fi, no Bluetooth. SharpZ3 in-car: NO radios at all (GNSS receive-only option; backhaul via the patrol vehicle's own network). Cloudrunner: LTE Cat-4 + GPS only (Verizon ODI-verified).",
       "radiosSummary": "No Wi-Fi or Bluetooth on any model — least sniff-capable of the major vendors (cert-verified)",
       "confidence": "confirmed [CERT]: FCC applicant search 'Genetec' returns zero applications; ISED REL search returns none — LTE rides pre-certified third-party modules; no-radio variants are Part 15B only",
       "formFactor": "Fixed (SharpV, PoE++/24VDC) / solar quick-deploy (Cloudrunner) / in-car (SharpZ3)",
-      "notes": "Canada's most-deployed ALPR vendor (Montreal). Canadian cloud hosting; no vendor-run cross-agency search network."
+      "notes": "Canada's most-deployed ALPR vendor (Montreal). Canadian cloud hosting; no vendor-run cross-agency search network.",
+      "slug": "genetec"
     },
     "Axon": {
       "radios": "Outpost (FCC X4GS06009, ISED 8803A-S06009): LTE 9 bands incl. FirstNet B14 + dual-band Wi-Fi + BLE — one cert for the whole unit. Fleet 3: Wi-Fi + BT in cameras/hub, 900MHz FHSS wireless mics, GNSS; LTE via separate Cradlepoint router. Lightpost: radios live in Ubicquia's streetlight hub (FCC grantee 2AECK); camera is an Axis Q1800-LE.",
       "radiosSummary": "Cellular, dual-band Wi-Fi and Bluetooth radios onboard (Outpost — certified by FCC and ISED filings)",
       "confidence": "confirmed [CERT]: FCC X4GS06009 (granted 2025-12-10) + ISED 8803A-S06009 (approved 2026-01-29 — Outpost is certified for the Canadian market)",
       "formFactor": "Fixed/solar/trailer (Outpost), streetlight (Lightpost), in-car (Fleet 3 dual-view)",
-      "notes": "Toronto and York Region platform (Fusus). Customer-set retention, no vendor limit. Outpost's ISED approval (Jan 2026) means Axon's fixed ALPR hardware is regulatory-ready for Canada."
+      "notes": "Toronto and York Region platform (Fusus). Customer-set retention, no vendor limit. Outpost's ISED approval (Jan 2026) means Axon's fixed ALPR hardware is regulatory-ready for Canada.",
+      "slug": "axon"
     },
     "RTX Corporation": {
       "radios": "Tolling gantry sensors (transponder readers + plate cameras)",
@@ -34,42 +38,48 @@
       "radiosSummary": "No radios — wired PoE; certified as an unintentional radiator",
       "confidence": "confirmed (Axis datasheets: approvals list only FCC 15B/ICES-003 class marks)",
       "formFactor": "Fixed IP camera, ALPR via analytics software",
-      "notes": "General-purpose IP cameras running plate-reading analytics."
+      "notes": "General-purpose IP cameras running plate-reading analytics.",
+      "slug": "axis"
     },
     "Neology": {
       "radios": "neoForce: integrated 4G/5G + GPS per vendor page (no own FCC/ISED cert — module-based). Predecessor P500 IRIS: FCC ID 2AKNFP500FAW (2021) covers a variant with internal 4G modem + Wi-Fi ('configure from the street') + optional GPS.",
       "radiosSummary": "Cellular + GPS per vendor specs; P500 variant adds Wi-Fi (FCC-certified)",
       "confidence": "confirmed [CERT/DATASHEET]: P500 grant 2AKNFP500FAW; neoForce vendor datasheet; ISED REL lists only 3 Neology RFID toll readers for Canada — no LPR camera",
       "formFactor": "Fixed multi-lane (neoForce: 4-lane, edge AI, PoE; P500: 5MP dual-sensor, 28-LED pulsed IR)",
-      "notes": "BC provincial program vendor; BC deletes non-hit reads at end of shift. No Neology LPR camera appears in Canada's radio-equipment registry — connectivity rides module certs."
+      "notes": "BC provincial program vendor; BC deletes non-hit reads at end of shift. No Neology LPR camera appears in Canada's radio-equipment registry — connectivity rides module certs.",
+      "slug": "neology"
     },
     "Motorola Solutions": {
       "radios": "L6Q: LTE + Wi-Fi 802.11ac + Bluetooth 5 LE + embedded radar trigger (speed/direction to 100 mph) — all via pre-certified modules, no host FCC ID (Part 15 SDoC per manual). ReaperHD (in-car/fixed): ZERO radios — pure PoE+ camera; GPS and comms live in the vehicle systems.",
       "radiosSummary": "Portable L6Q: cellular, Wi-Fi, Bluetooth and radar onboard. In-car ReaperHD: no radios — wired PoE",
       "confidence": "confirmed [CERT/DATASHEET]: FCC has no Motorola LPR camera filings; Vigilant never held any FCC authorization; L6Q manual shows Part 15 SDoC (module-based); ReaperHD datasheet PoE-only",
       "formFactor": "Quick-deploy solar/pole (L6Q, IP67, ~20,000 scans per battery charge), in-car dual-lens (ReaperHD, capture to 150 mph), fixed packages",
-      "notes": "Vigilant/DRN parent — the commercial-collection outlier in the US."
+      "notes": "Vigilant/DRN parent — the commercial-collection outlier in the US.",
+      "slug": "motorola"
     },
     "Dahua": {
       "radios": "None — Ethernet RJ-45 only (ITC415/ITC215 datasheets); PoE+/12VDC/24VAC; FCC Part 15B class marks, no FCC ID",
       "radiosSummary": "No radios — wired PoE. But vendor datasheet claims recognition of driver and front-seat passenger features",
       "confidence": "confirmed (Dahua DHI-ITC415-PW6M-IZ-BH datasheet, 2021)",
       "formFactor": "Fixed bullet, vertical pole mount, built-in IR",
-      "notes": "PRC vendor; banned from US federal procurement (NDAA s.889), FCC equipment authorizations halted 2022; still sold in Canada. Datasheet: 'supports recognizing... features of driver and front-seat passenger.'"
+      "notes": "PRC vendor; banned from US federal procurement (NDAA s.889), FCC equipment authorizations halted 2022; still sold in Canada. Datasheet: 'supports recognizing... features of driver and front-seat passenger.'",
+      "slug": "dahua"
     },
     "Verkada": {
       "radios": "Current CB52-TE/CB62-TE: PoE only. Gen-1 CB61-TE: contains a DORMANT Wi-Fi radio — disabled by default, enable requires Verkada Support at org level. New Outdoor Remote camera (FCC 2AWUU68B66001, Jan 2026): BLE + LTE.",
       "radiosSummary": "Current LPR bullets are wired PoE — but gen-1 units carry a dormant support-enabled Wi-Fi radio, and the newest remote camera ships BLE + LTE",
       "confidence": "confirmed (datasheets + FCC grantee 2AWUU records + Verkada help docs)",
       "formFactor": "Fixed bullet (telephoto/wide), LPR as cloud analytics",
-      "notes": "2021 breach exposed ~150,000 customer camera feeds. Separate CR63-E 'remote' line has LTE."
+      "notes": "2021 breach exposed ~150,000 customer camera feeds. Separate CR63-E 'remote' line has LTE.",
+      "slug": "verkada"
     },
     "Leonardo ELSAG": {
       "radios": "Cameras themselves: radio-free. Only FCC cert ELSAG ever held is a 2009 2.4GHz Wi-Fi AP in the in-car trunk processor (VTFADM3). Street Sentry solar units use an off-the-shelf cellular router in a separate utility box. SignalTrace/EOC Plus: RECEIVE-ONLY sensor harvesting Wi-Fi, Bluetooth and RFID identifiers (needs no transmitter cert — hence no filing).",
       "radiosSummary": "Cameras radio-free; SignalTrace is the receive-only device-signal harvester — legally invisible to radio certification",
       "confidence": "confirmed [CERT]: FCC applicant 'elsag' = exactly 1 record (VTFADM3, 2009); ISED = 0 results; SignalTrace absence-of-filing consistent with passive receiver",
       "formFactor": "In-car (MPH900), fixed (bridges/gantries), Street Sentry solar pole, covert units disguised as utility boxes/toolboxes/cargo carriers, radar trailers",
-      "notes": "See the antenna problem — SignalTrace pairs device signals with plates. Covert-disguise product line is documented in ELSAG's own catalog."
+      "notes": "See the antenna problem — SignalTrace pairs device signals with plates. Covert-disguise product line is documented in ELSAG's own catalog.",
+      "slug": "leonardo"
     },
     "Bosch": {
       "radios": "Unconfirmed",
