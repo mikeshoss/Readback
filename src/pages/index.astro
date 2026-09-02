@@ -57,6 +57,7 @@ const fleets = fleetsData.fleets;
     import maplibregl from 'maplibre-gl';
     import 'maplibre-gl/dist/maplibre-gl.css';
     import fleetsData from '../data/fleets.json';
+    import hardwareData from '../data/hardware.json';
 
     const CAT_COLORS: Record<string, string> = {
       police_alpr: '#ff5a5f',
@@ -132,11 +133,14 @@ const fleets = fleetsData.fleets;
         });
         map.on('click', cat, (e) => {
           const p: any = e.features?.[0]?.properties ?? {};
+          const hw = p.manufacturer ? (hardwareData.manufacturers as any)[p.manufacturer] : null;
           const rows = [
             p.operator ? `<div><b>Operator:</b> ${p.operator}</div>` : '',
             p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}</div>` : '',
             p.zone ? `<div><b>Zone:</b> ${p.zone}</div>` : '',
             p.tollMethod ? `<div><b>Toll method:</b> ${p.tollMethod}</div>` : '',
+            hw ? `<div class="pop-hw"><b>Hardware:</b> ${hw.radiosSummary}</div>` : '',
+            hw?.formFactor ? `<div class="pop-hw-ff">${hw.formFactor}</div>` : '',
             `<div class="pop-cat">${{ police_alpr: 'Police surveillance ALPR', toll: 'Toll camera — paid service', border: 'Border crossing checkpoint', private: 'Private/institutional ALPR' }[p.category as string] ?? p.category}</div>`,
           ].join('');
           new maplibregl.Popup({ closeButton: false })
@@ -234,6 +238,8 @@ const fleets = fleetsData.fleets;
     :global(.maplibregl-popup-tip) { border-top-color: var(--panel-2) !important; border-bottom-color: var(--panel-2) !important; }
     :global(.pop) { display: flex; flex-direction: column; gap: 0.2rem; }
     :global(.pop-cat) { color: var(--muted); margin-top: 0.3rem; }
+    :global(.pop-hw) { color: var(--fleet); margin-top: 0.25rem; }
+    :global(.pop-hw-ff) { color: var(--muted); font-size: 0.74rem; }
     @media (max-width: 720px) {
       .map-shell { flex-direction: column; }
       #map { order: -1; flex: none; height: 52vh; min-height: 300px; }

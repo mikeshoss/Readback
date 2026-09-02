@@ -1,0 +1,82 @@
+{
+  "note": "Hardware capability profiles keyed by canonical manufacturer (see MFR_ALIASES in scripts/build-cameras.mjs). 'profile' is shown on map popups when the model isn't tagged (almost always). Sources: FCC ID filings, ISED REL, teardowns, vendor datasheets — see data/research/. Seed data; expanded from certification-database research.",
+  "manufacturers": {
+    "Flock Safety": {
+      "radios": "LTE + Wi-Fi (802.11ac) + Bluetooth 4.2 LE + GPS",
+      "radiosSummary": "Cellular, Wi-Fi and Bluetooth radios onboard — active hotspot; sniff-capable hardware",
+      "confidence": "confirmed (teardown + FCC ID WCBN3510A, N7NRC76B)",
+      "formFactor": "Fixed, solar/battery, pole-mount",
+      "notes": "No Canadian police contracts; Canadian pins are likely HOA/private or mistagged."
+    },
+    "Genetec": {
+      "radios": "Varies: SharpV fixed is PoE (no radios identified); Cloudrunner is LTE + GPS only — no Wi-Fi, no Bluetooth",
+      "radiosSummary": "No Wi-Fi or Bluetooth radios identified — least sniff-capable of the major vendors",
+      "confidence": "Cloudrunner confirmed (carrier device listing); SharpV datasheet",
+      "formFactor": "Fixed (SharpV, PoE) / solar fixed (Cloudrunner) / in-car (SharpZ3)",
+      "notes": "Canada's most-deployed ALPR vendor (Montreal). Canadian cloud hosting; no vendor-run cross-agency search network."
+    },
+    "Axon": {
+      "radios": "LTE + Bluetooth (pairing); Wi-Fi unconfirmed",
+      "radiosSummary": "Cellular + Bluetooth radios onboard",
+      "confidence": "vendor docs + app store pairing docs; FCC grantee X4G",
+      "formFactor": "Fixed (Outpost), streetlight (Lightpost), in-car (Fleet 3)",
+      "notes": "Toronto and York Region platform (Fusus). Customer-set retention, no vendor limit."
+    },
+    "RTX Corporation": {
+      "radios": "Tolling gantry sensors (transponder readers + plate cameras)",
+      "radiosSummary": "407 toll system hardware — reads transponders and plates for billing",
+      "confidence": "system heritage (Raytheon built 407 ETR tolling)",
+      "formFactor": "Gantry-mounted, highway corridor",
+      "notes": "These are the 407's toll cameras, operator-tagged as MTO. Not police surveillance."
+    },
+    "Axis Communications": {
+      "radios": "None — PoE wired only (typical for Axis fixed cameras)",
+      "radiosSummary": "No radios — wired PoE camera",
+      "confidence": "datasheet (verify per model)",
+      "formFactor": "Fixed IP camera, ALPR via analytics software",
+      "notes": "General-purpose IP cameras running plate-reading analytics."
+    },
+    "Neology": {
+      "radios": "Unconfirmed — verifying via certification filings",
+      "radiosSummary": "Radio loadout unconfirmed",
+      "confidence": "pending",
+      "formFactor": "Fixed + in-car (PIPS heritage)",
+      "notes": "BC provincial program vendor; BC deletes non-hit reads at end of shift."
+    },
+    "Motorola Solutions": {
+      "radios": "L6Q: LTE + Wi-Fi + Bluetooth + GPS",
+      "radiosSummary": "Cellular, Wi-Fi and Bluetooth radios onboard (L6Q)",
+      "confidence": "vendor spec page",
+      "formFactor": "Quick-deploy portable (L6Q), fixed (ReaperHD), in-car",
+      "notes": "Vigilant/DRN parent — the commercial-collection outlier in the US."
+    },
+    "Dahua": {
+      "radios": "Unconfirmed — verifying via certification filings",
+      "radiosSummary": "Radio loadout unconfirmed",
+      "confidence": "pending",
+      "formFactor": "Fixed ITC-series ALPR cameras",
+      "notes": "PRC vendor; banned from US federal procurement (NDAA s.889); still sold in Canada."
+    },
+    "Verkada": {
+      "radios": "Unconfirmed — verifying via certification filings",
+      "radiosSummary": "Radio loadout unconfirmed",
+      "confidence": "pending",
+      "formFactor": "Fixed cloud-managed camera",
+      "notes": "Cloud-first vendor; 2021 breach exposed 150,000 customer camera feeds."
+    },
+    "Leonardo ELSAG": {
+      "radios": "Plate readers: wireless alarm broadcast (~0.5 mi); SignalTrace sensor adds Wi-Fi/BT/RF capture by design",
+      "radiosSummary": "Vendor of SignalTrace — device-signal capture as a product",
+      "confidence": "vendor docs",
+      "formFactor": "In-car, fixed, covert pole/barrel, radar trailers",
+      "notes": "See the antenna problem — SignalTrace pairs device signals with plates."
+    },
+    "Bosch": {
+      "radios": "Unconfirmed",
+      "radiosSummary": "Radio loadout unconfirmed",
+      "confidence": "pending",
+      "formFactor": "Fixed IP camera",
+      "notes": ""
+    }
+  }
+}

@@ -57,6 +57,37 @@ if (localFile) {
   ({ elements } = await res.json());
 }
 
+// Normalize messy crowdsourced manufacturer tags to canonical names so the
+// hardware-profile lookup (src/data/hardware.json) can key off them.
+const MFR_ALIASES = {
+  genetech: 'Genetec',
+  genetec: 'Genetec',
+  'rtx corporation': 'RTX Corporation',
+  rtx: 'RTX Corporation',
+  raytheon: 'RTX Corporation',
+  'flock safety': 'Flock Safety',
+  flock: 'Flock Safety',
+  'axon enterprise': 'Axon',
+  axon: 'Axon',
+  'axis communications': 'Axis Communications',
+  axis: 'Axis Communications',
+  'neology, inc.': 'Neology',
+  neology: 'Neology',
+  'motorola solutions': 'Motorola Solutions',
+  motorola: 'Motorola Solutions',
+  'dahua technology': 'Dahua',
+  dahua: 'Dahua',
+  leonardo: 'Leonardo ELSAG',
+  elsag: 'Leonardo ELSAG',
+  verkada: 'Verkada',
+  'the bosch group': 'Bosch',
+  bosch: 'Bosch',
+};
+const normMfr = (raw) => {
+  if (!raw) return null;
+  return MFR_ALIASES[raw.trim().toLowerCase()] ?? raw.trim();
+};
+
 const cameras = elements.map((e) => {
   const t = e.tags || {};
   return {
@@ -65,7 +96,7 @@ const cameras = elements.map((e) => {
     lon: e.lon,
     category: classify(t),
     operator: t.operator || null,
-    manufacturer: t.manufacturer || t.brand || null,
+    manufacturer: normMfr(t.manufacturer || t.brand || null),
     zone: t['surveillance:zone'] || null,
     direction: t.direction ? Number(t.direction) || null : null,
     tollMethod: t.toll_method || null,
