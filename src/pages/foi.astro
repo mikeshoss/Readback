@@ -119,5 +119,11 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
     .letter .pre { white-space: pre-line; color: var(--muted); margin-bottom: 0.7rem; }
     .letter ol { padding-left: 1.2rem; }
     .letter li { margin-bottom: 0.55rem; }
+    @media (max-width: 720px) {
+      .req { padding: 0.85rem 0.9rem; }
+      .req header { flex-direction: column; gap: 0.4rem; }
+      .status-wrap { text-align: left; }
+      .letter { padding-left: 0.7rem; }
+    }
   </style>
 </Base>

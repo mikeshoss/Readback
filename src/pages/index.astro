@@ -236,7 +236,14 @@ const fleets = fleetsData.fleets;
     :global(.pop-cat) { color: var(--muted); margin-top: 0.3rem; }
     @media (max-width: 720px) {
       .map-shell { flex-direction: column; }
-      .panel { width: 100%; max-width: none; max-height: 45vh; border-right: none; border-bottom: 1px solid var(--line); }
+      #map { order: -1; flex: none; height: 52vh; min-height: 300px; }
+      .panel {
+        width: 100%; max-width: none; max-height: none; overflow: visible;
+        border-right: none; border-top: 1px solid var(--line);
+        padding: 1rem 0.9rem 2rem;
+      }
+      .panel h1 { font-size: 1.2rem; }
+      .attr { margin-top: 0.5rem; }
     }
   </style>
 </Base>
