@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import tech from '../../data/tech.json';
+
+export function getStaticPaths() {
+  return tech.vendors.map((v) => ({ params: { slug: v.slug }, props: { v } }));
+}
+const { v } = Astro.props;
+---
+<Base title={v.name}>
+  <p class="crumb"><a href="/tech">← All providers</a></p>
+  <h1>{v.name}</h1>
+  <p class="where">{v.where}</p>
+  <p class="lede">{v.summary}</p>
+
+  {v.platform && (
+    <>
+      <h2>The platform: {v.platform.name}</h2>
+      <section class="panel-card">
+        <p class="what">{v.platform.what}</p>
+        <ul>
+          {v.platform.features.map((x) => <li><strong>{x.f}.</strong> {x.d}</li>)}
+        </ul>
+        <p class="record">📎 On the record: {v.platform.onRecord}</p>
+      </section>
+    </>
+  )}
+
+  <h2>The hardware — model by model</h2>
+  {v.hardware.map((h) => (
+    <section class="panel-card hw">
+      <h3>{h.model}</h3>
+      <p class="hw-type">{h.type}</p>
+      <dl>
+        <dt>Radios</dt><dd>{h.radios}</dd>
+        <dt>Imaging</dt><dd>{h.imaging}</dd>
+        <dt>Power</dt><dd>{h.power}</dd>
+        {h.notes && <><dt>Notes</dt><dd>{h.notes}</dd></>}
+      </dl>
+    </section>
+  ))}
+
+  {v.certNote && <div class="note"><strong>Certification record:</strong> {v.certNote}</div>}
+  {v.flags && <p class="flags">⚠ {v.flags}</p>}
+
+  <p class="src">
+    Every specification above traces to a certification filing, teardown, carrier device
+    listing, or the vendor's own datasheet — the full paper trail with links lives in the
+    <a href="https://github.com/mikeshoss/Readback/blob/main/data/research/hardware-certs.md" rel="noopener">open research base</a>.
+  </p>
+
+  <style>
+    .crumb { margin-bottom: 0.6rem; font-size: 0.84rem; }
+    .crumb a { color: var(--muted); text-decoration: none; }
+    .crumb a:hover { color: var(--text); }
+    .where { color: var(--toll); font-size: 0.88rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .panel-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.25rem; margin-top: 0.8rem; }
+    .panel-card ul { margin: 0; padding-left: 1.15rem; font-size: 0.88rem; }
+    .panel-card li { margin-bottom: 0.4rem; }
+    .what { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.6rem; }
+    .record { margin-top: 0.7rem; font-size: 0.84rem; color: var(--fleet); }
+    .hw h3 { margin: 0 0 0.1rem; font-size: 1rem; }
+    .hw-type { color: var(--muted); font-size: 0.82rem; margin-bottom: 0.6rem; }
+    dl { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.3rem 0.8rem; margin: 0; font-size: 0.86rem; }
+    dt { color: var(--muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 0.1rem; }
+    dd { margin: 0; }
+    .flags { margin-top: 1rem; font-size: 0.88rem; color: var(--fleet); }
+    .src { margin-top: 1.2rem; color: var(--muted); font-size: 0.82rem; }
+    .src a { color: var(--toll); }
+    @media (max-width: 640px) { dl { grid-template-columns: 1fr; gap: 0.05rem; } dt { margin-top: 0.5rem; } }
+  </style>
+</Base>
