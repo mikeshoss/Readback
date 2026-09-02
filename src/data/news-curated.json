@@ -1,0 +1,98 @@
+[
+  {
+    "d": "Aug 2026",
+    "where": "🇨🇦",
+    "t": "Toronto police AI plate readers draw \"constant eyes\" warning",
+    "via": "Yahoo/CP",
+    "url": "https://ca.news.yahoo.com/constant-eyes-toronto-police-ai-080000288.html",
+    "s": "CBC covers the fully deployed fleet: every marked cruiser scans plates, makes and models. TPS 2026 budget adds $5.6M for \"AI Operationalization.\""
+  },
+  {
+    "d": "Aug 2026",
+    "where": "🇨🇦",
+    "t": "ALPR quietly expanding across Canada — without Flock",
+    "via": "Epoch Times",
+    "url": "https://www.theepochtimes.com/world/use-of-licence-plate-reading-cameras-expanding-in-canada-as-flock-related-privacy-concerns-grow-in-us-6075207",
+    "s": "Ottawa grew 5→65 equipped vehicles; Sudbury added 16 fixed sites; Waterloo went live in June. Flock confirms zero Canadian police partnerships; the OPP says it has no plans to use them."
+  },
+  {
+    "d": "Jun 2026",
+    "where": "🇺🇸",
+    "t": "Supreme Court: geofence data is a Fourth Amendment search",
+    "via": "analysis",
+    "url": "https://theautowire.com/2026/07/06/the-supreme-court-just-handed-flocks-license-plate-cameras-a-legal-time-bomb/",
+    "s": "Chatrie v. US (6-3) — widely read as a legal time bomb for ALPR dragnets. The Norfolk Flock case is at the Fourth Circuit."
+  },
+  {
+    "d": "Mar 2026",
+    "where": "🇺🇸",
+    "t": "Washington signs the Driver Privacy Act",
+    "via": "Stateline",
+    "url": "https://stateline.org/2026/01/08/worried-about-surveillance-states-enact-privacy-laws-and-restrict-license-plate-readers/",
+    "s": "21-day retention cap, immigration-enforcement ban, no cameras near schools, courts, or places of worship."
+  },
+  {
+    "d": "Feb 2026",
+    "where": "🇺🇸",
+    "t": "The cancellation wave hits 50+ cities",
+    "via": "NPR",
+    "url": "https://www.npr.org/2026/02/17/nx-s1-5612825/flock-contracts-canceled-immigration-survillance-concerns",
+    "s": "Denver removed all 110 Flock cameras (then bought a smaller Axon network over ACLU objections). NPR counts contract cancellations nationwide — even as Flock crosses 100,000 total cameras."
+  },
+  {
+    "d": "Jan 2026",
+    "where": "🇺🇸",
+    "t": "Researchers find Flock camera feeds exposed online",
+    "via": "GainSec",
+    "url": "https://gainsec.com/2026/01/09/bird-hunting-season-finding-67-live-camera-feeds-and-debug-web-interfaces-accidentally-exposed-by-flock-safety/",
+    "s": "60+ live camera feeds and debug interfaces open to the internet with no password; 50+ vulnerabilities; stolen customer credentials on crime forums. Cited by several cities in cancellations."
+  },
+  {
+    "d": "Oct 2025",
+    "where": "🇺🇸",
+    "t": "California sues El Cajon over plate-data sharing",
+    "via": "CA AG",
+    "url": "https://www.oag.ca.gov/news/press-releases/attorney-general-bonta-sues-el-cajon-illegally-sharing-license-plate-data-out",
+    "s": "AG Bonta: sharing ALPR data with 100+ out-of-state agencies violates SB 34."
+  },
+  {
+    "d": "Aug 2025",
+    "where": "🇺🇸",
+    "t": "Illinois audit: Flock let CBP into state cameras",
+    "via": "IL Secretary of State",
+    "url": "https://www.ilsos.gov/news/2025/august-25-2025-giannoulias-audit-finds-license-plate-reader-company-in-violation-of-state-law.html",
+    "s": "Trigger: a Texas deputy searched 83,000 cameras nationwide for a woman who self-administered an abortion — hitting Illinois. Evanston and Oak Park terminated contracts."
+  },
+  {
+    "d": "Jun 2025",
+    "where": "🇺🇸",
+    "t": "Austin cancels its Flock contract",
+    "via": "EFF",
+    "url": "https://www.eff.org/deeplinks/2025/06/victory-austin-organizers-cancel-citys-flock-alpr-contract",
+    "s": "First major-city cancellation, after organizers surfaced the ICE search revelations. Texas DPS later installed its own readers in the city over local objections."
+  },
+  {
+    "d": "May 2025",
+    "where": "🇺🇸",
+    "t": "404 Media: police ran ~4,000 Flock searches for ICE",
+    "via": "404 Media",
+    "url": "https://www.404media.co/flock-removes-states-from-national-lookup-tool-after-ice-and-abortion-searches-revealed/",
+    "s": "Despite ICE having no Flock contract. Separate reporting: CBP had quiet access to 80,000+ cameras via an undisclosed pilot. The story that started the backlash."
+  },
+  {
+    "d": "2025",
+    "where": "🇺🇸",
+    "t": "Flock builds \"Nova\" people-lookup on breach data",
+    "via": "404 Media",
+    "url": "https://www.404media.co/license-plate-reader-company-flock-is-building-a-massive-people-lookup-tool-leak-shows/",
+    "s": "Leaked audio: jumping \"from LPR to person\" using data brokers and hacked datasets, no warrant. Flock said it dropped the breach data after internal objections; later analysis disputed that."
+  },
+  {
+    "d": "Feb 2025",
+    "where": "🇨🇦",
+    "t": "Toronto completes fleet-wide ALPR rollout",
+    "via": "Blue Line",
+    "url": "https://www.blueline.ca/tps-fleet-now-fully-equipped-with-automatic-licence-plate-recognition/",
+    "s": "Every marked vehicle scans at up to 225 km/h — 1.25M+ plate reads/day capacity. Reads kept 7 days, hits 365."
+  }
+]

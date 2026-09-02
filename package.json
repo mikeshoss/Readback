@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "data": "node scripts/build-cameras.mjs",
     "deploy": "npm run build && wrangler pages deploy dist --project-name readback",
-    "refresh": "npm run data && npm run deploy"
+    "refresh": "npm run data && npm run deploy",
+    "news": "node scripts/fetch-news.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

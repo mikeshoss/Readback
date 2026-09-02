@@ -1,4 +1,4 @@
-name: Refresh camera data
+name: Refresh data and news
 
 # Weekly, plus a "Run workflow" button in the GitHub UI (Actions tab →
 # this workflow → Run workflow). That button also works from the GitHub
@@ -36,13 +36,16 @@ jobs:
       - name: Query Overpass and classify
         run: node scripts/build-cameras.mjs ${{ inputs.force && '--force' || '' }}
 
+      - name: Fetch news feeds
+        run: node scripts/fetch-news.mjs
+
       - name: Verify the site still builds with the new data
         run: npm run build
 
       - name: Commit if the data actually changed
         id: commit
         run: |
-          if git diff --quiet -- public/data/; then
+          if git diff --quiet -- public/data/ data/news-queue.json; then
             echo "No change in camera data — nothing to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -51,7 +54,7 @@ jobs:
           REMOVED=$(node -e "const h=require('./public/data/changes.json').history[0]; console.log(h?h.removedIds.length:0)")
           git config user.name  "readback-bot"
           git config user.email "actions@github.com"
-          git add public/data/
+          git add public/data/ data/news-queue.json
           git commit -m "Data refresh: +${ADDED} newly mapped, -${REMOVED} removed
 
           Automated weekly Overpass pull. Camera data © OpenStreetMap
