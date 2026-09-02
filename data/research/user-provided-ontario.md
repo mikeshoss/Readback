@@ -43,8 +43,15 @@ Seed data fed by Mike. Verify/source each claim before publishing on the site.
   Kitchener, Cambridge, North Dumfries to follow.
 - **Peel**: also runs a portable unit combining acoustic detection, PTZ
   cameras, ALPR, and a loudspeaker.
-- **Ontario (provincial)**: assessing highway ALPR under the proposed
-  Protecting Ontario's Streets and Communities Act, 2026.
+- **Ontario (provincial)**: assessing highway ALPR. VERIFIED 2026-09-02:
+  this is a commitment in the government's *announcement* accompanying
+  Bill 119 (Protecting Ontario's Streets and Communities Act, 2026) — the
+  full bill text on ola.org contains no occurrence of "plate", "licence
+  plate recognition" or ALPR. Do not cite the bill as the ALPR authority.
+  Bill: https://www.ola.org/en/legislative-business/bills/parliament-44/session-1/bill-119
+  Release: https://news.ontario.ca/en/release/1007500/ontario-introduces-legislation-to-protect-communities-and-keep-streets-safe
+  Status: introduced, 44th Parliament 1st Session; second reading debated
+  2026-05-28; Royal Assent unconfirmed.
 - **Halton**: nothing found on fixed ALPR — MFIPPA request candidate.
 
 ## Retention comparison (the "setting, not a standard" exhibit)
