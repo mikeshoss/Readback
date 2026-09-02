@@ -5,8 +5,9 @@ assembled, 3 FOI requests filed. This file is the pick-up-where-we-left-off.
 
 ## What exists
 
-**Site** (Astro + MapLibre, github.com/mikeshoss/Readback, deploys nowhere
-yet — runs locally via `npm run dev`, dev preview on port 4321):
+**Site** (Astro + MapLibre) — LIVE at https://readback.ofrecord.ca via
+Cloudflare Pages. Repo is PUBLIC at github.com/mikeshoss/Readback.
+Deploy with `npm run deploy`; refresh data + deploy with `npm run refresh`.
 - **/** Map: 1,357 OSM-sourced cameras in 5 layers (police 317 — shown as
   204 verified-operator solid dots + 113 unverified hollow; toll 519 incl.
   the 407's RTX gantries; border 464; private 57) + 12 police-fleet
