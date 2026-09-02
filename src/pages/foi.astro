@@ -66,7 +66,7 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
         <details>
           <summary>Read the full request ({r.items.length} items)</summary>
           <div class="letter">
-            <p class="pre">{foi.preamble}</p>
+            <p class="pre">{r.preamble ?? foi.preamble}</p>
             <p><strong>I request the following records:</strong></p>
             <ol>
               {r.items.map((item) => <li>{item}</li>)}

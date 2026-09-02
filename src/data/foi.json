@@ -41,9 +41,9 @@
       "id": "halton",
       "institution": "Halton Regional Police Service",
       "region": "Halton (Oakville, Burlington, Milton, Halton Hills)",
-      "status": "drafted",
-      "dateSent": null,
-      "dateDue": null,
+      "status": "sent",
+      "dateSent": "2026-09-01",
+      "dateDue": "2026-11-05",
       "outcome": null,
       "items": [
         "Records sufficient to determine whether the Halton Regional Police Service currently operates, has piloted, or has approved the acquisition of any automated licence plate recognition (ALPR) technology — vehicle-mounted or fixed — from January 1, 2023 to present, including the number of units and the vendor(s).",
@@ -61,12 +61,17 @@
         "phone": "905-825-4777 ext. 5192",
         "source": "https://www.haltonpolice.ca/en/about-us/freedom-of-information.aspx"
       },
-      "fileNumber": null,
+      "fileNumber": "2026-09-01-005",
       "events": [
         {
           "date": "2026-09-01",
           "label": "Request drafted",
           "note": "Published here before sending — the ask is public from day one."
+        },
+        {
+          "date": "2026-09-01",
+          "label": "Sent via online portal",
+          "note": "$5 fee paid by credit card. Reference number 2026-09-01-005 issued at filing. Response due in 45 business days (est. Nov 5, 2026)."
         }
       ]
     },
@@ -74,18 +79,18 @@
       "id": "peel",
       "institution": "Peel Regional Police",
       "region": "Peel (Mississauga, Brampton)",
-      "status": "drafted",
-      "dateSent": null,
-      "dateDue": null,
+      "status": "sent",
+      "dateSent": "2026-09-01",
+      "dateDue": "2026-11-05",
       "outcome": null,
       "items": [
-        "Records sufficient to identify the locations (street address or intersection) of fixed cameras with ALPR capability installed or approved in the Region of Peel, including the intersection camera program in Brampton, from January 1, 2023 to present.",
-        "Records sufficient to identify the deployment locations and dates of the portable surveillance unit combining acoustic detection, PTZ cameras, ALPR, and a loudspeaker, from January 1, 2025 to present.",
-        "The final Privacy Impact Assessment(s) for ALPR and for the portable surveillance unit.",
-        "Records showing the currently configured retention periods in the ALPR system for (a) non-matching plate reads, (b) matches/hits, and (c) associated audit logs — for example, a system configuration export or governance procedure stating the configured values.",
-        "Any agreements or system configuration records governing the sharing of ALPR data with other police services or agencies.",
-        "Final audit or compliance reports concerning access to or searches of ALPR data, from January 1, 2025 to present.",
-        "Statistical or aggregate records showing, for the period January 1, 2023 to present: (a) the number of internal investigations, professional standards investigations, or privacy breach investigations involving alleged unauthorized access to, or misuse of, ALPR data, CPIC, or other police databases; (b) the number of substantiated findings; and (c) the disciplinary outcomes by category (e.g., training, forfeiture of hours, demotion, dismissal, criminal charge). To be clear, I am not requesting the names or identifying information of any individual — aggregate counts and severed summaries are responsive to this item. I also request any reports to the Police Services Board concerning misuse of ALPR or database access, and records showing whether and how often proactive audits of ALPR queries are conducted (audit policy, frequency, and the most recent audit report, severed as required)."
+        "Records sufficient to identify the locations (address or intersection) of fixed ALPR-capable cameras installed or approved in Peel Region, including the Brampton intersection camera program.",
+        "Deployment locations and dates of the portable unit combining acoustic detection, PTZ cameras, ALPR and loudspeaker, from Jan 1, 2025.",
+        "Final Privacy Impact Assessment(s) for ALPR and for the portable unit.",
+        "Records showing currently configured ALPR retention periods for (a) non-hit reads, (b) hits, (c) audit logs — e.g. a configuration export or governance procedure stating the values.",
+        "Agreements or configuration records governing sharing of ALPR data with other police services or agencies.",
+        "Final audit or compliance reports on access to or searches of ALPR data, from Jan 1, 2025.",
+        "Aggregate records showing (a) the number of internal, professional standards or privacy-breach investigations involving alleged unauthorized access to or misuse of ALPR, CPIC or other police databases; (b) substantiated findings; (c) disciplinary outcomes by category. No names or identifying information are requested — aggregate counts and severed summaries are responsive. Also: reports to the Police Services Board on ALPR or database misuse, and the audit policy, frequency and most recent report for proactive ALPR query audits, severed as required."
       ],
       "submission": {
         "how": "Online portal — no cheque needed if it takes payment (unverified; mail fallback is a $5 cheque to 'Peel Regional Police'). Note: use the Mississauga Rd address — the old Brampton HQ address still circulates.",
@@ -101,16 +106,22 @@
           "date": "2026-09-01",
           "label": "Request drafted",
           "note": "Published here before sending — the ask is public from day one."
+        },
+        {
+          "date": "2026-09-01",
+          "label": "Sent via online portal",
+          "note": "$5 paid by credit card (payment ref [redacted]). Letter condensed to fit the portal — the text published here is exactly as sent. Formal file number expected with acknowledgment. Response due in 45 business days (est. Nov 5, 2026)."
         }
-      ]
+      ],
+      "preamble": "Dear Freedom of Information Coordinator,\n\nThis is a request under MFIPPA. The $5 fee has been paid. Please provide final records in electronic form. If any portion is withheld, cite the specific exemption and sever the remainder (s. 4(2)). If fees will exceed $25, send an estimate first; I will narrow scope if needed. Digitally stored data, including system configuration values, are records for the purposes of this request.\n\nI request, from Jan 1, 2023 to present unless stated:"
     },
     {
       "id": "york",
       "institution": "York Regional Police",
       "region": "York Region (Vaughan, Markham, Richmond Hill, Newmarket, Aurora)",
-      "status": "drafted",
-      "dateSent": null,
-      "dateDue": null,
+      "status": "sent",
+      "dateSent": "2026-09-01",
+      "dateDue": "2026-11-05",
       "outcome": null,
       "items": [
         "Records sufficient to identify the locations (street address or intersection) of cameras in the York Regional Police CCTV/camera program, each of which has been publicly described as having ALPR capability, from January 1, 2023 to present.",
@@ -135,6 +146,11 @@
           "date": "2026-09-01",
           "label": "Request drafted",
           "note": "Published here before sending — the ask is public from day one."
+        },
+        {
+          "date": "2026-09-01",
+          "label": "Sent via online portal",
+          "note": "$5 paid by credit card (payment ref [redacted]). Formal file number expected with acknowledgment. Response due in 45 business days (est. Nov 5, 2026)."
         }
       ]
     },
@@ -168,6 +184,11 @@
           "date": "2026-09-01",
           "label": "Request drafted",
           "note": "Published here before sending — the ask is public from day one."
+        },
+        {
+          "date": "2026-09-01",
+          "label": "Online form completed — but the fee must be mailed",
+          "note": "WRPS's online form dead-ends into a mailed package: printed request, photocopy of one piece of ID, and the $5 fee by post. A police service that runs combined CCTV+ALPR cannot take five dollars over the internet. Mailing next."
         }
       ]
     }
