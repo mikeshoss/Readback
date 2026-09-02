@@ -24,7 +24,12 @@
     "via": "analysis",
     "url": "https://theautowire.com/2026/07/06/the-supreme-court-just-handed-flocks-license-plate-cameras-a-legal-time-bomb/",
     "s": "Chatrie v. US (6-3) — widely read as a legal time bomb for ALPR dragnets. The Norfolk Flock case is at the Fourth Circuit.",
-    "iso": "2026-07-06"
+    "iso": "2026-06-29",
+    "official": {
+      "label": "Chatrie v. United States, No. 25-112 — slip opinion",
+      "url": "https://www.supremecourt.gov/opinions/25pdf/25-112_0am4.pdf",
+      "status": "decided 29 Jun 2026"
+    }
   },
   {
     "d": "Mar 2026",
@@ -33,7 +38,12 @@
     "via": "Stateline",
     "url": "https://stateline.org/2026/01/08/worried-about-surveillance-states-enact-privacy-laws-and-restrict-license-plate-readers/",
     "s": "21-day retention cap, immigration-enforcement ban, no cameras near schools, courts, or places of worship.",
-    "iso": "2026-01-08"
+    "iso": "2026-03-30",
+    "official": {
+      "label": "ESSB 6002 — Chapter 239, Laws of 2026 (session law)",
+      "url": "https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/Senate/6002-S.SL.pdf",
+      "status": "signed 30 Mar 2026, in force"
+    }
   },
   {
     "d": "Feb 2026",
