@@ -108,3 +108,47 @@ ISED cert for Canadian enforcement use (not verified).
 - Canadian angle: module-level ISED certs (4491A-, 2417C-) likely cover
   legality, but Flock-the-company has certified nothing in Canada — of a
   piece with zero Canadian police contracts.
+
+## Genetec / Axon cluster (third surviving agent, same date)
+
+### Structural findings [CERT]
+- **Genetec holds zero radio certifications under its own name**: FCC OET
+  applicant search "genetec" → no applications; ISED REL company search →
+  no results (both queried directly). LTE products integrate pre-certified
+  third-party modules; no-radio variants are Part 15B/ICES-003 only.
+- **Axon**: FCC grantee X4G; ISED company number 8803A with 37 REL entries.
+
+### Genetec models
+- **SharpV G3**: optional LTE Cat-4 (PTCRB; AT&T/Verizon/FirstNet B14) +
+  multi-GNSS; NO Wi-Fi/BT. ALPR sensor 1920x1200@30 mono global shutter +
+  colour context; pulsed LED illuminator (940/850/740/590nm), 0-lux;
+  PoE++ 802.3bt or 24VDC; IP66/67. Datasheet + Nemko cert summary.
+- **SharpZ3 in-car**: NO radios of its own — Part 15B only; optional
+  GNSS+IMU expansion (receive-only); backhaul via vehicle LTE router;
+  1456x1088 sensors.
+- **Cloudrunner CR-H2**: LTE Cat-4 (B2/4/5/13/66 + B14) + GNSS, no
+  Wi-Fi/BT [Verizon ODI]; module identity not publicly disclosed
+  (Telit/Quectel-class [INFERENCE]); solar + LiFePO4; straps to poles.
+
+### Axon models
+- **Outpost (AX1054)**: FCC **X4GS06009** granted 2025-12-10; ISED
+  **8803A-S06009 approved 2026-01-29** — LTE 9 bands (incl. FirstNet
+  B14) + Wi-Fi 2.4/5GHz + BLE, one cert for the whole unit. Solar/battery
+  (~3 days without sun), 12-24VDC, ~sealed IP66, pole/building/trailer/
+  vehicle/tree mounts. Imaging specs not published [gap].
+  **Canadian significance: Outpost is ISED-certified — Axon's fixed ALPR
+  is regulatory-ready for Canada as of Jan 2026.**
+- **Lightpost**: no Axon FCC filing — radios+power from partner
+  Ubicquia's streetlight hub (grantee 2AECK); camera is an **Axis
+  Q1800-LE** (1080p WDR, ~155 mph capture, ~100m daylight).
+- **Fleet 3** (Toronto-relevant in-car): dual-view camera X4GS00947C
+  (Wi-Fi+BT), Fleet Hub X4GS01405/B (Wi-Fi+BLE, NO LTE), 900MHz FHSS
+  wireless mic X4GS01351, charging base X4GS01358; ISED entries
+  8803A-S01405/B, -S01351, -S01358. LTE via separate Cradlepoint IBR900.
+  ALPR lens: 4K sensor, 60° FoV; recordings up to 1080p.
+- Pattern corroboration: Axon separately certifies LTE modules for body
+  cams (8803A-AB7610 Sierra WP7610/Body 3; 8803A-AB065 Quectel/Body 4).
+
+### Gaps (not findings)
+- Outpost imaging resolution/IR; exact LTE module inside SharpV-LTE and
+  CR-H2; ISED REL entry for Fleet 3 dual-view camera S00947C.

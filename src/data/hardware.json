@@ -9,18 +9,18 @@
       "notes": "No Canadian police contracts; Canadian pins are likely HOA/private or mistagged."
     },
     "Genetec": {
-      "radios": "Varies: SharpV fixed is PoE (no radios identified); Cloudrunner is LTE + GPS only — no Wi-Fi, no Bluetooth",
-      "radiosSummary": "No Wi-Fi or Bluetooth radios identified — least sniff-capable of the major vendors",
-      "confidence": "Cloudrunner confirmed (carrier device listing); SharpV datasheet",
-      "formFactor": "Fixed (SharpV, PoE) / solar fixed (Cloudrunner) / in-car (SharpZ3)",
+      "radios": "SharpV: optional LTE Cat-4 module + multi-GNSS; no Wi-Fi, no Bluetooth. SharpZ3 in-car: NO radios at all (GNSS receive-only option; backhaul via the patrol vehicle's own network). Cloudrunner: LTE Cat-4 + GPS only (Verizon ODI-verified).",
+      "radiosSummary": "No Wi-Fi or Bluetooth on any model — least sniff-capable of the major vendors (cert-verified)",
+      "confidence": "confirmed [CERT]: FCC applicant search 'Genetec' returns zero applications; ISED REL search returns none — LTE rides pre-certified third-party modules; no-radio variants are Part 15B only",
+      "formFactor": "Fixed (SharpV, PoE++/24VDC) / solar quick-deploy (Cloudrunner) / in-car (SharpZ3)",
       "notes": "Canada's most-deployed ALPR vendor (Montreal). Canadian cloud hosting; no vendor-run cross-agency search network."
     },
     "Axon": {
-      "radios": "LTE + Bluetooth (pairing); Wi-Fi unconfirmed",
-      "radiosSummary": "Cellular + Bluetooth radios onboard",
-      "confidence": "vendor docs + app store pairing docs; FCC grantee X4G",
-      "formFactor": "Fixed (Outpost), streetlight (Lightpost), in-car (Fleet 3)",
-      "notes": "Toronto and York Region platform (Fusus). Customer-set retention, no vendor limit."
+      "radios": "Outpost (FCC X4GS06009, ISED 8803A-S06009): LTE 9 bands incl. FirstNet B14 + dual-band Wi-Fi + BLE — one cert for the whole unit. Fleet 3: Wi-Fi + BT in cameras/hub, 900MHz FHSS wireless mics, GNSS; LTE via separate Cradlepoint router. Lightpost: radios live in Ubicquia's streetlight hub (FCC grantee 2AECK); camera is an Axis Q1800-LE.",
+      "radiosSummary": "Cellular, dual-band Wi-Fi and Bluetooth radios onboard (Outpost — certified by FCC and ISED filings)",
+      "confidence": "confirmed [CERT]: FCC X4GS06009 (granted 2025-12-10) + ISED 8803A-S06009 (approved 2026-01-29 — Outpost is certified for the Canadian market)",
+      "formFactor": "Fixed/solar/trailer (Outpost), streetlight (Lightpost), in-car (Fleet 3 dual-view)",
+      "notes": "Toronto and York Region platform (Fusus). Customer-set retention, no vendor limit. Outpost's ISED approval (Jan 2026) means Axon's fixed ALPR hardware is regulatory-ready for Canada."
     },
     "RTX Corporation": {
       "radios": "Tolling gantry sensors (transponder readers + plate cameras)",
