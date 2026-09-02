@@ -1,43 +1,81 @@
-# Deploying Readback
+# How to push an update live
 
-Live: **https://readback.ofrecord.ca** (Cloudflare Pages, project `readback`)
-Also reachable at the project URL: https://readback-bpq.pages.dev
+Live site: **https://readback.ofrecord.ca**
 
-## Deploy a change (current method: direct upload)
+## The short version
 
 ```bash
-npm run build && npx wrangler pages deploy dist --project-name readback
+npm run deploy
 ```
 
-That's it — no Docker, no tunnel involved. Wrangler is authenticated via
-`wrangler login` (OAuth, stored in ~/Library/Preferences/.wrangler/).
+That builds the site and pushes it to Cloudflare Pages. Live in ~30
+seconds. That's the whole thing.
 
-## Known gap: no Git connection yet
+## The three kinds of update
 
-The Pages project was created by direct upload, so it has **no Git
-provider attached**. Consequence: pushing to GitHub does *not* deploy, and
-the weekly data-refresh Action commits new camera data that will sit
-undeployed until someone runs the command above.
-
-Two ways to close it:
-
-**A. Connect the repo (dashboard only — Cloudflare has no API for this).**
-Pages → `readback` → Settings → Builds & deployments → Connect to Git →
-authorize the Cloudflare GitHub app → pick `mikeshoss/Readback` →
-build command `npm run build`, output directory `dist`.
-Then every push deploys, including the weekly data commit.
-
-**B. Deploy from the Action.** Create a Cloudflare API token (Pages:Edit),
-add it to the repo as secrets `CLOUDFLARE_API_TOKEN` and
-`CLOUDFLARE_ACCOUNT_ID`, then append a deploy step to
-`.github/workflows/refresh-data.yml`.
-
-A is less machinery; B keeps everything in the repo.
-
-## Local preview (Docker)
-
-Still useful for checking things before shipping; unrelated to production:
+**1. You changed content or code** — edited a page, added an FOI status,
+fixed a vendor detail:
 
 ```bash
-npm run build && docker compose up -d --build   # http://localhost:4321
+npm run deploy
+```
+
+**2. You want fresh camera data from OpenStreetMap** — pulls Overpass,
+re-classifies, then builds and deploys in one go:
+
+```bash
+npm run refresh
+```
+
+(This also runs automatically every Monday via GitHub Actions — see the
+Git gap below.)
+
+**3. You just want to look at it locally before shipping:**
+
+```bash
+npm run dev          # live-reload dev server at localhost:4321
+```
+
+## Commit your work too
+
+Deploying and committing are separate. `npm run deploy` ships the site
+but doesn't touch git. Keep the repo in sync so the research base and
+history stay accurate:
+
+```bash
+git add -A && git commit -m "what changed" && git push
+```
+
+Habit: **commit, then deploy.**
+
+## The Git gap (why pushing doesn't deploy)
+
+The Pages project uses direct upload, so it has no Git provider attached.
+Pushing to GitHub does *not* trigger a deploy — only `npm run deploy`
+does. The weekly data Action commits new camera data but can't publish it
+on its own.
+
+To close it, pick one:
+
+**A. Connect the repo** (dashboard only — no API exists for this):
+Pages → `readback` → Settings → Builds & deployments → Connect to Git →
+authorize the Cloudflare GitHub app → pick `mikeshoss/Readback` → build
+command `npm run build`, output `dist`. Then every push deploys itself.
+
+**B. Deploy from the Action**: create a Cloudflare API token (Pages:Edit),
+add `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` as repo secrets, and
+append a wrangler deploy step to `.github/workflows/refresh-data.yml`.
+
+## Rollback
+
+Every deploy is kept. To revert:
+Pages → `readback` → Deployments → find a previous one → **Rollback**.
+Or `npx wrangler pages deployment list --project-name readback`.
+
+## Local Docker preview (optional)
+
+Unrelated to production; useful for checking on other devices:
+
+```bash
+npm run build && docker compose up -d --build   # http://<your-ip>:4321
 ```

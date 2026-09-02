@@ -7,11 +7,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "data": "node scripts/build-cameras.mjs"
+    "data": "node scripts/build-cameras.mjs",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name readback",
+    "refresh": "npm run data && npm run deploy"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.0.0",
     "maplibre-gl": "^5.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.128.0"
   }
 }
