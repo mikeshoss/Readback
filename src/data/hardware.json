@@ -8,7 +8,7 @@
       "formFactor": "Fixed, solar/battery, pole-mount",
       "notes": "No Canadian police contracts; Canadian pins are likely HOA/private or mistagged.",
       "slug": "flock",
-      "caution": "Flock states it has no Canadian police contracts and the OPP says it has no plans to use Flock — a Flock-tagged camera in Canada is likely a private/HOA install, or mistagged. Unverified."
+      "caution": "Flock states it has no Canadian police contracts, and the OPP says it has no plans to use Flock — a Flock-tagged camera in Canada is likely a private/HOA install, or mistagged."
     },
     "Genetec": {
       "radios": "SharpV: optional LTE Cat-4 module + multi-GNSS; no Wi-Fi, no Bluetooth. SharpZ3 in-car: NO radios at all (GNSS receive-only option; backhaul via the patrol vehicle's own network). Cloudrunner: LTE Cat-4 + GPS only (Verizon ODI-verified).",
