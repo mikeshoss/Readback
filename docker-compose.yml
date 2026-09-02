@@ -1,0 +1,8 @@
+services:
+  readback:
+    build: .
+    image: readback:latest
+    container_name: readback
+    ports:
+      - "4321:80"
+    restart: unless-stopped

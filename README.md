@@ -32,7 +32,18 @@ dragnet on your commute — so those layers exist, toggled off, with notes.
   `data/research/`), rendered as capacity circles — most Canadian ALPR is
   vehicle-mounted and invisible to dot maps.
 
-## Develop
+## Run it
+
+**Docker (recommended — stays up on its own):**
+
+```
+docker compose up -d --build
+```
+
+Then visit http://localhost:4321. Survives reboots and doesn't depend on
+a dev session being open. See [docs/docker.md](docs/docker.md).
+
+**Local dev (live-reload while editing):**
 
 ```
 npm install
@@ -42,11 +53,13 @@ npm run dev
 
 ## Repository layout
 
-- `src/pages/` — map (index), regions, vendors, evidence, news
+- `src/pages/` — map (index), tech (vendor hub + per-provider pages),
+  rules, evidence, news, foi, about
 - `scripts/build-cameras.mjs` — OSM data pipeline
 - `data/research/` — sourced research base (every site claim traces here)
 - `data/raw/` — third-party datasets (EFF Atlas of Surveillance CSV)
-- `docs/` — design decisions (map taxonomy, location-discovery roadmap)
+- `docs/` — design decisions, Docker guide, launch plan + emails
 - `content/` — draft content pieces
+- `Dockerfile` / `docker-compose.yml` / `nginx.conf` — static-site container
 
 Camera data © OpenStreetMap contributors (ODbL).
