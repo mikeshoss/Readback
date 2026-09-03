@@ -1,0 +1,218 @@
+{
+  "note": "What Readback and its third parties collect about readers. Same standard as the rest of the site: every retention figure cites the operator's own documentation, and where an operator does not publish a figure we say so rather than estimating. Verified 2026-09-02.",
+  "verified": "2026-09-02",
+  "stance": {
+    "heading": "Collection is not the problem",
+    "lede": "This site does not argue that reading a licence plate is wrong, and it would be inconsistent to argue that counting a page view is. The position is the same in both directions: collect what the job actually requires, say plainly that you are doing it, bound how long you keep it, and let someone outside check.",
+    "tests": [
+      {
+        "q": "Is it necessary?",
+        "a": "A toll gantry has to read your plate — billing by plate is the service you entered. A map has to load tiles. Necessity is not a free pass, but it is a real distinction, and it is the one most surveillance debates skip."
+      },
+      {
+        "q": "Is it proportionate to the purpose?",
+        "a": "Reading every plate on a road to catch a stolen car is a different proposition from reading the plate at a toll booth. Counting which pages get read is a different proposition from following a named person around a site."
+      },
+      {
+        "q": "Is it disclosed?",
+        "a": "Undisclosed collection is the part that corrodes trust, whoever is doing it. This page exists so that nothing here is undisclosed — including the parts that make us look worse."
+      },
+      {
+        "q": "Is it bounded?",
+        "a": "Indefinite retention is where proportionate collection quietly turns into a database. It is why we ask police services for their configured retention period, and why we publish ours."
+      },
+      {
+        "q": "Can anyone outside verify it?",
+        "a": "This is the one nearly everybody fails, us included. It is the whole argument of this site: when every safeguard is a setting, an assurance from the organisation holding the data is not the same as a check on it."
+      }
+    ],
+    "close": "So this page is not a claim to collect nothing. It is the same accounting we ask of a police service, applied to ourselves, on the understanding that the answer 'we needed it for this, we keep it this long, here is the documentation' is a legitimate answer — and that refusing to give that answer is the actual problem."
+  },
+  "parties": [
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare Pages",
+      "role": "Our host. Every page, image and data file on this site is served from Cloudflare's network, so Cloudflare sees every request made to readback.ofrecord.ca.",
+      "scope": "Every page",
+      "necessity": "Required",
+      "necessityWhy": "The site cannot be served to you without a host, and a host necessarily sees the request. The only real choice here is which host, and whether we name them.",
+      "collects": "IP addresses, traffic routing data, system configuration information, and other information about traffic to the site. This happens at the network level — there is no way for us to serve the site without it.",
+      "collectsQuote": "The information processed may include but is not limited to IP addresses, traffic routing data, system configuration information, and other information about traffic to and from Customers' websites, devices, applications, and/or networks.",
+      "collectsQuoteSource": "Cloudflare Privacy Policy",
+      "retention": "Not documented",
+      "retentionFlag": "undocumented",
+      "retentionDetail": "Cloudflare's Privacy Policy and Data Processing Addendum give criteria for how long they keep data but state no period. The only concrete figure Cloudflare has published — discarding access logs within four hours — comes from a blog post dated April 2013 that no current documentation restates. We are not going to present a 13-year-old blog post as today's retention policy.",
+      "weSee": "Nothing identifying. Log access (Logpush) is documented as Enterprise-plan only; we are on the free plan and receive no visitor IPs. We see no per-visitor data from Cloudflare at all.",
+      "sources": [
+        {
+          "label": "Cloudflare Privacy Policy",
+          "url": "https://www.cloudflare.com/privacypolicy/"
+        },
+        {
+          "label": "Cloudflare Customer DPA",
+          "url": "https://www.cloudflare.com/cloudflare-customer-dpa/"
+        },
+        {
+          "label": "Logpush availability by plan",
+          "url": "https://developers.cloudflare.com/logs/logpush/"
+        },
+        {
+          "label": "\"What Cloudflare Logs\" (2013, dated)",
+          "url": "https://blog.cloudflare.com/what-cloudflare-logs/"
+        }
+      ]
+    },
+    {
+      "id": "cf-email",
+      "name": "Cloudflare Email Address Obfuscation",
+      "role": "A Cloudflare feature that hides the contact address in our footer from scrapers. It rewrites the mailto: link into an encoded one and injects a small script that decodes it in your browser. We did not go looking for this — Cloudflare documents it as “enabled automatically when you sign up” — and we found it only by diffing what we published against what the live site actually served.",
+      "scope": "45 of 46 pages — everywhere the footer contact link appears",
+      "necessity": "On by default",
+      "necessityWhy": "Nothing needs this. It is a Cloudflare default rather than a decision we made, and we intend to turn it off: the anti-scraping benefit is close to zero for an address already published on GitHub and at the top of every freedom-of-information letter we file, while the cost is that our contact address stops working for anyone browsing without JavaScript. It is listed here rather than quietly fixed because this page is supposed to describe what actually runs, not what we meant to run.",
+      "collects": "Nothing that we can observe. The script is 1,239 bytes, served from readback.ofrecord.ca rather than a third-party host, and contains no network requests, no cookie access, and no browser storage — you can fetch it and check that yourself at the URL below. Cloudflare already sees the request for it, as it sees every request to this site, which is covered in the Cloudflare Pages entry above.",
+      "collectsQuote": "Email addresses on your web page will be hidden from bots, while keeping them visible to humans.",
+      "collectsQuoteSource": "Cloudflare, on Email Address Obfuscation",
+      "retention": "No data collected to retain",
+      "retentionFlag": "documented",
+      "retentionDetail": "There is no separate collection here, so there is nothing with its own retention period. One honest caveat: Cloudflare's documentation for this feature does not address data collection or cookies at all, so the statement above rests on our own inspection of the script and of what the page requests, not on a Cloudflare commitment. That is weaker evidence than a published policy, and we would rather say so than present it as documented.",
+      "weSee": "Nothing.",
+      "sources": [
+        {
+          "label": "Cloudflare — Email Address Obfuscation",
+          "url": "https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/"
+        },
+        {
+          "label": "The script itself, as served on this site",
+          "url": "https://readback.ofrecord.ca/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+        }
+      ]
+    },
+    {
+      "id": "ga4",
+      "name": "Google Analytics 4",
+      "role": "Our analytics. Added 2026-09-02 so we can see which pages people actually read. It is the only thing on this list we deliberately added: everything else here is either required to serve the site or switched on by default by someone else.",
+      "scope": "Every page",
+      "necessity": "Chosen",
+      "necessityWhy": "Nothing breaks without this. We added it to see which pages are actually read and which sources send people here, because a transparency project that cannot tell whether anyone is reading it cannot prioritise what to file records requests about next. It is the one entry on this page we could remove tomorrow, which is exactly why it gets the most scrutiny.",
+      "collects": "Sets two first-party cookies (_ga and _ga_<container-id>) to distinguish users and persist session state. Collects approximate geolocation, browser and device information, session statistics, and page details including page location, referrer, title, language and screen resolution.",
+      "collectsQuote": "Used to distinguish users.",
+      "collectsQuoteSource": "Google, on the _ga cookie",
+      "retention": "Cookies: 2 years on your device. Event and user data: 2 months, our setting",
+      "retentionFlag": "documented",
+      "retentionDetail": "Both cookies expire after two years. Separately, Google's event- and user-level data retention is configurable to either 2 months or 14 months on a standard property, and we have set ours to 2 months — the shortest Google offers. Google publishes those two options but does not document what a newly created property defaults to; that claim is repeated widely elsewhere and we could not trace it to Google's own documentation, so we do not repeat it. One limit worth stating: the retention setting governs only Explorations and funnel reports. Standard aggregated reports are not affected by it, so the aggregate picture — how many people read a page — persists beyond two months.",
+      "ourClaim": "This is the one figure on this page you cannot check. Every other retention period here is published by the company that sets it; this one is a dropdown in our Google Analytics admin that only we can see. That is exactly the problem this site was built to point at — a safeguard that is a setting, attested to by the organisation that configured it, with no way for an outsider to verify. We are not exempt from our own argument, so: we have set event and user data retention to 2 months, and you are taking our word for it.",
+      "control": {
+        "text": "These two cookies sit on your device, not ours, which means they are the one thing on this page you can delete yourself — right now, without asking us. Clearing them resets us to knowing nothing about you. You can also block them before they are ever set, or opt out of Google Analytics across every site that uses it.",
+        "links": [
+          {
+            "label": "Delete, allow and manage cookies in Chrome",
+            "url": "https://support.google.com/chrome/answer/95647"
+          },
+          {
+            "label": "How Google uses cookies",
+            "url": "https://policies.google.com/technologies/cookies"
+          },
+          {
+            "label": "Google Analytics opt-out browser add-on",
+            "url": "https://tools.google.com/dlpage/gaoptout"
+          }
+        ]
+      },
+      "weSee": "Aggregate reports: page views, rough location, browser and device mix, and how people arrive. We do not see individual identities. Google's documented position is that raw IP addresses are discarded after use and never associated with user identifiers — though the wording is firmer for EU, Swiss and UK visitors, where IPs are explicitly never logged, than it is elsewhere.",
+      "sources": [
+        {
+          "label": "GA4 cookie usage",
+          "url": "https://support.google.com/analytics/answer/11397207"
+        },
+        {
+          "label": "GA4 data retention",
+          "url": "https://support.google.com/analytics/answer/7667196?hl=en"
+        },
+        {
+          "label": "Data collected by Google Analytics",
+          "url": "https://support.google.com/analytics/answer/11593727?hl=en"
+        },
+        {
+          "label": "IP addresses, EU/Switzerland/UK",
+          "url": "https://support.google.com/analytics/answer/12017362?hl=en"
+        },
+        {
+          "label": "IP addresses, other regions",
+          "url": "https://support.google.com/analytics/answer/16871531?hl=en"
+        }
+      ]
+    },
+    {
+      "id": "openfreemap",
+      "name": "OpenFreeMap",
+      "role": "Our map tiles. When you pan or zoom the map, your browser requests tiles directly from OpenFreeMap — which means the areas you look at are visible to them, not only to us. On a map of surveillance cameras that is the most sensitive thing on this page, and it is why we picked a provider that publishes a policy at all.",
+      "scope": "The map page only",
+      "necessity": "Required",
+      "necessityWhy": "A map needs map tiles. We are keeping this provider rather than self-hosting: running a tile server is a real cost and a real failure point for a project this size, and the honest trade is to disclose the provider plainly rather than pretend the request does not happen. If the map ever gets heavy enough use to justify self-hosting, that changes.",
+      "collects": "Anonymised logs including browser type, referring and exit pages, date and time stamps, and operating system. The operator states these logs do not contain IP addresses, and that no cookies or tracking technologies are used.",
+      "collectsQuote": "By default, we do not log IP addresses. However, if we detect a security incident (such as an attack on our service) or misuse, we may temporarily enable IP logging for a maximum of 30 days to investigate and resolve the issue.",
+      "collectsQuoteSource": "OpenFreeMap Privacy Policy",
+      "retention": "Anonymised logs: indefinite. IP logs during a security incident: 30 days maximum",
+      "retentionFlag": "documented",
+      "retentionDetail": "We want to be precise here because it would be easy to overstate: OpenFreeMap does not claim it never logs IP addresses. It claims it does not log them by default, and may log them for up to 30 days while investigating an attack or misuse, after which they are permanently deleted. What their policy does not address is whether individual tile requests — the actual record of which map areas were viewed — appear in the anonymised logs it keeps indefinitely. We asked that question of the documentation and it is not answered there.",
+      "weSee": "Nothing. We receive no data from OpenFreeMap about who loaded which tiles.",
+      "sources": [
+        {
+          "label": "OpenFreeMap Privacy Policy",
+          "url": "https://openfreemap.org/privacy/"
+        },
+        {
+          "label": "OpenFreeMap",
+          "url": "https://openfreemap.org/"
+        }
+      ]
+    },
+    {
+      "id": "wikimedia",
+      "name": "Wikimedia Commons",
+      "role": "Community photographs of two specific cameras. Two of the 1,364 mapped cameras have a reader-contributed photo hosted on Wikimedia Commons. Opening either of those two map popups makes your browser fetch the image from Wikimedia directly.",
+      "scope": "Two camera popups on the map",
+      "necessity": "Required for what it does",
+      "necessityWhy": "These two photographs are evidence — a reader can see the actual camera rather than taking a dot on a map on faith, which is the whole direction this project is moving in. Hosting the images ourselves would remove Wikimedia from this page, but it would also detach them from the record that establishes their licence and provenance. We are keeping them where they are and disclosing it.",
+      "collects": "Device type, browser type and version, browser language, operating system, in some cases your internet service provider, the referring website, which pages you request, and the date and time of each request. Wikimedia's privacy policy explicitly covers this case — third-party pages that load Wikimedia content.",
+      "collectsQuote": "This includes when you use an online tool on a third-party site that loads information coming from the Wikimedia Sites.",
+      "collectsQuoteSource": "Wikimedia Foundation Privacy Policy",
+      "retention": "90 days, extendable to 180 days",
+      "retentionFlag": "documented",
+      "retentionDetail": "Wikimedia's data retention guidelines specify that visitor IP addresses are deleted, aggregated or de-identified after at most 90 days. The table that would contain a hotlinked image request carries a documented exception allowing an extra 90 days when investigating automated traffic spikes, to a maximum of 180, so 90 days is the floor rather than the ceiling.",
+      "weSee": "Nothing.",
+      "sources": [
+        {
+          "label": "Wikimedia Foundation Privacy Policy",
+          "url": "https://foundation.wikimedia.org/wiki/Policy:Privacy_policy"
+        },
+        {
+          "label": "Wikimedia data retention guidelines",
+          "url": "https://foundation.wikimedia.org/wiki/Policy:Data_retention_guidelines"
+        }
+      ]
+    }
+  ],
+  "notPresent": [
+    {
+      "what": "Web fonts",
+      "detail": "The site loads no fonts from Google or anywhere else. Type is rendered with fonts already on your device, so nothing about your visit reaches a font host."
+    },
+    {
+      "what": "Embeds",
+      "detail": "No YouTube players, no social embeds, no comment widgets. Embeds set cookies before anyone clicks them, so we link out instead."
+    },
+    {
+      "what": "Advertising and third-party trackers",
+      "detail": "No ad networks, no retargeting pixels, no social tracking pixels, no session recording, no heatmaps, no A/B testing tools."
+    },
+    {
+      "what": "Accounts",
+      "detail": "There is nothing to sign up for. We hold no reader accounts, no email list, and no newsletter service."
+    },
+    {
+      "what": "Server logs of our own",
+      "detail": "The site is static files on a content delivery network — there is no origin web server of ours running Nginx or Caddy, and so no access log we could keep or truncate. That does not make the collection disappear; it moves it to Cloudflare, which is why Cloudflare is the first entry above rather than an omission."
+    }
+  ]
+}

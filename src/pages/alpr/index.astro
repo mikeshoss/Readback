@@ -1,0 +1,119 @@
+---
+import Base from '../../layouts/Base.astro';
+import {
+  cameras, generated, slugify, countByCategory, CATEGORY_LABEL,
+  retentionFor, foiFor, earnsAPage, num, type Camera,
+} from '../../lib/alpr';
+
+const group = (key: (c: Camera) => string | null) => {
+  const m = new Map<string, Camera[]>();
+  for (const c of cameras) {
+    const k = key(c);
+    if (!k) continue;
+    const list = m.get(k) ?? [];
+    list.push(c);
+    m.set(k, list);
+  }
+  return m;
+};
+
+const provinces = [...group((c) => c.province).entries()]
+  .filter(([province, list]) => earnsAPage(list, retentionFor({ province })))
+  .sort((a, b) => b[1].length - a[1].length);
+
+const operators = [...group((c) => c.operator).entries()]
+  .filter(([operator, list]) =>
+    earnsAPage(list, [...retentionFor({ operator }), ...foiFor(operator)]))
+  .sort((a, b) => b[1].length - a[1].length);
+
+const cats = countByCategory(cameras);
+const unattributed = cameras.filter((c) => !c.operator).length;
+const unplaced = cameras.filter((c) => !c.province).length;
+---
+<Base
+  title="ALPR by region"
+  titleFull="ALPR Cameras in Canada by Province and Police Service"
+  description="Every mapped licence plate reader in Canada, broken down by province and by the force or organisation that operates it — with retention policy, records requests, and a link to every source node."
+  breadcrumbs={[{ name: 'ALPR by region', href: '/alpr' }]}>
+  <h1>Who is scanning, and where</h1>
+  <p class="lede">
+    The map shows {num(cameras.length)} mapped cameras as dots. This is the same data as a list —
+    by province, and by the organisation that operates them — so you can read it, search it,
+    and trace every entry to the record it came from.
+  </p>
+
+  <div class="stat-row">
+    {cats.map(([cat, n]) => (
+      <div class="stat"><span class="n">{n}</span><span class="l">{CATEGORY_LABEL[cat]}</span></div>
+    ))}
+  </div>
+
+  <h2>By province</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Province or territory</th><th>Mapped cameras</th><th>Police ALPR</th><th></th></tr></thead>
+      <tbody>
+        {provinces.map(([province, list]) => (
+          <tr>
+            <td><a href={`/alpr/${slugify(province)}`}>{province}</a></td>
+            <td><strong>{list.length}</strong></td>
+            <td>{list.filter((c) => c.category === 'police_alpr').length}</td>
+            <td><a href={`/alpr/${slugify(province)}`}>Detail →</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  {unplaced > 0 && (
+    <p class="meta">
+      {unplaced} mapped {unplaced === 1 ? 'camera has' : 'cameras have'} no province recorded yet.
+    </p>
+  )}
+
+  <h2>By operator</h2>
+  <p class="meta">
+    Only operators with a named tag in OpenStreetMap appear here. {unattributed} of
+    {' '}{num(cameras.length)} mapped cameras carry no operator at all — the largest single gap in the
+    data, and the reason we file records requests. <a href="/foi">The paper trail →</a>
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Operator</th><th>Mapped cameras</th><th>Kind</th><th></th></tr></thead>
+      <tbody>
+        {operators.map(([operator, list]) => (
+          <tr>
+            <td><a href={`/alpr/operator/${slugify(operator)}`}>{operator}</a></td>
+            <td><strong>{list.length}</strong></td>
+            <td>{countByCategory(list).map(([c]) => CATEGORY_LABEL[c]).join(', ')}</td>
+            <td><a href={`/alpr/operator/${slugify(operator)}`}>Detail →</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Counts are floors.</strong> This is crowdsourced OpenStreetMap data, not an official
+    register: a camera missing here may still exist, and newly <em>mapped</em> is not newly
+    <em> installed</em>. It also excludes vehicle-mounted ALPR entirely, which is where most
+    Canadian plate reading actually happens.
+    {' '}Data © OpenStreetMap contributors (ODbL), generated {generated.slice(0, 10)}.
+  </div>
+
+  <style>
+    .stat-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.8rem 0 1.2rem; }
+    .stat {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 0.6rem 0.9rem; min-width: 8.5rem;
+    }
+    .stat .n { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .stat .l { display: block; font-size: 0.78rem; color: var(--muted); }
+    .meta { color: var(--muted); font-size: 0.88rem; margin: 0.5rem 0; }
+    .meta a { color: var(--toll); text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; font-size: 0.78rem; }
+    td a { color: var(--toll); text-decoration: none; }
+    td a:hover { text-decoration: underline; }
+  </style>
+</Base>

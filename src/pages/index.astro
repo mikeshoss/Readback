@@ -3,7 +3,11 @@ import Base from '../layouts/Base.astro';
 import fleetsData from '../data/fleets.json';
 const fleets = fleetsData.fleets;
 ---
-<Base title="Map" description="Every mapped licence plate reader in Canada — police ALPR, toll gantries, border crossings, and the police fleet scanning capacity no dot map shows." fullBleed>
+<Base
+  title="Map"
+  titleFull="ALPR Camera Map Canada — Licence Plate Readers by Region"
+  description="Every mapped licence plate reader in Canada — police ALPR, toll gantries, border crossings, and the police fleet scanning capacity no dot map shows."
+  fullBleed>
   <div class="map-shell">
     <aside class="panel">
       <h1>Who's scanning your plate?</h1>
@@ -48,6 +52,11 @@ const fleets = fleetsData.fleets;
         Consent and context matter — a toll you pay and a border you cross are not the
         same as a dragnet on your commute. Every safeguard on these systems is a
         setting. <a href="/rules">See how the settings differ →</a>
+      </div>
+      <div class="thesis browse">
+        Prefer a list to a map? Every camera here is also written out
+        <a href="/alpr">by province and by the force that operates it</a> — with the
+        retention policy and records request for each, where we have them.
       </div>
       <div class="whatsnew" id="whatsnew" hidden>
         <h2>New this week</h2>

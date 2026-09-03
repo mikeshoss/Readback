@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+---
+{/*
+  Without this file Cloudflare Pages falls back to serving the homepage with
+  HTTP 200 for any unknown path — a soft 404, which invites search engines to
+  index junk URLs as duplicates of the map page.
+*/}
+<Base
+  title="Page not found"
+  titleFull="Page not found · Readback"
+  description="That page doesn't exist on Readback.">
+  <h1>That page isn't here</h1>
+  <p class="lede">
+    The link may be old, or we may have moved it. Everything on the site is one of these:
+  </p>
+  <ul class="where">
+    <li><a href="/">The map</a> — every mapped licence plate reader in Canada</li>
+    <li><a href="/alpr">Cameras by province and operator</a> — the same data as a list</li>
+    <li><a href="/what-is-alpr">What an ALPR is</a> — the short answers</li>
+    <li><a href="/tech">The tech</a> — what each vendor's equipment collects</li>
+    <li><a href="/rules">The rules</a> — how long each force keeps your plate</li>
+    <li><a href="/evidence">Evidence</a> — whether any of it reduces crime</li>
+    <li><a href="/news">News</a> · <a href="/foi">The paper trail</a></li>
+  </ul>
+  <p class="lede">
+    If you followed a link from somewhere else and it broke,
+    <a href="mailto:themiltonrecord@gmail.com">tell us</a> and we'll fix it.
+  </p>
+
+  <style>
+    .where { margin: 1rem 0 1.4rem; padding-left: 1.1rem; }
+    .where li { margin-bottom: 0.45rem; color: var(--muted); }
+    .where a { color: var(--toll); text-decoration: none; }
+    .where a:hover { text-decoration: underline; }
+  </style>
+</Base>

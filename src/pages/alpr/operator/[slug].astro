@@ -1,0 +1,172 @@
+---
+import Base from '../../../layouts/Base.astro';
+import {
+  cameras, generated, slugify, osmNode, countByCategory,
+  CATEGORY_LABEL, retentionFor, foiFor, earnsAPage, num, type Camera,
+} from '../../../lib/alpr';
+
+export function getStaticPaths() {
+  const byOperator = new Map<string, Camera[]>();
+  for (const c of cameras) {
+    if (!c.operator) continue;
+    const list = byOperator.get(c.operator) ?? [];
+    list.push(c);
+    byOperator.set(c.operator, list);
+  }
+  return [...byOperator.entries()]
+    // The quality floor: enough cameras to be worth a page, or a sourced
+    // policy fact to report. Everything else stays on the map only.
+    .filter(([operator, list]) =>
+      earnsAPage(list, [...retentionFor({ operator }), ...foiFor(operator)]))
+    .map(([operator, list]) => ({
+      params: { slug: slugify(operator) },
+      props: { operator, list },
+    }));
+}
+
+const { operator, list } = Astro.props as { operator: string; list: Camera[] };
+
+const cats = countByCategory(list);
+const provinces = [...new Set(list.map((c) => c.province).filter(Boolean))] as string[];
+const manufacturers = [...new Set(list.map((c) => c.manufacturer).filter(Boolean))] as string[];
+const disputed = list.filter((c) => c.vendorDisputed);
+const retention = retentionFor({ operator });
+const requests = foiFor(operator);
+const where = provinces.length === 1 ? provinces[0] : 'Canada';
+const plural = list.length === 1 ? 'camera' : 'cameras';
+
+const desc = `${list.length} ${plural} operated by ${operator} are recorded in OpenStreetMap`
+  + `${provinces.length === 1 ? ` in ${provinces[0]}` : ''}`
+  + `. Every location links to its source node — plus retention policy and freedom-of-information status where we have them.`;
+---
+<Base
+  title={operator}
+  titleFull={`${operator} ALPR Cameras — ${list.length} Mapped in ${where}`}
+  description={desc}
+  breadcrumbs={[
+    { name: 'ALPR by operator', href: '/alpr' },
+    { name: operator, href: `/alpr/operator/${slugify(operator)}` },
+  ]}>
+  <p class="crumb"><a href="/alpr">← All operators and provinces</a></p>
+  <h1>{operator}</h1>
+  <p class="lede">
+    <strong>{list.length}</strong> {plural} recorded in OpenStreetMap
+    {provinces.length === 1 ? ` in ${provinces[0]}` : provinces.length > 1 ? ` across ${provinces.join(', ')}` : ''}.
+    Every one links to the OpenStreetMap record it came from — which shows who mapped it and
+    when, not that it is still there.
+  </p>
+
+  <h2>What is mapped: {list.length} licence plate {list.length === 1 ? 'reader' : 'readers'}</h2>
+  <div class="stat-row">
+    {cats.map(([cat, n]) => (
+      <div class="stat">
+        <span class="n">{n}</span>
+        <span class="l">{CATEGORY_LABEL[cat]}</span>
+      </div>
+    ))}
+  </div>
+  {manufacturers.length > 0 && (
+    <p class="meta">
+      Hardware recorded in the data: {manufacturers.join(', ')}.
+      {' '}<a href="/tech">What each vendor's equipment can do →</a>
+    </p>
+  )}
+
+  {disputed.length > 0 && (
+    <div class="note">
+      <strong>Disputed vendor tag.</strong> {disputed.length} of these {disputed.length === 1 ? 'node is' : 'nodes are'}
+      {' '}tagged in OpenStreetMap as Flock Safety hardware. Flock states it holds no Canadian
+      police contracts, and "Flock" is often used generically for any pole-mounted ALPR, so we
+      flag the tag rather than repeat it as fact.
+    </div>
+  )}
+
+  <h2>Retention: how long reads are kept</h2>
+  {retention.length > 0 ? (
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Jurisdiction</th><th>Non-matching reads kept</th><th>Authority</th></tr></thead>
+        <tbody>
+          {retention.map((e: any) => (
+            <tr><td>{e.j}</td><td><strong>{e.r}</strong></td><td>{e.a}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p class="meta">
+      We have not published a sourced retention figure for {operator}. That is a gap in our
+      records, not a finding about their policy — retention is a configurable setting, and the
+      only reliable way to learn the configured value is to ask for it.
+      {' '}<a href="/foi">How we ask →</a>
+    </p>
+  )}
+  <p class="meta"><a href="/rules#retention">Full retention comparison — 3 minutes to indefinite →</a></p>
+
+  {requests.length > 0 && (
+    <>
+      <h2>Our freedom-of-information requests</h2>
+      {requests.map((r: any) => (
+        <div class="panel-card">
+          <p><strong>{r.institution}</strong> — status: {r.status}{r.dateSent ? `, sent ${r.dateSent}` : ''}</p>
+          {r.outcome && <p>{r.outcome}</p>}
+          <p><a href="/foi">Read the request in full →</a></p>
+        </div>
+      ))}
+    </>
+  )}
+
+  <h2>Every mapped location</h2>
+  <p class="meta">
+    Coordinates as recorded in OpenStreetMap. Follow any node link to see its full tag history
+    and who added it.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Type</th><th>Latitude</th><th>Longitude</th><th>Hardware</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        {list.map((c) => (
+          <tr>
+            <td>{CATEGORY_LABEL[c.category]}</td>
+            <td>{c.lat.toFixed(5)}</td>
+            <td>{c.lon.toFixed(5)}</td>
+            <td>{c.manufacturer ?? '—'}</td>
+            <td><a href={osmNode(c.id)} rel="noopener nofollow">node {c.id}</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>What this page is and is not.</strong> These are cameras that somebody has mapped in
+    OpenStreetMap, not a complete inventory. A location missing here may still exist; a location
+    listed here was newly <em>mapped</em>, which is not the same as newly <em>installed</em>.
+    Across Canada we hold {num(cameras.length)} records and
+    {' '}{num(cameras.filter((c) => !c.operator).length)} of them carry no operator tag at all,
+    so per-operator counts are floors, not totals.
+    Data © OpenStreetMap contributors (ODbL), generated {generated.slice(0, 10)}.
+  </div>
+
+  <p class="crumb"><a href="/">See these on the map →</a></p>
+
+  <style>
+    .crumb { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .crumb a { color: var(--toll); text-decoration: none; }
+    .stat-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.8rem 0 1rem; }
+    .stat {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 0.6rem 0.9rem; min-width: 8.5rem;
+    }
+    .stat .n { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .stat .l { display: block; font-size: 0.78rem; color: var(--muted); }
+    .meta { color: var(--muted); font-size: 0.88rem; margin: 0.5rem 0; }
+    .meta a { color: var(--toll); text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { text-align: left; padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; font-size: 0.78rem; }
+    td a { color: var(--toll); text-decoration: none; }
+  </style>
+</Base>

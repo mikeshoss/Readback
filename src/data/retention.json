@@ -1,0 +1,25 @@
+{
+  "note": "How long each jurisdiction keeps the plate reads of drivers who matched nothing. Shared by /rules and the per-operator and per-province pages so the same fact is never written down twice. `operator` and `province` are join keys matching public/data/cameras.json — present only where the entry already names that force or province; they add no claim of their own.",
+  "entries": [
+    { "j": "New Hampshire", "r": "3 minutes", "a": "RSA 261:75-b (repeal slated Jan 2027)", "hl": true },
+    { "j": "BC, Canada (police)", "r": "End of shift / immediate", "a": "OIPC BC ruling F12-04 (2012)", "hl": true, "province": "British Columbia" },
+    { "j": "Peel Regional Police, ON", "r": "24 hours (matches: 30 days)", "a": "Peel Regional Police official policy", "hl": true, "operator": "Peel Regional Police" },
+    { "j": "Toronto Police, ON", "r": "7 days (hits: 365 days)", "a": "TPS policy + PIA", "hl": true, "operator": "Toronto Police Service" },
+    { "j": "Maine", "r": "21 days", "a": "29-A M.R.S. §2117-A" },
+    { "j": "Virginia", "r": "21 days", "a": "HB 2724 (2025)" },
+    { "j": "Washington State", "r": "21 days", "a": "Driver Privacy Act, SB 6002 (2026)" },
+    { "j": "Flock default (US)", "r": "30 days", "a": "Vendor default setting" },
+    { "j": "Oregon", "r": "30 days", "a": "2026 statute" },
+    { "j": "Minnesota", "r": "60 days", "a": "Statute" },
+    { "j": "California (CHP)", "r": "60 days", "a": "SB 34 (2015)" },
+    { "j": "Tennessee", "r": "90 days", "a": "Statute" },
+    { "j": "Arkansas", "r": "150 days", "a": "Statute" },
+    { "j": "Utah", "r": "9 months", "a": "Statute" },
+    { "j": "United Kingdom (national ANPR)", "r": "12 months", "a": "NPCC standards — no statute" },
+    { "j": "Vermont", "r": "18 months", "a": "23 V.S.A. §1607" },
+    { "j": "Georgia", "r": "30 months", "a": "Statute" },
+    { "j": "Colorado", "r": "3 years", "a": "C.R.S. §24-72-113" },
+    { "j": "New Jersey", "r": "3 years (was 5)", "a": "AG Directive 2022-12" },
+    { "j": "~34 US states with no statute", "r": "Agency discretion — up to indefinite", "a": "LAPD audit found 320M stored images", "hl": true }
+  ]
+}

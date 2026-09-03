@@ -17,7 +17,10 @@ const STATUS_CLASS: Record<string, string> = {
 };
 const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' }) : null;
 ---
-<Base title="Paper trail" description="Our freedom-of-information requests to Ontario police services, published in full and tracked in public.">
+<Base
+  title="Paper trail"
+  titleFull="ALPR Freedom of Information Requests — Ontario Police"
+  description="Our freedom-of-information requests to Ontario police services, published in full and tracked in public.">
   <h1>The paper trail: our freedom-of-information requests</h1>
   <p class="lede">
     Crowdsourced maps show where cameras are. Only the institutions themselves can show the

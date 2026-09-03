@@ -4,7 +4,7 @@
 // public/data/cameras.json. Run on a schedule (GitHub Action) — never at
 // page runtime. Data © OpenStreetMap contributors, ODbL.
 
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -50,6 +50,43 @@ function classify(tags) {
   return 'police_alpr';
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Every mirror, three rounds, with backoff. Returns elements, or null if the
+// whole thing failed — callers decide whether that is fatal.
+async function overpass(query, { label, attempts = 3, timeoutMs = 300_000 } = {}) {
+  let lastErr;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    for (const endpoint of OVERPASS_MIRRORS) {
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Readback/1.0 (readback.ca; ALPR transparency project)',
+          },
+          body: 'data=' + encodeURIComponent(query),
+          signal: AbortSignal.timeout(timeoutMs),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const { elements } = await res.json();
+        console.log(`  ✓ ${label}: ${endpoint} returned ${elements.length} elements`);
+        return elements;
+      } catch (err) {
+        lastErr = err;
+        console.warn(`  ✗ ${label}: ${endpoint}: ${err.message}`);
+      }
+    }
+    if (attempt < attempts) {
+      const backoff = attempt * 30;
+      console.log(`  all mirrors failed; retrying in ${backoff}s…`);
+      await sleep(backoff * 1000);
+    }
+  }
+  console.warn(`  ${label}: every mirror failed. Last error: ${lastErr?.message}`);
+  return null;
+}
+
 // Optional: node scripts/build-cameras.mjs <path-to-overpass-json> to reuse a
 // previously downloaded result instead of hitting the API.
 let elements;
@@ -59,37 +96,9 @@ if (localFile) {
   ({ elements } = JSON.parse(await import('node:fs/promises').then((fs) => fs.readFile(localFile, 'utf8'))));
 } else {
   console.log('Querying Overpass (Canada: ALPR + toll gantries + border controls)…');
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  let lastErr;
-  outer: for (let attempt = 1; attempt <= 3; attempt++) {
-    for (const endpoint of OVERPASS_MIRRORS) {
-      try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'User-Agent': 'Readback/1.0 (readback.ca; ALPR transparency project)',
-          },
-          body: 'data=' + encodeURIComponent(QUERY),
-          signal: AbortSignal.timeout(300_000),
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        ({ elements } = await res.json());
-        console.log(`  ✓ ${endpoint} returned ${elements.length} elements`);
-        break outer;
-      } catch (err) {
-        lastErr = err;
-        console.warn(`  ✗ ${endpoint}: ${err.message}`);
-      }
-    }
-    if (attempt < 3) {
-      const backoff = attempt * 30;
-      console.log(`  all mirrors failed; retrying in ${backoff}s…`);
-      await sleep(backoff * 1000);
-    }
-  }
+  elements = await overpass(QUERY, { label: 'canada' });
   if (!elements) {
-    console.error(`FAILED: every Overpass mirror failed. Last error: ${lastErr?.message}`);
+    console.error('FAILED: every Overpass mirror failed.');
     console.error('Nothing written — existing data left untouched.');
     process.exit(1);
   }
@@ -144,6 +153,55 @@ const normOp = (raw) => {
 
 const POLICE_RE = /police|polizei|gendarmerie|rcmp|opp\b|sûreté/i;
 
+// --- Province assignment ---------------------------------------------------
+// Which province a camera sits in comes from OSM's own administrative
+// boundaries rather than a bundled shapefile or a geocoding API: same source
+// as the cameras, so the provenance story stays "it's all OSM, go check the
+// node." One ids-only query per province — small payloads, run sequentially
+// because Overpass rate-limits parallel clients.
+const PROVINCES = {
+  'CA-AB': 'Alberta',                    'CA-BC': 'British Columbia',
+  'CA-MB': 'Manitoba',                   'CA-NB': 'New Brunswick',
+  'CA-NL': 'Newfoundland and Labrador',  'CA-NS': 'Nova Scotia',
+  'CA-NT': 'Northwest Territories',      'CA-NU': 'Nunavut',
+  'CA-ON': 'Ontario',                    'CA-PE': 'Prince Edward Island',
+  'CA-QC': 'Quebec',                     'CA-SK': 'Saskatchewan',
+  'CA-YT': 'Yukon',
+};
+
+// A failed province query must not silently blank out that province's pages,
+// so fall back to whatever the last successful run recorded.
+const prevPath = join(root, 'public/data/cameras.json');
+const prevData = existsSync(prevPath) ? JSON.parse(readFileSync(prevPath, 'utf8')) : { cameras: [] };
+const prevProvince = new Map((prevData.cameras || []).filter((c) => c.province).map((c) => [c.id, c.province]));
+
+const provinceOf = new Map();
+if (localFile) {
+  console.log('Local Overpass result: reusing previously recorded provinces.');
+  for (const [id, p] of prevProvince) provinceOf.set(id, p);
+} else {
+  console.log('Assigning provinces from OSM administrative boundaries…');
+  for (const [iso, name] of Object.entries(PROVINCES)) {
+    const q = `[out:json][timeout:180];
+area["ISO3166-2"="${iso}"]->.p;
+(
+  node["man_made"="surveillance"]["surveillance:type"="ALPR"](area.p);
+  node["highway"="toll_gantry"](area.p);
+  node["barrier"="border_control"](area.p);
+);
+out ids;`;
+    const ids = await overpass(q, { label: iso, attempts: 2, timeoutMs: 180_000 });
+    if (!ids) {
+      console.warn(`  ${name}: query failed — keeping previously recorded assignments.`);
+      continue;
+    }
+    for (const e of ids) provinceOf.set(e.id, name);
+    await sleep(1000);
+  }
+  // Restore anything a failed query would otherwise have dropped.
+  for (const [id, p] of prevProvince) if (!provinceOf.has(id)) provinceOf.set(id, p);
+}
+
 const cameras = elements.map((e) => {
   const t = e.tags || {};
   const operator = normOp(t.operator || null);
@@ -152,6 +210,7 @@ const cameras = elements.map((e) => {
     id: e.id,
     lat: e.lat,
     lon: e.lon,
+    province: provinceOf.get(e.id) ?? null,
     category: classify(t),
     operator,
     rawOperator: t.operator && operator !== t.operator.trim() ? t.operator.trim() : null,
@@ -177,10 +236,16 @@ const cameras = elements.map((e) => {
 const counts = {};
 for (const c of cameras) counts[c.category] = (counts[c.category] || 0) + 1;
 
+const provinceCounts = {};
+for (const c of cameras) if (c.province) provinceCounts[c.province] = (provinceCounts[c.province] || 0) + 1;
+const unplaced = cameras.filter((c) => !c.province).length;
+console.log(`Provinces: ${Object.keys(provinceCounts).length} with data, ${unplaced} cameras unplaced`);
+
 const out = {
   generated: new Date().toISOString(),
   attribution: '© OpenStreetMap contributors (ODbL)',
   counts,
+  provinceCounts,
   cameras,
 };
 
@@ -189,7 +254,6 @@ mkdirSync(dirname(dest), { recursive: true });
 
 // Diff against the previous run: newly mapped / removed cameras become the
 // change feed ("new cameras coming online" — strictly, newly *mapped*).
-const { readFileSync, existsSync } = await import('node:fs');
 const changesDest = join(root, 'public/data/changes.json');
 
 // --- Sanity gate -----------------------------------------------------------

@@ -1,0 +1,128 @@
+---
+import Base from '../layouts/Base.astro';
+import { cameras, num } from '../lib/alpr';
+
+const police = cameras.filter((c) => c.category === 'police_alpr').length;
+
+// One source for both the visible page and the FAQPage schema, so the rich
+// result can never drift from what a reader actually sees. Every answer
+// summarises a claim already sourced on the page it links to — nothing here
+// is asserted that isn't backed up somewhere else on this site.
+const faqs = [
+  {
+    q: 'What is an automated licence plate reader?',
+    a: 'An automated licence plate reader (ALPR, or ANPR outside North America) is a camera '
+      + 'paired with software that photographs every passing vehicle, converts the plate to text, '
+      + 'and records it with a time and location. Modern systems also record vehicle attributes '
+      + 'like colour, make and model. They read every plate that passes, not only plates of interest.',
+    more: { label: 'What each vendor\'s system collects and infers', href: '/tech' },
+  },
+  {
+    q: 'Where are licence plate readers in Canada?',
+    a: `We map ${num(cameras.length)} plate-reading cameras across Canada from OpenStreetMap data, `
+      + `of which ${police} are classified as police ALPR and the rest are toll gantries, border `
+      + 'crossings, and private or institutional systems. Locations are listed by province and by '
+      + 'operating force, and every one links to the map node it came from. This is crowdsourced '
+      + 'data, so treat the counts as a floor rather than a complete inventory.',
+    more: { label: 'Every mapped camera by province and operator', href: '/alpr' },
+  },
+  {
+    q: 'How long do police keep my licence plate data if I have done nothing wrong?',
+    a: 'It depends entirely on who is scanning. Retention across the jurisdictions we track runs '
+      + 'from three minutes to indefinitely. Two neighbouring Ontario forces differ by an order of '
+      + 'magnitude: Peel Regional Police keep non-matching reads for 24 hours, Toronto Police for '
+      + 'seven days. Around 34 US states have no statute at all and leave it to agency discretion. '
+      + 'Retention is a configurable setting, not a fixed property of the technology.',
+    more: { label: 'The full retention comparison, with sources', href: '/rules#retention' },
+  },
+  {
+    q: 'Does ALPR reduce crime?',
+    a: 'Every randomized controlled trial of patrol-mounted ALPR has found the same thing: more '
+      + 'plates checked and more stolen vehicles recovered, but no measurable reduction in crime. '
+      + 'The strongest published finding for fixed camera networks is an 11% drop in motor vehicle '
+      + 'theft, from a quasi-experimental study across 216 agencies. Claims substantially larger '
+      + 'than that are not supported by the research literature.',
+    more: { label: 'Every trial and audit, listed', href: '/evidence' },
+  },
+  {
+    q: 'What share of plate scans actually match anything?',
+    a: 'Very little. An audit of the LAPD by the California State Auditor found roughly 0.1% of '
+      + 'stored images matched anything, meaning 99.9% belonged to drivers of no interest. Smaller '
+      + 'deployments report lower still: 0.02% in Central Marin, 0.0013% in Piedmont. Separately, '
+      + 'an LAPD Inspector General audit found one in three alerts was false, driven by stale '
+      + 'hotlist data.',
+    more: { label: 'Hit rates and wrongful stops', href: '/evidence' },
+  },
+  {
+    q: 'Do Canadian police use Flock Safety cameras?',
+    a: 'Flock Safety states it holds no Canadian police contracts. Some cameras in Canada are '
+      + 'tagged as Flock hardware in OpenStreetMap, but "Flock" is often used generically for any '
+      + 'pole-mounted plate reader, so we flag those tags as disputed rather than repeating them '
+      + 'as fact. The vendors actually documented in Canadian police use include Genetec, a '
+      + 'Montreal company, and Axon.',
+    more: { label: 'Every vendor operating in Canada', href: '/tech' },
+  },
+  {
+    q: 'Are toll gantries and border cameras the same thing?',
+    a: 'They read plates, but they are not the same as ambient police surveillance and we count '
+      + 'them separately. A toll gantry bills a paid service you chose to enter; a border crossing '
+      + 'is a defined checkpoint. Merging them into one "surveillance camera" total is how a map '
+      + 'ends up overstating how much policing is happening — on the existing crowdsourced '
+      + 'Canadian map, 244 of 618 supposed police cameras were the 407 toll system.',
+    more: { label: 'How the categories are drawn', href: '/' },
+  },
+  {
+    q: 'How do I find out what my own police service is doing?',
+    a: 'File a freedom-of-information request. In Ontario that means a municipal FOI request under '
+      + 'MFIPPA, which costs $5 to file. Ask for the number and location of fixed cameras, the '
+      + 'privacy impact assessment, the configured retention period, and any data-sharing '
+      + 'agreements. We publish our own requests in full, including the wording, so they can be '
+      + 'reused for any region.',
+    more: { label: 'Our requests and their status', href: '/foi' },
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Base
+  title="What is an ALPR"
+  titleFull="What Is an ALPR? Licence Plate Readers in Canada, Explained"
+  description="What automated licence plate readers are, where they are in Canada, how long police keep your plate data, and whether they reduce crime — answered, with every claim sourced.">
+  <h1>What a plate reader is, and what it does with you</h1>
+  <p class="lede">
+    The short answers, each one linked to the page where we show our work. Nothing here is
+    asserted that isn't sourced somewhere on this site.
+  </p>
+
+  {faqs.map((f) => (
+    <section class="qa">
+      <h2>{f.q}</h2>
+      <p>{f.a}</p>
+      <p class="more"><a href={f.more.href}>{f.more.label} →</a></p>
+    </section>
+  ))}
+
+  <div class="note">
+    <strong>Corrections welcome, and wanted.</strong> If something here is wrong, we want the
+    citation so we can fix it. <a href="mailto:themiltonrecord@gmail.com">themiltonrecord@gmail.com</a>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <style>
+    .qa { margin: 1.4rem 0; }
+    .qa h2 { font-size: 1.08rem; margin-bottom: 0.4rem; }
+    .qa p { color: var(--muted); }
+    .more { margin-top: 0.35rem; font-size: 0.88rem; }
+    .more a { color: var(--toll); text-decoration: none; }
+    .more a:hover { text-decoration: underline; }
+  </style>
+</Base>

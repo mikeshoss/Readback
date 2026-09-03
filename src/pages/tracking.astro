@@ -1,0 +1,260 @@
+---
+import Base from '../layouts/Base.astro';
+import tracking from '../data/tracking.json';
+import retentionData from '../data/retention.json';
+
+const { parties, notPresent, verified, stance } = tracking;
+
+// The comparison this page exists to make. Pulled from the same retention
+// data /rules uses, so if those figures are ever corrected this moves with
+// them rather than drifting into a stale claim.
+const peel = retentionData.entries.find((e: any) => e.operator === 'Peel Regional Police');
+const toronto = retentionData.entries.find((e: any) => e.operator === 'Toronto Police Service');
+---
+<Base
+  title="What we track"
+  titleFull="What Readback Tracks About You — In Full, With Sources"
+  description="Every party that sees something when you read this site, what each one collects, how long they keep it, and the documentation that says so — including the parts nobody documents.">
+  <h1>What we know about you</h1>
+  <p class="lede">
+    This site asks police services what they collect and how long they keep it. It would be
+    incoherent not to answer the same question about ourselves — to the same standard, with a
+    citation on every line.
+  </p>
+
+  <div class="note">
+    <strong>"No analytics" would not have been the same as "no collection."</strong> A site can
+    run no analytics at all and still hand a reader's address to its host, its font provider and
+    its map provider before the page finishes loading. What follows is everyone who sees
+    something when you read this, not just the tool we chose to install.
+  </div>
+
+  <h2>{stance.heading}</h2>
+  <p class="lede">{stance.lede}</p>
+  <div class="tests">
+    {stance.tests.map((t: any) => (
+      <div class="test">
+        <h3>{t.q}</h3>
+        <p>{t.a}</p>
+      </div>
+    ))}
+  </div>
+  <p class="close">{stance.close}</p>
+
+  <h2>The comparison that matters</h2>
+  <p>
+    We hold this site to the standard we apply to police services, so here is the honest version
+    of that comparison. It is not flattering in every direction, which is the point.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Who</th><th>Keeps data on</th><th>For how long</th></tr></thead>
+      <tbody>
+        {peel && <tr><td>{peel.j}</td><td>Drivers who matched nothing</td><td><strong>{peel.r}</strong></td></tr>}
+        {toronto && <tr><td>{toronto.j}</td><td>Drivers who matched nothing</td><td><strong>{toronto.r}</strong></td></tr>}
+        <tr class="us">
+          <td>Readback (via Google Analytics)</td>
+          <td>Readers of this site</td>
+          <td><strong>2 years</strong>, as a cookie on your device — which you can delete</td>
+        </tr>
+        <tr class="us">
+          <td>Readback (via Google Analytics)</td>
+          <td>Readers of this site</td>
+          <td><strong>2 months</strong>, as event and user data on Google's servers</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">
+    A cookie lifetime is not the same thing as a plate database, and we are not going to pretend
+    it is. But the number is longer than either force keeps a licence plate, and a page that
+    hid that while running this site's argument would deserve the challenge it got.
+  </p>
+  <div class="note control-note">
+    <strong>The difference is who holds it.</strong> Our two-year figure is a cookie sitting on
+    <em>your</em> device, and you can delete it right now — no request, no form, no waiting.
+    Do that and we are back to knowing nothing about you. You cannot delete a plate read out of
+    a police database; there is no button, and the only route in is a freedom-of-information
+    request that takes months and may come back redacted. That asymmetry is the entire reason
+    this site exists, and it is why we would rather publish this page than be caught omitting it.
+    <span class="control-links">
+      <a href="https://support.google.com/chrome/answer/95647" rel="noopener">Delete, allow and manage cookies in Chrome →</a>
+      · <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">Opt out of Google Analytics entirely →</a>
+    </span>
+  </div>
+
+  <h2>Everyone who sees something</h2>
+  {parties.map((p: any) => (
+    <section class="party">
+      <div class="party-head">
+        <h3>{p.name}</h3>
+        <span class={`need ${p.necessity === 'Chosen' ? 'chosen' : p.necessity === 'On by default' ? 'default' : 'required'}`}>{p.necessity}</span>
+        <span class="scope">{p.scope}</span>
+      </div>
+      <p class="role">{p.role}</p>
+      <dl>
+        <dt>Why it is here</dt>
+        <dd>{p.necessityWhy}</dd>
+        <dt>What it collects</dt>
+        <dd>
+          {p.collects}
+          {p.collectsQuote && (
+            <blockquote>
+              “{p.collectsQuote}”
+              <cite>— {p.collectsQuoteSource}</cite>
+            </blockquote>
+          )}
+        </dd>
+        <dt>How long it is kept</dt>
+        <dd>
+          <span class={`retention ${p.retentionFlag}`}>{p.retention}</span>
+          <span class="detail">{p.retentionDetail}</span>
+          {p.ourClaim && (
+            <p class="our-claim"><strong>Take our word for it, and note that you have to.</strong> {p.ourClaim}</p>
+          )}
+        </dd>
+        <dt>What we can see</dt>
+        <dd>{p.weSee}</dd>
+        {p.control && (
+          <>
+            <dt>What you can do about it</dt>
+            <dd>
+              {p.control.text}
+              <span class="control-links">
+                {p.control.links.map((l: any, i: number) => (
+                  <>{i > 0 && ' · '}<a href={l.url} rel="noopener">{l.label} →</a></>
+                ))}
+              </span>
+            </dd>
+          </>
+        )}
+      </dl>
+      <p class="srcline">
+        Sources: {p.sources.map((s: any, i: number) => (
+          <>{i > 0 && ' · '}<a href={s.url} rel="noopener">{s.label}</a></>
+        ))}
+      </p>
+    </section>
+  ))}
+
+  <h2>What is not here</h2>
+  <p class="meta">
+    Absence is a claim too, so these are stated as specifically as the presences above.
+  </p>
+  <ul class="absent">
+    {notPresent.map((n: any) => (
+      <li><strong>{n.what}.</strong> {n.detail}</li>
+    ))}
+  </ul>
+
+  <h2>Where the documentation runs out</h2>
+  <p>
+    We file freedom-of-information requests because organisations do not always publish what
+    they do. The same problem applies to the companies we depend on, and pretending otherwise
+    would be the overclaim that gets a site like this caught. Three gaps, stated plainly:
+  </p>
+  <ul class="gaps">
+    <li>
+      <strong>Cloudflare does not publish a retention period.</strong> Its privacy policy gives
+      criteria, not durations. The only concrete figure it has published is in a blog post from
+      2013 that no current documentation restates, so we do not cite it as current practice.
+    </li>
+    <li>
+      <strong>Google does not document a default retention period</strong> for a newly created
+      Analytics property. Two options exist, 2 months and 14 months. The claim that new
+      properties default to the shorter one is repeated widely but we could not trace it to
+      Google's own documentation, so it is not on this page as fact.
+    </li>
+    <li>
+      <strong>OpenFreeMap does not address tile-request logging.</strong> Its policy covers IP
+      addresses clearly and commits to keeping anonymised logs indefinitely, but does not say
+      whether the record of which map areas were viewed is among them.
+    </li>
+    <li>
+      <strong>Cloudflare does not document whether its email-obfuscation script collects
+      anything.</strong> Its documentation describes what the feature does and never addresses
+      data or cookies, so what we say about that script above comes from reading it ourselves
+      rather than from a commitment anyone is bound to.
+    </li>
+  </ul>
+  <p class="meta">
+    We found the fourth of these by comparing the files we published against what the live site
+    actually served, and we would not have found it any other way. That is worth stating on a
+    page like this: the gap between what an organisation believes it runs and what it actually
+    runs is not usually malice, which is exactly why nobody should be asked to take it on trust.
+  </p>
+
+  <div class="note">
+    <strong>Corrections wanted.</strong> If any operator above documents something that
+    contradicts this page, send the link and we will correct it and say that we did.
+    <a href="mailto:themiltonrecord@gmail.com">themiltonrecord@gmail.com</a>
+    <span class="asof">Every claim on this page was checked against its source on {verified}.</span>
+  </div>
+
+  <style>
+    .party {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 1rem 1.15rem; margin: 0.9rem 0;
+    }
+    .party-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+    .party h3 { font-size: 1.05rem; margin: 0; }
+    .scope {
+      font-size: 0.72rem; font-weight: 600; color: var(--muted);
+      border: 1px solid var(--line); border-radius: 999px; padding: 0.05rem 0.5rem;
+    }
+    .need {
+      font-size: 0.72rem; font-weight: 700; border-radius: 999px; padding: 0.05rem 0.5rem;
+    }
+    .need.required { color: var(--toll); background: rgba(77,163,255,0.14); }
+    .need.chosen { color: var(--fleet); background: rgba(255,181,77,0.14); }
+    .need.default { color: var(--border-cat); background: rgba(176,122,255,0.14); }
+    .tests { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.7rem; margin: 1rem 0; }
+    .test { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.8rem 0.95rem; }
+    .test h3 { font-size: 0.9rem; margin: 0 0 0.3rem; color: var(--text); }
+    .test p { margin: 0; color: var(--muted); font-size: 0.85rem; }
+    .close {
+      border-left: 3px solid var(--toll); padding-left: 0.9rem;
+      color: var(--muted); font-size: 0.92rem; margin: 1rem 0 1.6rem;
+    }
+    .role { color: var(--muted); font-size: 0.9rem; margin: 0.4rem 0 0.7rem; }
+    .party dl { margin: 0; }
+    .party dt {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--muted); margin-top: 0.7rem;
+    }
+    .party dd { margin: 0.2rem 0 0; color: var(--text); font-size: 0.9rem; }
+    .party blockquote {
+      margin: 0.5rem 0 0; padding: 0.5rem 0.8rem; border-left: 2px solid var(--toll);
+      background: var(--panel-2); border-radius: 0 6px 6px 0;
+      color: var(--muted); font-size: 0.86rem;
+    }
+    .party blockquote cite { display: block; margin-top: 0.25rem; font-size: 0.78rem; font-style: normal; }
+    .retention { display: inline-block; font-weight: 700; }
+    .retention.undocumented { color: var(--fleet); }
+    .detail { display: block; margin-top: 0.3rem; color: var(--muted); font-size: 0.86rem; }
+    .control-links {
+      display: block; margin-top: 0.4rem; font-size: 0.84rem; line-height: 1.7;
+    }
+    .control-links a { color: var(--toll); text-decoration: none; }
+    .control-links a:hover { text-decoration: underline; }
+    .control-note { border-left-color: var(--fleet); }
+    .our-claim {
+      margin-top: 0.55rem; padding: 0.55rem 0.8rem; border-left: 2px solid var(--fleet);
+      background: var(--panel-2); border-radius: 0 6px 6px 0;
+      color: var(--muted); font-size: 0.86rem;
+    }
+    .our-claim strong { color: var(--fleet); }
+    .srcline { margin-top: 0.8rem; font-size: 0.78rem; color: var(--muted); }
+    .srcline a { color: var(--toll); text-decoration: none; }
+    .srcline a:hover { text-decoration: underline; }
+    .meta { color: var(--muted); font-size: 0.88rem; }
+    .absent, .gaps { margin: 0.8rem 0 1.4rem; padding-left: 1.1rem; }
+    .absent li, .gaps li { margin-bottom: 0.5rem; color: var(--muted); font-size: 0.9rem; }
+    .absent strong, .gaps strong { color: var(--text); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; font-size: 0.78rem; }
+    tr.us td { background: rgba(255,181,77,0.07); }
+    .asof { display: block; margin-top: 0.35rem; font-size: 0.8rem; color: var(--muted); }
+  </style>
+</Base>

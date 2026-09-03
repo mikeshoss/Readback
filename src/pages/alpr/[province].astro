@@ -1,0 +1,153 @@
+---
+import Base from '../../layouts/Base.astro';
+import {
+  cameras, generated, slugify, countByCategory,
+  CATEGORY_LABEL, retentionFor, earnsAPage, type Camera,
+} from '../../lib/alpr';
+
+export function getStaticPaths() {
+  const byProvince = new Map<string, Camera[]>();
+  for (const c of cameras) {
+    if (!c.province) continue;
+    const list = byProvince.get(c.province) ?? [];
+    list.push(c);
+    byProvince.set(c.province, list);
+  }
+  return [...byProvince.entries()]
+    .filter(([province, list]) => earnsAPage(list, retentionFor({ province })))
+    .map(([province, list]) => ({
+      params: { province: slugify(province) },
+      props: { province, list },
+    }));
+}
+
+const { province, list } = Astro.props as { province: string; list: Camera[] };
+
+const cats = countByCategory(list);
+const retention = retentionFor({ province });
+
+// Province pages summarise by operator and link onward; the individual
+// locations live on the operator pages so neither page is a wall of rows.
+const byOperator = new Map<string, Camera[]>();
+for (const c of list) {
+  if (!c.operator) continue;
+  const l = byOperator.get(c.operator) ?? [];
+  l.push(c);
+  byOperator.set(c.operator, l);
+}
+const operators = [...byOperator.entries()].sort((a, b) => b[1].length - a[1].length);
+const unattributed = list.filter((c) => !c.operator).length;
+const police = list.filter((c) => c.category === 'police_alpr').length;
+const plural = list.length === 1 ? 'camera' : 'cameras';
+
+const desc = `${list.length} licence plate reader and related surveillance ${plural} mapped in `
+  + `${province} — ${police} classified as police ALPR, operated by ${operators.length} named `
+  + `${operators.length === 1 ? 'organisation' : 'organisations'}. Every location links to its OpenStreetMap source.`;
+---
+<Base
+  title={`ALPR in ${province}`}
+  titleFull={`ALPR Cameras in ${province} — ${list.length} Licence Plate Readers Mapped`}
+  description={desc}
+  breadcrumbs={[
+    { name: 'ALPR by region', href: '/alpr' },
+    { name: province, href: `/alpr/${slugify(province)}` },
+  ]}>
+  <p class="crumb"><a href="/alpr">← All provinces and operators</a></p>
+  <h1>ALPR cameras in {province}</h1>
+  <p class="lede">
+    <strong>{list.length}</strong> licence plate readers and related surveillance {plural} are
+    mapped in {province}, {police} of them classified as police ALPR. Every location links back
+    to the OpenStreetMap node it came from.
+  </p>
+
+  <h2>What is mapped in {province}</h2>
+  <div class="stat-row">
+    {cats.map(([cat, n]) => (
+      <div class="stat">
+        <span class="n">{n}</span>
+        <span class="l">{CATEGORY_LABEL[cat]}</span>
+      </div>
+    ))}
+  </div>
+  <p class="meta">
+    Toll gantries and border crossings are counted separately on purpose. They read plates too,
+    but they are a different kind of system with a different legal basis — folding them into a
+    "surveillance cameras" total is how a map ends up overstating policing.
+    {' '}<a href="/">See the categories on the map →</a>
+  </p>
+
+  <h2>Who operates them</h2>
+  {operators.length > 0 ? (
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Cameras</th><th>Detail</th></tr></thead>
+        <tbody>
+          {operators.map(([op, l]) => (
+            <tr>
+              <td>{op}</td>
+              <td><strong>{l.length}</strong></td>
+              <td><a href={`/alpr/operator/${slugify(op)}`}>Locations and policy →</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p class="meta">No camera in {province} carries an operator tag in OpenStreetMap.</p>
+  )}
+  {unattributed > 0 && (
+    <p class="meta">
+      A further <strong>{unattributed}</strong> mapped {unattributed === 1 ? 'camera carries' : 'cameras carry'}
+      {' '}no operator tag, so we cannot say who runs {unattributed === 1 ? 'it' : 'them'}. That
+      is the single biggest gap in crowdsourced ALPR data, and it is why we file records requests
+      instead of guessing. <a href="/foi">The paper trail →</a>
+    </p>
+  )}
+
+  <h2>Retention rules that apply here</h2>
+  {retention.length > 0 ? (
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Jurisdiction</th><th>Non-matching reads kept</th><th>Authority</th></tr></thead>
+        <tbody>
+          {retention.map((e: any) => (
+            <tr><td>{e.j}</td><td><strong>{e.r}</strong></td><td>{e.a}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p class="meta">
+      We have not published a province-wide retention figure for {province}. Retention in Canada
+      is generally set force by force rather than by statute, which is the finding itself.
+    </p>
+  )}
+  <p class="meta"><a href="/rules">How the rules compare across Canada, the US and the UK →</a></p>
+
+  <div class="note">
+    <strong>Read this as a floor, not a total.</strong> These are cameras somebody has mapped in
+    OpenStreetMap, not an official inventory. Newly <em>mapped</em> is not newly
+    <em> installed</em>, and none of this captures vehicle-mounted ALPR — the fleet scanners that
+    do most of the plate reading in Canada and appear on no dot map anywhere.
+    {' '}<a href="/">The fleet layer explains the gap →</a>
+    {' '}Data © OpenStreetMap contributors (ODbL), generated {generated.slice(0, 10)}.
+  </div>
+
+  <style>
+    .crumb { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .crumb a { color: var(--toll); text-decoration: none; }
+    .stat-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.8rem 0 1rem; }
+    .stat {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 0.6rem 0.9rem; min-width: 8.5rem;
+    }
+    .stat .n { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .stat .l { display: block; font-size: 0.78rem; color: var(--muted); }
+    .meta { color: var(--muted); font-size: 0.88rem; margin: 0.5rem 0; }
+    .meta a { color: var(--toll); text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; font-size: 0.78rem; }
+    td a { color: var(--toll); text-decoration: none; }
+  </style>
+</Base>

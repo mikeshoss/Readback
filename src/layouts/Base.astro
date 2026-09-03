@@ -1,10 +1,22 @@
 ---
 interface Props {
   title: string;
+  // Set when the page needs a complete <title> of its own. `title` still
+  // supplies the nav-length name; this replaces the "· Readback" template so
+  // the suffix doesn't eat the character budget search engines truncate at.
+  titleFull?: string;
   description?: string;
   fullBleed?: boolean;
+  breadcrumbs?: { name: string; href: string }[];
 }
-const { title, description = 'Mapping automated licence plate readers in Canada — where they are, what they can do, and what the settings say.', fullBleed = false } = Astro.props;
+const {
+  title,
+  titleFull,
+  description = 'Mapping automated licence plate readers in Canada — where they are, what they can do, and what the settings say.',
+  fullBleed = false,
+  breadcrumbs,
+} = Astro.props;
+const pageTitle = titleFull ?? `${title} · Readback`;
 const nav = [
   { href: '/', label: 'The map' },
   { href: '/tech', label: 'The tech' },
@@ -14,26 +26,83 @@ const nav = [
   { href: '/foi', label: 'Paper trail' },
 ];
 const path = Astro.url.pathname;
+const site = Astro.site ?? new URL('https://readback.ofrecord.ca');
+const canonical = new URL(path, site);
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'Organization',
+    '@id': `${site.origin}/#organization`,
+    name: 'Readback',
+    url: site.origin,
+    description: 'Independent Canadian project mapping automated licence plate readers and documenting what the operators actually say about them.',
+    email: 'themiltonrecord@gmail.com',
+    sameAs: ['https://github.com/mikeshoss/Readback'],
+  },
+  {
+    '@type': 'WebSite',
+    '@id': `${site.origin}/#website`,
+    name: 'Readback',
+    url: site.origin,
+    description: 'Crowdsourced map and sourced record of ALPR surveillance in Canada.',
+    publisher: { '@id': `${site.origin}/#organization` },
+    inLanguage: 'en-CA',
+  },
+];
+if (breadcrumbs?.length) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: b.name,
+      item: new URL(b.href, site).href,
+    })),
+  });
+}
+const schema = { '@context': 'https://schema.org', '@graph': graph };
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en-CA">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} · Readback</title>
+    <meta name="google-site-verification" content="tMkis1NXiAWz2osb003FFUiPgbJBRLBuIuk95ZR1M60" />
+    <meta name="msvalidate.01" content="819797485C3B438C1C1F85BBD184426E" />
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url)} />
+    <link rel="canonical" href={canonical} />
     <meta property="og:site_name" content="Readback" />
-    <meta property="og:title" content={`${title} · Readback`} />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site ?? Astro.url)} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="en_CA" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content={`${title} · Readback`} />
+    <meta property="og:image" content={new URL('/og.png', site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Readback — automated licence plate readers in Canada, mapped." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og.png', site)} />
     <meta name="theme-color" content="#101418" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" sizes="180x180" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    <!-- Google tag (gtag.js). is:inline keeps both tags verbatim — Astro would
+         otherwise bundle them and gtag must stay a global. -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-Q93NYEFQTS"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-Q93NYEFQTS');
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -51,6 +120,8 @@ const path = Astro.url.pathname;
       <footer class="site-footer">
         <p>
           Camera data © OpenStreetMap contributors (ODbL). Every claim on this site is sourced.
+          <a href="/alpr">Cameras by region</a> ·
+          <a href="/tracking">What we track</a> ·
           <a href="/about">About &amp; contact</a> · <a href="mailto:themiltonrecord@gmail.com">themiltonrecord@gmail.com</a> ·
           <a href="https://github.com/mikeshoss/Readback" rel="noopener">Open research base</a>
         </p>
