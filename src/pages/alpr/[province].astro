@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import {
   cameras, generated, slugify, countByCategory,
-  CATEGORY_LABEL, retentionFor, earnsAPage, type Camera,
+  CATEGORY_LABEL, retentionFor, earnsAPage, clampDesc, num, type Camera,
 } from '../../lib/alpr';
 
 export function getStaticPaths() {
@@ -40,9 +40,9 @@ const unattributed = list.filter((c) => !c.operator).length;
 const police = list.filter((c) => c.category === 'police_alpr').length;
 const plural = list.length === 1 ? 'camera' : 'cameras';
 
-const desc = `${list.length} licence plate reader and related surveillance ${plural} mapped in `
-  + `${province} — ${police} classified as police ALPR, operated by ${operators.length} named `
-  + `${operators.length === 1 ? 'organisation' : 'organisations'}. Every location links to its OpenStreetMap source.`;
+const desc = clampDesc(
+  `${num(list.length)} plate-reading cameras mapped in ${province}, ${police} of them police ALPR. `
+  + `Operators, retention rules and a link to every source record.`);
 ---
 <Base
   title={`ALPR in ${province}`}

@@ -51,6 +51,44 @@ export const osmNode = (id: number) => `https://www.openstreetmap.org/node/${id}
 
 export const num = (n: number) => n.toLocaleString('en-CA');
 
+// Search engines truncate meta descriptions around 155-160 characters, and
+// Bing reports anything outside roughly 120-160 as an error. Generated pages
+// interpolate names of wildly different lengths ("407 ETR" vs "United Chiefs
+// and Councils of Manitoulin Anishnaabe Police Service"), so the templates
+// aim short and this clamps the outliers at a word boundary rather than
+// mid-word.
+export const MAX_DESC = 158;
+
+// Length must be measured after HTML-attribute escaping, not before: a single
+// double quote renders as &#34; and an apostrophe as &#39;, so a string that
+// looks 158 characters long in source can arrive well over the limit. Quotes
+// are dropped outright — they read badly in a search result and cost 5
+// characters each.
+const encodedLen = (s: string) => s.length + (s.match(/[&<>']/g)?.length ?? 0) * 4;
+
+export const clampDesc = (s: string) => {
+  let t = s.replace(/["“”]/g, '').replace(/\s+/g, ' ').trim();
+  if (encodedLen(t) <= MAX_DESC) return t;
+  // Trim whole words until the escaped form fits.
+  while (t.length && encodedLen(t) > MAX_DESC - 1) {
+    const at = t.lastIndexOf(' ');
+    if (at < 60) break;
+    t = t.slice(0, at);
+  }
+  // Prefer ending on a clause boundary. Cutting mid-thought ("...and as a.")
+  // reads as broken in a search result; ending a sentence early does not.
+  // ...but only when the shorter version still clears the 120-character floor,
+  // otherwise the fix trades "too long" for "too short".
+  const clause = Math.max(t.lastIndexOf('. '), t.lastIndexOf(' — '), t.lastIndexOf('; '), t.lastIndexOf(', '));
+  if (clause > 0 && encodedLen(t.slice(0, clause)) >= 124) t = t.slice(0, clause);
+  // A truncation that ends on a dangling connective ("...crime centre that")
+  // reads worse than one that stops a word earlier.
+  return `${t
+    .replace(/[\s,;:.–—-]+$/, '')
+    .replace(/\s+(that|and|or|with|which|the|a|an|for|to|of|in|on|plus)$/i, '')
+    .replace(/[\s,;:.–—-]+$/, '')}.`;
+};
+
 export const countByCategory = (list: Camera[]) => {
   const c: Partial<Record<Camera['category'], number>> = {};
   for (const x of list) c[x.category] = (c[x.category] ?? 0) + 1;

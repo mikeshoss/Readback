@@ -1,13 +1,17 @@
 ---
 import Base from '../../layouts/Base.astro';
 import tech from '../../data/tech.json';
+import { clampDesc } from '../../lib/alpr';
 
 export function getStaticPaths() {
   return tech.vendors.map((v) => ({ params: { slug: v.slug }, props: { v } }));
 }
 const { v } = Astro.props;
 ---
-<Base title={v.name} description={v.summary}>
+<Base
+  title={v.name}
+  titleFull={`${v.name} ALPR Hardware and Capabilities in Canada`}
+  description={clampDesc(`${v.name} ALPR in Canada: ${v.summary}`)}>
   <p class="crumb"><a href="/tech">← All providers</a></p>
   <h1>{v.name}</h1>
   <p class="where">{v.country}</p>

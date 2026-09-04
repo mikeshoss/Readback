@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import {
   cameras, generated, slugify, osmNode, countByCategory,
-  CATEGORY_LABEL, retentionFor, foiFor, earnsAPage, num, type Camera,
+  CATEGORY_LABEL, retentionFor, foiFor, earnsAPage, num, clampDesc, type Camera,
 } from '../../../lib/alpr';
 
 export function getStaticPaths() {
@@ -35,9 +35,9 @@ const requests = foiFor(operator);
 const where = provinces.length === 1 ? provinces[0] : 'Canada';
 const plural = list.length === 1 ? 'camera' : 'cameras';
 
-const desc = `${list.length} ${plural} operated by ${operator} are recorded in OpenStreetMap`
-  + `${provinces.length === 1 ? ` in ${provinces[0]}` : ''}`
-  + `. Every location links to its source node — plus retention policy and freedom-of-information status where we have them.`;
+const desc = clampDesc(
+  `${num(list.length)} ${plural} operated by ${operator}, mapped in OpenStreetMap. `
+  + `Locations, retention policy and records-request status, each linked to its source.`);
 ---
 <Base
   title={operator}
