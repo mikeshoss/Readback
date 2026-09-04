@@ -1,0 +1,218 @@
+---
+import Base from '../layouts/Base.astro';
+import { cameras, generated, num } from '../lib/alpr';
+import { readFileSync, statSync, existsSync } from 'node:fs';
+
+// Sizes and timestamps are read from the actual published files at build time,
+// so this page cannot advertise an endpoint that isn't there or a size that
+// has drifted.
+const pub = (p: string) => new URL(`../../public/data/${p}`, import.meta.url).pathname;
+const fileInfo = (p: string) => {
+  const path = pub(p);
+  if (!existsSync(path)) return null;
+  const s = statSync(path);
+  return { kb: Math.round(s.size / 1024), bytes: s.size };
+};
+
+const files = [
+  {
+    name: 'cameras.json',
+    what: 'Every mapped camera, classified, with province and the OSM tag that put it in the dataset.',
+    info: fileInfo('cameras.json'),
+    records: `${num(cameras.length)} cameras`,
+  },
+  {
+    name: 'changes.json',
+    what: 'What appeared and disappeared between pipeline runs — the change feed behind "new this week".',
+    info: fileInfo('changes.json'),
+    records: 'diff + history',
+  },
+  {
+    name: 'news.json',
+    what: 'Auto-collected ALPR news items with publication dates, outlets and a Canada flag.',
+    info: fileInfo('news.json'),
+    records: 'rolling 40 items',
+  },
+].filter((f) => f.info);
+
+const fields = [
+  ['id', 'number', 'OpenStreetMap node ID. Append to openstreetmap.org/node/ for the source record and its full edit history.'],
+  ['lat, lon', 'number', 'Coordinates as recorded in OSM (WGS 84).'],
+  ['province', 'string | null', 'Assigned at build time by point-in-polygon against OSM administrative boundaries (ISO3166-2 areas), not a geocoding service.'],
+  ['source', 'enum', 'Which OSM tag put this node in the dataset: alpr_tagged, toll_gantry, or border_control. This is the denominator behind the tolling finding.'],
+  ['category', 'enum', 'Our classification layer, not an OSM tag: police_alpr, toll, border, private. Rules are in scripts/build-cameras.mjs.'],
+  ['operator', 'string | null', 'Normalized operator name (e.g. "YRP" resolves to "York Regional Police"). null means OSM records no operator — true of a large share of the data.'],
+  ['rawOperator', 'string | null', 'The original OSM value when normalization changed it, so you can see what we did.'],
+  ['manufacturer', 'string | null', 'Normalized vendor name from the manufacturer or brand tag.'],
+  ['vendorDisputed', 'boolean', 'true where a node is tagged as Flock Safety hardware at a police service. Flock states it holds no Canadian police contracts and the term is used generically, so we flag rather than assert.'],
+  ['zone, cameraType, direction', 'string | number | null', 'Passed through from OSM tags where present.'],
+  ['tollMethod', 'string | null', 'From the toll_method tag on gantries.'],
+  ['photo', 'string | null', 'Community photograph URL where one exists. Currently only a handful, hosted on Wikimedia Commons.'],
+];
+
+const unattributed = cameras.filter((c: any) => !c.operator).length;
+const alprTagged = cameras.filter((c: any) => c.source === 'alpr_tagged');
+const tollInAlpr = alprTagged.filter((c: any) => c.category === 'toll');
+
+const dataset = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: 'Readback — mapped ALPR and plate-reading cameras in Canada',
+  description: 'Classified dataset of automated licence plate readers, toll gantries and border control points mapped in Canada, derived from OpenStreetMap with an added classification, operator-normalisation and province layer.',
+  url: 'https://readback.ofrecord.ca/data',
+  license: 'https://opendatacommons.org/licenses/odbl/1-0/',
+  creator: { '@type': 'Organization', name: 'Readback', url: 'https://readback.ofrecord.ca' },
+  isBasedOn: 'https://www.openstreetmap.org/',
+  spatialCoverage: { '@type': 'Place', name: 'Canada' },
+  dateModified: generated.slice(0, 10),
+  keywords: ['ALPR', 'automated licence plate recognition', 'surveillance', 'Canada', 'OpenStreetMap', 'privacy'],
+  distribution: files.map((f) => ({
+    '@type': 'DataDownload',
+    name: f.name,
+    encodingFormat: 'application/json',
+    contentSize: `${f.info!.bytes}`,
+    contentUrl: `https://readback.ofrecord.ca/data/${f.name}`,
+  })),
+};
+---
+<Base
+  title="The data"
+  titleFull="ALPR Camera Data for Canada — Open Download and Documented Endpoints"
+  description="The full Canadian ALPR dataset as documented JSON endpoints: every field explained, CORS enabled, ODbL licensed, with the limitations stated plainly. Free for journalists and researchers to use and check."
+  breadcrumbs={[{ name: 'The data', href: '/data' }]}>
+  <h1>Take the data</h1>
+  <p class="lede">
+    Everything the map draws is a static JSON file you can fetch, cite and check. No key, no
+    signup, no rate limit, CORS enabled so it works from a browser. If you are verifying
+    something we published, this is the fastest route.
+  </p>
+
+  <h2>Endpoints</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>File</th><th>Contents</th><th>Size</th><th></th></tr></thead>
+      <tbody>
+        {files.map((f) => (
+          <tr>
+            <td><code>/data/{f.name}</code></td>
+            <td>{f.what}<span class="rec">{f.records}</span></td>
+            <td>{f.info!.kb} KB</td>
+            <td><a href={`/data/${f.name}`}>Download →</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">
+    Regenerated when the pipeline runs; last generated <strong>{generated.slice(0, 10)}</strong>.
+    Cached at the edge for 15 minutes.
+  </p>
+
+  <h2>cameras.json — every field</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead>
+      <tbody>
+        {fields.map(([f, t, d]) => (
+          <tr><td><code>{f}</code></td><td class="ty">{t}</td><td>{d}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Reproducing the tolling finding</h2>
+  <p>
+    The headline claim on <a href="/findings">/findings</a> is checkable in three lines, which is
+    the point of publishing the <code>source</code> field:
+  </p>
+  <pre><code>{`curl -s https://readback.ofrecord.ca/data/cameras.json \\
+  | jq '[.cameras[] | select(.source == "alpr_tagged")] |
+        {alpr_tagged: length,
+         toll: [.[] | select(.category == "toll")] | length}'`}</code></pre>
+  <p class="meta">
+    Returns <strong>{tollInAlpr.length}</strong> of <strong>{alprTagged.length}</strong> as of the
+    current dataset. The classification rules that produce <code>category</code> are in
+    {' '}<a href="https://github.com/mikeshoss/Readback/blob/main/scripts/build-cameras.mjs" rel="noopener">build-cameras.mjs</a> —
+    read them before citing the number, because the classification is ours, not OpenStreetMap's.
+  </p>
+
+  <h2>Limitations — read before citing</h2>
+  <ul class="limits">
+    <li>
+      <strong>These are mapped cameras, not an inventory.</strong> Locations are crowdsourced from
+      OpenStreetMap, which means somebody mapped them, not that anyone verified them. A camera
+      missing from this file may well exist. Treat every count as a floor.
+    </li>
+    <li>
+      <strong>{num(unattributed)} of {num(cameras.length)} records have no operator.</strong> We
+      cannot say who runs them, so per-operator counts are floors too.
+    </li>
+    <li>
+      <strong>Newly mapped is not newly installed.</strong> <code>changes.json</code> records when
+      something entered the dataset, which is a fact about OpenStreetMap, not about deployment.
+    </li>
+    <li>
+      <strong>Vehicle-mounted ALPR is not in here at all.</strong> Most Canadian scanning capacity
+      is mobile and has no fixed location. See <a href="/findings">finding 02</a>.
+    </li>
+    <li>
+      <strong><code>category</code> is our judgement.</strong> OpenStreetMap does not classify
+      these; we do, by rules you can read. Reasonable people could draw the toll/police line
+      differently, and that choice materially changes the headline number.
+    </li>
+  </ul>
+
+  <h2>Licence and attribution</h2>
+  <ul class="lic">
+    <li>
+      <strong>Camera data:</strong> © OpenStreetMap contributors, licensed under the
+      {' '}<a href="https://opendatacommons.org/licenses/odbl/" rel="noopener">Open Database Licence (ODbL) 1.0</a>.
+      This dataset is a derivative database and is re-published under the same licence — if you
+      build on it, share alike and attribute OpenStreetMap.
+    </li>
+    <li>
+      <strong>Atlas of Surveillance:</strong> research in this project draws on the
+      {' '}<a href="https://atlasofsurveillance.org/" rel="noopener">Electronic Frontier Foundation's Atlas of Surveillance</a>,
+      licensed <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a>.
+      The raw CSV is redistributed with attribution in our repository.
+    </li>
+    <li>
+      <strong>Basemap:</strong> tiles from <a href="https://openfreemap.org/" rel="noopener">OpenFreeMap</a>
+      {' '}(© OpenMapTiles, data from OpenStreetMap).
+    </li>
+    <li>
+      <strong>Our classification, normalisation and research:</strong> use it freely, with credit
+      to Readback and a link. Corrections are welcome and get logged publicly.
+    </li>
+  </ul>
+
+  <div class="note">
+    <strong>Using this for a story?</strong> Tell us what you need and we will help you verify it,
+    including the parts that weaken your angle.
+    {' '}<a href="mailto:themiltonrecord@gmail.com">themiltonrecord@gmail.com</a> ·
+    {' '}<a href="https://github.com/mikeshoss/Readback" rel="noopener">the full research base</a> ·
+    {' '}<a href="/tracking">what this site collects about you</a>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(dataset)} />
+
+  <style>
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 0.78rem; }
+    td a { color: var(--toll); text-decoration: none; white-space: nowrap; }
+    td code { font-size: 0.84rem; color: var(--text); }
+    .ty { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+    .rec { display: block; color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
+    .meta { color: var(--muted); font-size: 0.88rem; }
+    .meta a, .limits a, .lic a { color: var(--toll); text-decoration: none; }
+    pre {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+      padding: 0.8rem 1rem; overflow-x: auto; font-size: 0.82rem; margin: 0.6rem 0;
+    }
+    pre code { color: var(--text); }
+    .limits, .lic { margin: 0.8rem 0 1.4rem; padding-left: 1.1rem; }
+    .limits li, .lic li { margin-bottom: 0.55rem; color: var(--muted); font-size: 0.9rem; }
+    .limits strong, .lic strong { color: var(--text); }
+  </style>
+</Base>

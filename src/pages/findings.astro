@@ -1,0 +1,203 @@
+---
+import Base from '../layouts/Base.astro';
+import { cameras, generated, num, countByCategory, CATEGORY_LABEL } from '../lib/alpr';
+import fleetsData from '../data/fleets.json';
+import retentionData from '../data/retention.json';
+import { readFileSync } from 'node:fs';
+
+// Read the finding straight out of the generated dataset rather than hardcoding
+// it. The whole problem this page fixes is a headline number that drifted from
+// the data behind it; computing it at build time makes that impossible.
+const dataPath = new URL('../../public/data/cameras.json', import.meta.url).pathname;
+const data = JSON.parse(readFileSync(dataPath, 'utf8'));
+
+const alprTagged = cameras.filter((c: any) => c.source === 'alpr_tagged');
+const tollInAlpr = alprTagged.filter((c: any) => c.category === 'toll');
+const rtxMto = cameras.filter((c: any) =>
+  c.operator === 'Ministry of Transportation of Ontario' &&
+  /RTX|Raytheon/i.test(c.manufacturer || ''));
+const pct = alprTagged.length ? Math.round((tollInAlpr.length / alprTagged.length) * 100) : 0;
+
+const fleets = fleetsData.fleets;
+const totalFleetVehicles = fleets.reduce((s: number, f: any) => s + (f.vehicles || 0), 0);
+const peel = retentionData.entries.find((e: any) => e.operator === 'Peel Regional Police');
+const toronto = retentionData.entries.find((e: any) => e.operator === 'Toronto Police Service');
+const shortest = retentionData.entries.find((e: any) => e.j === 'New Hampshire');
+
+const cats = countByCategory(cameras);
+---
+<Base
+  title="Findings"
+  titleFull="Four Findings About ALPR Surveillance in Canada"
+  description="What the data shows once you separate tolling from policing: 40% of Canada's mapped ALPR surveillance is the 407, most scanning isn't on any map, and retention is a setting nobody outside each force checks."
+  breadcrumbs={[{ name: 'Findings', href: '/findings' }]}>
+  <h1>Four things the data shows</h1>
+  <p class="lede">
+    Every number here is computed from the published dataset at build time and links to the page
+    where you can check it. If a figure below disagrees with the map, the map is right and this
+    page is broken — tell us.
+  </p>
+
+  <section class="finding">
+    <div class="fnum">01</div>
+    <h2>Most of what Canada's ALPR map calls surveillance is the 407</h2>
+    <p class="stat"><strong>{tollInAlpr.length}</strong> of <strong>{alprTagged.length}</strong> nodes tagged as ALPR surveillance in OpenStreetMap — {pct}% — are tolling infrastructure, not policing.</p>
+    <p>
+      Of those, <strong>{rtxMto.length}</strong> are the 407's own cameras: manufactured by RTX
+      (Raytheon, which built the 407 ETR tolling system) and operated by the Ontario Ministry of
+      Transportation. Every one of them falls inside the 407 corridor. They read plates because
+      billing by plate is the service — you entered a toll road.
+    </p>
+    <p>
+      Existing crowdsourced maps show these as generic surveillance cameras, which inflates the
+      apparent scale of police surveillance by a wide margin. Readback classifies them separately
+      and turns the layer off by default, because a toll you chose to pay is not a dragnet on
+      your commute.
+    </p>
+    <p class="how">
+      <strong>How to check it:</strong> filter <code>/data/cameras.json</code> for
+      <code>source: "alpr_tagged"</code> and count <code>category: "toll"</code>. The
+      classification rule is in <a href="https://github.com/mikeshoss/Readback/blob/main/scripts/build-cameras.mjs" rel="noopener">build-cameras.mjs</a>,
+      and each node links to its OpenStreetMap record.
+    </p>
+    <p class="links">
+      <a href="/">See it on the map, toll layer on →</a> ·
+      <a href="/alpr/operator/ministry-of-transportation-of-ontario">The MTO cameras, listed →</a> ·
+      <a href="/data">The data →</a>
+    </p>
+    <p class="dated">
+      First identified 2026-09-01, when the same query returned 244 RTX/MTO nodes out of 618
+      ALPR-tagged — 40%. The dataset has grown since; the finding held. Both figures come from
+      the same rule applied to OpenStreetMap on different days.
+    </p>
+  </section>
+
+  <section class="finding">
+    <div class="fnum">02</div>
+    <h2>The scanning that matters most is on no map at all</h2>
+    <p class="stat">
+      <strong>{fleets.length}</strong> Canadian police services run vehicle-mounted ALPR across
+      roughly <strong>{num(totalFleetVehicles)}</strong> equipped vehicles.
+    </p>
+    <p>
+      A dot map can only show cameras bolted to poles. But most Canadian ALPR capacity is mobile:
+      cruisers scanning continuously while they drive. Those have no fixed location to map, so
+      every existing ALPR map — ours included, until we added a capacity layer — structurally
+      undercounts the thing it claims to measure.
+    </p>
+    <p>
+      This is why we render fleets as capacity circles rather than pretending not to know. It is
+      also why a "how many cameras are there" framing is the wrong question.
+    </p>
+    <p class="links">
+      <a href="/">See the fleet layer →</a> ·
+      <a href="/tech">What the in-car systems collect →</a>
+    </p>
+  </section>
+
+  <section class="finding">
+    <div class="fnum">03</div>
+    <h2>Retention is a setting, not a standard</h2>
+    {peel && toronto && (
+      <p class="stat">
+        <strong>{peel.r.split(' (')[0]}</strong> in Peel Region.
+        <strong> {toronto.r.split(' (')[0]}</strong> in Toronto. Same province, same technology,
+        neighbouring forces.
+      </p>
+    )}
+    <p>
+      Across the jurisdictions we track, how long a plate read of an innocent driver is kept runs
+      from {shortest ? shortest.r : 'three minutes'} to indefinitely. Nothing about the hardware
+      requires any of these numbers. Retention is an administrator's dropdown, and in most of
+      Canada no statute constrains it.
+    </p>
+    <p>
+      The consequence is the site's central claim: <em>every safeguard on these systems is a
+      setting, and nobody outside each service checks what the settings are.</em> That is not an
+      accusation that anyone is lying. It is an observation that nobody is in a position to know.
+    </p>
+    <p class="links">
+      <a href="/rules#retention">The full comparison, with sources →</a> ·
+      <a href="/foi">The requests we filed to find out →</a>
+    </p>
+  </section>
+
+  <section class="finding">
+    <div class="fnum">04</div>
+    <h2>Some plate readers also listen for your phone</h2>
+    <p class="stat">
+      Two vendors sell ALPR units that additionally capture Bluetooth and Wi-Fi identifiers from
+      passing vehicles. No Canadian retention rule mentions device signals at all.
+    </p>
+    <p>
+      Jenoptik's TraffiCatch has been deployed in US border counties since around 2019. Leonardo
+      markets comparable capability. More importantly, the radios needed to do this are already
+      present in hardware from several major vendors — which means the capability is, again, a
+      setting rather than a purchase.
+    </p>
+    <p>
+      Retention rules, privacy impact assessments and oversight frameworks in Canada are written
+      about plates. A device identifier is not a plate, and the rules are silent.
+    </p>
+    <p class="links"><a href="/tech#antenna">The antenna problem, sourced to certification filings →</a></p>
+  </section>
+
+  <h2>What is mapped, in total</h2>
+  <div class="stat-row">
+    {cats.map(([cat, n]) => (
+      <div class="stat-box"><span class="n">{num(n)}</span><span class="l">{CATEGORY_LABEL[cat]}</span></div>
+    ))}
+  </div>
+
+  <div class="note">
+    <strong>The limits of all four.</strong> Camera locations are crowdsourced from
+    OpenStreetMap: somebody mapped them, which is not the same as anyone verifying them. The
+    counts are a floor, not an inventory, and {num(cameras.filter((c: any) => !c.operator).length)} of
+    {' '}{num(cameras.length)} records carry no operator tag at all. Newly <em>mapped</em> is not
+    newly <em>installed</em>. Turning these into records a journalist can cite is what the
+    freedom-of-information programme is for.
+    {' '}Data © OpenStreetMap contributors (ODbL), generated {generated.slice(0, 10)}.
+  </div>
+
+  <p class="crumb">
+    Press enquiries, data, or verification: <a href="mailto:themiltonrecord@gmail.com">themiltonrecord@gmail.com</a>
+  </p>
+
+  <style>
+    .finding {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+      padding: 1.1rem 1.25rem; margin: 1.1rem 0; position: relative;
+    }
+    .fnum {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--toll); margin-bottom: 0.3rem;
+    }
+    .finding h2 { font-size: 1.18rem; margin: 0 0 0.5rem; }
+    .stat {
+      font-size: 1.02rem; color: var(--text); border-left: 3px solid var(--toll);
+      padding-left: 0.8rem; margin: 0.6rem 0 0.8rem;
+    }
+    .finding p { color: var(--muted); font-size: 0.92rem; }
+    .how {
+      background: var(--panel-2); border-radius: 8px; padding: 0.6rem 0.8rem;
+      font-size: 0.85rem; margin-top: 0.8rem;
+    }
+    .how code { font-size: 0.82rem; color: var(--text); }
+    .how a, .links a { color: var(--toll); text-decoration: none; }
+    .how a:hover, .links a:hover { text-decoration: underline; }
+    .links { margin-top: 0.7rem; font-size: 0.88rem; }
+    .dated {
+      margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px dashed var(--line);
+      font-size: 0.82rem;
+    }
+    .stat-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.8rem 0 1.2rem; }
+    .stat-box {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 0.6rem 0.9rem; min-width: 8.5rem;
+    }
+    .stat-box .n { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .stat-box .l { display: block; font-size: 0.78rem; color: var(--muted); }
+    .crumb { color: var(--muted); font-size: 0.88rem; margin-top: 1rem; }
+    .crumb a { color: var(--toll); text-decoration: none; }
+  </style>
+</Base>

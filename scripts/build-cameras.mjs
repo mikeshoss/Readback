@@ -34,6 +34,18 @@ area["ISO3166-1"="CA"][admin_level=2]->.ca;
 );
 out body;`;
 
+// Which OSM tag put a node in the dataset, recorded per camera. This is the
+// denominator behind the toll-vs-surveillance finding: "N of the nodes tagged
+// as ALPR surveillance are actually tolling infrastructure" is only checkable
+// if we say which nodes were ALPR-tagged in the first place. Derived from the
+// node's own tags, so it is reproducible from the raw Overpass result.
+function sourceTag(t) {
+  if (t['surveillance:type'] === 'ALPR' && t.man_made === 'surveillance') return 'alpr_tagged';
+  if (t.highway === 'toll_gantry') return 'toll_gantry';
+  if (t.barrier === 'border_control') return 'border_control';
+  return 'other';
+}
+
 // Categories are OUR classification layer — see docs/map-taxonomy.md.
 function classify(tags) {
   if (tags.highway === 'toll_gantry') return 'toll';
@@ -211,6 +223,7 @@ const cameras = elements.map((e) => {
     lat: e.lat,
     lon: e.lon,
     province: provinceOf.get(e.id) ?? null,
+    source: sourceTag(t),
     category: classify(t),
     operator,
     rawOperator: t.operator && operator !== t.operator.trim() ? t.operator.trim() : null,
@@ -241,11 +254,29 @@ for (const c of cameras) if (c.province) provinceCounts[c.province] = (provinceC
 const unplaced = cameras.filter((c) => !c.province).length;
 console.log(`Provinces: ${Object.keys(provinceCounts).length} with data, ${unplaced} cameras unplaced`);
 
+// The toll-vs-surveillance finding, recomputed every run so the published
+// number can never drift from the data behind it.
+const sourceCounts = {};
+for (const c of cameras) sourceCounts[c.source] = (sourceCounts[c.source] || 0) + 1;
+const alprTagged = cameras.filter((c) => c.source === 'alpr_tagged');
+const alprTaggedToll = alprTagged.filter((c) => c.category === 'toll');
+const finding = {
+  alprTagged: alprTagged.length,
+  reclassifiedAsToll: alprTaggedToll.length,
+  pct: alprTagged.length ? Math.round((alprTaggedToll.length / alprTagged.length) * 100) : 0,
+  rtxMto: cameras.filter((c) =>
+    c.operator === 'Ministry of Transportation of Ontario' &&
+    /RTX|Raytheon/i.test(c.manufacturer || '')).length,
+};
+console.log(`Toll finding: ${finding.reclassifiedAsToll} of ${finding.alprTagged} ALPR-tagged nodes (${finding.pct}%) are tolling infrastructure; ${finding.rtxMto} are RTX/MTO 407 cameras`);
+
 const out = {
   generated: new Date().toISOString(),
   attribution: '© OpenStreetMap contributors (ODbL)',
   counts,
   provinceCounts,
+  sourceCounts,
+  finding,
   cameras,
 };
 

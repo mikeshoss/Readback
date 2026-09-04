@@ -10,6 +10,9 @@ export type Camera = {
   lat: number;
   lon: number;
   province: string | null;
+  // Which OSM tag put this node in the dataset — the denominator behind the
+  // tolling finding on /findings.
+  source: 'alpr_tagged' | 'toll_gantry' | 'border_control' | 'other';
   category: 'police_alpr' | 'toll' | 'border' | 'private';
   operator: string | null;
   rawOperator: string | null;
