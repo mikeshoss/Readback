@@ -1,0 +1,702 @@
+{
+  "note": "How to file a records request with each organisation that operates, or is likely to operate, plate-reading cameras in Canada. Every field comes from the organisation's own published page, cited per entry. `payee: null` and `responseTime: null` mean the official page does not state it — shown on the page as a gap to confirm, never filled in by inference.",
+  "verified": "2026-09-05",
+  "traps": [
+    {
+      "t": "Ontario is 45 business days now, and several pages still say 30",
+      "d": "Ontario moved FOI response times from 30 calendar days to 45 business days on 1 July 2026, under both FIPPA and MFIPPA. Durham and Hamilton have updated their pages. Brampton, Chatham-Kent, Sault Ste. Marie, Windsor and Ottawa still publish the old figure. If you are working out when a request is deemed refused so you can appeal, do not use the number printed on those pages.",
+      "source": {
+        "label": "ontario.ca — Freedom of information request",
+        "url": "https://www.ontario.ca/page/freedom-information-request"
+      }
+    },
+    {
+      "t": "The cheque payee is often not the organisation you are writing to",
+      "d": "Windsor Police takes payment to the City of Windsor. Ottawa Police to the Treasurer of the City of Ottawa. Edmonton Police to the City of Edmonton. Any Ontario ministry, including MTO and the OPP's route through the Solicitor General, to the Minister of Finance. A cheque in the wrong name is returned, and the statutory clock does not start until the fee is paid."
+    },
+    {
+      "t": "Alberta's FOIP Act no longer exists",
+      "d": "It was replaced by the Access to Information Act and the Protection of Privacy Act on 11 June 2025. Calgary and Edmonton police both cite the new Act. A request citing FOIP should still be processed, but the reference is out of date."
+    },
+    {
+      "t": "The fee is not $5 everywhere",
+      "d": "Ontario and federal requests are $5. UBC, under BC law, is $10. Calgary and Edmonton are $25 for general records. Quebec has no flat application fee at all, charging per page instead."
+    }
+  ],
+  "institutions": [
+    {
+      "id": "toronto",
+      "name": "Toronto Police Service",
+      "short": "Toronto",
+      "kind": "police",
+      "region": "Toronto, Ontario",
+      "statute": "MFIPPA",
+      "operatorSlug": "toronto-police-service",
+      "why": "Runs the largest fleet ALPR programme in the country, plus fixed cameras.",
+      "portal": null,
+      "card": false,
+      "address": "Toronto Police Service, Information Privacy Section, 4th Floor, 40 College Street, Toronto ON M5G 2J3",
+      "fee": "$5",
+      "payee": "Toronto Police Service",
+      "form": {
+        "label": "Access/Correction Request (PDF)",
+        "url": "https://www.tps.ca/services/freedom-information-request/"
+      },
+      "idRequired": null,
+      "responseTime": null,
+      "phone": "416-808-7850",
+      "email": null,
+      "warnings": [
+        "No portal. Mail, or in person at the headquarters lobby, 7:00 to 16:30 Monday, Tuesday, Thursday and Friday. Closed Wednesdays.",
+        "Debit, Visa and Mastercard are accepted in person only. By post it must be a cheque or money order.",
+        "A fee estimate is issued if costs exceed $25, and a 50% deposit is required if the estimate reaches $100."
+      ],
+      "source": {
+        "label": "TPS — Freedom of information request",
+        "url": "https://www.tps.ca/services/freedom-information-request/"
+      }
+    },
+    {
+      "id": "halton",
+      "name": "Halton Regional Police Service",
+      "short": "Halton",
+      "kind": "police",
+      "region": "Halton Region, Ontario",
+      "statute": "MFIPPA",
+      "portal": "https://forms.haltonpolice.ca/Freedom-of-Information-Request-Form",
+      "card": true,
+      "address": "Halton Regional Police Service, Attn: Freedom of Information Unit, 2485 North Service Road West, Oakville ON L6M 3H8",
+      "fee": "$5",
+      "payee": null,
+      "form": null,
+      "idRequired": null,
+      "responseTime": null,
+      "phone": "905-825-4777 ext. 5192",
+      "email": null,
+      "warnings": [
+        "The online portal takes Mastercard and Visa, so filing this way avoids the cheque question entirely.",
+        "If you post it instead, the payee is not stated on their page. Confirm by phone first."
+      ],
+      "source": {
+        "label": "Halton Police — Freedom of information",
+        "url": "https://www.haltonpolice.ca/en/about-us/freedom-of-information.aspx"
+      }
+    },
+    {
+      "id": "peel",
+      "name": "Peel Regional Police",
+      "short": "Peel",
+      "kind": "police",
+      "region": "Peel Region, Ontario",
+      "statute": "MFIPPA",
+      "why": "Keeps non-matching plate reads for 24 hours, the shortest retention we have found at any Canadian force.",
+      "portal": "https://peelpolice.onlinepolicecheck.ca?primessp=FOI",
+      "card": true,
+      "address": "Information and Privacy Unit, Peel Regional Police, 7150 Mississauga Road, Mississauga ON L5N 8M5",
+      "fee": "$5",
+      "payee": "Peel Regional Police",
+      "form": null,
+      "idRequired": "Two pieces of government-issued identification, one with a photograph.",
+      "responseTime": "45 business days",
+      "phone": "905-453-2121 ext. 4263",
+      "email": null,
+      "warnings": [
+        "An old Brampton headquarters address, 7750 Hurontario Street, still circulates in out-of-date listings. Do not use it.",
+        "IPU@peelpolice.ca is published, but only in a video-request context. It is not a verified route for a full FOI submission."
+      ],
+      "source": {
+        "label": "Peel Police — Information and privacy requests",
+        "url": "https://www.peelpolice.ca/en/services/information-and-privacy-requests.aspx"
+      }
+    },
+    {
+      "id": "york",
+      "name": "York Regional Police",
+      "short": "York",
+      "kind": "police",
+      "region": "York Region, Ontario",
+      "statute": "MFIPPA",
+      "operatorSlug": "york-regional-police",
+      "portal": "https://www.yrp.ca/freedom-information-request-form",
+      "card": true,
+      "address": "Freedom of Information Unit, York Regional Police, 47 Don Hillock Drive, Aurora ON L4G 0S7",
+      "fee": "$5",
+      "payee": "York Regional Police",
+      "form": {
+        "label": "Form YRP436 (DOCX, for postal filing)",
+        "url": "https://www.yrp.ca/en/about/freedom-of-information.asp"
+      },
+      "idRequired": "One piece of photo identification.",
+      "responseTime": "45 business days",
+      "phone": "1-866-876-5423 ext. 6740",
+      "email": "foi@yrp.ca",
+      "warnings": [
+        "The portal takes Visa and Mastercard.",
+        "foi@yrp.ca is published as a contact address, but full submission by email is not explicitly accepted."
+      ],
+      "source": {
+        "label": "YRP — Freedom of information",
+        "url": "https://www.yrp.ca/en/about/freedom-of-information.asp"
+      }
+    },
+    {
+      "id": "waterloo",
+      "name": "Waterloo Regional Police Service",
+      "short": "Waterloo",
+      "kind": "police",
+      "region": "Waterloo Region, Ontario",
+      "statute": "MFIPPA",
+      "operatorSlug": "waterloo-regional-police-service",
+      "why": "Brought a combined CCTV and ALPR network live in June 2026.",
+      "portal": "https://wrps.ca/en/about-us/freedom-of-information.aspx",
+      "card": false,
+      "address": "Access to Information Unit, Waterloo Regional Police Service, P.O. Box 3070, 200 Maple Grove Road, Cambridge ON N3H 5M1",
+      "fee": "$5",
+      "payee": null,
+      "form": null,
+      "idRequired": "A photocopy of one piece of identification.",
+      "responseTime": "45 business days",
+      "phone": null,
+      "email": "foi@wrps.on.ca",
+      "warnings": [
+        "Their online form runs on Microsoft Forms, which is an unusual platform for this but is the official route linked from their own page.",
+        "For a postal filing the payment method and payee are not specified. Confirm before mailing."
+      ],
+      "source": {
+        "label": "WRPS — Freedom of information",
+        "url": "https://wrps.ca/en/about-us/freedom-of-information.aspx"
+      }
+    },
+    {
+      "id": "mto",
+      "name": "Ministry of Transportation of Ontario",
+      "short": "MTO",
+      "kind": "provincial",
+      "region": "Ontario",
+      "statute": "Ontario FIPPA",
+      "operatorSlug": "ministry-of-transportation-of-ontario",
+      "why": "The single largest operator on our map. Also the route to records about the 407, since the Province is the counterparty to that concession.",
+      "portal": null,
+      "card": false,
+      "address": "Freedom of Information and Privacy Coordinator, Ministry of Transportation, 777 Bay Street, 27th Floor, Suite 2702, Toronto ON M7A 2J8",
+      "fee": "$5",
+      "payee": "Minister of Finance",
+      "form": {
+        "label": "Form ON00089E",
+        "url": "https://forms.mgcs.gov.on.ca/en/dataset/on00089"
+      },
+      "idRequired": "None for general-records requests. Photo ID only if asking for your own personal information.",
+      "responseTime": "45 business days",
+      "phone": null,
+      "email": "MTOFOI@ontario.ca",
+      "warnings": [
+        "The form states \"Please do not include any credit card information on this form\" — mail or in person only.",
+        "Ontario's Directory of Institutions gives Suite 2702 and lists no phone for MTO; a secondary source gives Suite 2703 for the coordinator. Worth an email to confirm before mailing."
+      ],
+      "source": {
+        "label": "ontario.ca — Freedom of information request",
+        "url": "https://www.ontario.ca/page/freedom-information-request"
+      }
+    },
+    {
+      "id": "brampton",
+      "name": "City of Brampton",
+      "short": "Brampton",
+      "kind": "municipal",
+      "region": "Brampton, Ontario",
+      "statute": "MFIPPA",
+      "operatorSlug": "city-of-brampton",
+      "why": "Operates the intersection camera network with ALPR. This is the City, not Peel Regional Police — a separate request from the police one.",
+      "portal": null,
+      "card": false,
+      "address": "Attn: Access to Information, Access and Privacy Team, City Clerk's Office, City of Brampton, 2 Wellington Street West, Brampton ON L6Y 4R2",
+      "fee": "$5",
+      "payee": "City of Brampton",
+      "form": {
+        "label": "FOI request form (PDF)",
+        "url": "https://www.brampton.ca/EN/City-Hall/Access-Privacy/Documents/FOI%20Form%20Fill-in.pdf"
+      },
+      "idRequired": null,
+      "responseTime": null,
+      "phone": "311 in city, or 905-874-2000",
+      "email": null,
+      "warnings": [
+        "Their page still states 30 calendar days. Ontario moved to 45 business days on 1 July 2026."
+      ],
+      "source": {
+        "label": "brampton.ca — Access to information request",
+        "url": "https://www.brampton.ca/EN/City-Hall/Access-Privacy/Pages/Access-to-Information-Request.aspx"
+      }
+    },
+    {
+      "id": "ubc",
+      "name": "University of British Columbia",
+      "short": "UBC",
+      "kind": "university",
+      "region": "British Columbia",
+      "statute": "BC FIPPA",
+      "operatorSlug": "university-of-british-columbia",
+      "why": "Campus parking enforcement, across the Vancouver and Okanagan campuses.",
+      "portal": "https://ubc.ca1.qualtrics.com/jfe/form/SV_3JWhLTzfVTAnsbA",
+      "card": true,
+      "address": "Freedom of Information Specialist, Office of the University Counsel, The University of British Columbia, 6328 Memorial Road, Vancouver BC V6T 1Z2",
+      "fee": "$10",
+      "payee": null,
+      "form": {
+        "label": "Request for general information (PDF)",
+        "url": "https://universitycounsel.ubc.ca/sites/default/files/media-uploads/files/FOI-Request-for-General-Information-2025.pdf"
+      },
+      "idRequired": "Government or UBC photo ID, required before release of personal information.",
+      "responseTime": null,
+      "phone": "604-822-1897",
+      "email": "access.and.privacy@ubc.ca",
+      "warnings": [
+        "$10, not $5 — this is the British Columbia rate.",
+        "Whether one request covers UBC Okanagan as well as Vancouver is not stated outright. The University Counsel's office says it processes all FOI requests, which implies it does. Confirm before filing two."
+      ],
+      "source": {
+        "label": "UBC — Making a freedom of information request",
+        "url": "https://universitycounsel.ubc.ca/making-freedom-information-foi-request"
+      }
+    },
+    {
+      "id": "cbsa",
+      "name": "Canada Border Services Agency",
+      "short": "CBSA",
+      "kind": "federal",
+      "region": "Canada",
+      "statute": "Access to Information Act",
+      "operatorSlug": "canada-border-services-agency",
+      "why": "Operates plate readers at land border crossings.",
+      "portal": "https://atip-aiprp.tbs-sct.gc.ca/",
+      "card": true,
+      "address": "Access to Information and Privacy Coordinator, Canada Border Services Agency, 333 North River Road, 14th Floor, Tower A, Vanier ON K1A 0L8",
+      "fee": "$5",
+      "payee": "Receiver General for Canada",
+      "form": {
+        "label": "Form TBS/SCT 350-57",
+        "url": "http://www.tbs-sct.gc.ca/tbsf-fsct/350-57-eng.asp"
+      },
+      "idRequired": "No photo ID for general requests. Full name and mailing address required.",
+      "responseTime": null,
+      "phone": "1-800-461-9999",
+      "email": "atip-aiprp@cbsa-asfc.gc.ca",
+      "warnings": [
+        "Only the online route accepts credit card payment, per their own page."
+      ],
+      "source": {
+        "label": "CBSA — Requesting information",
+        "url": "https://www.cbsa-asfc.gc.ca/agency-agence/reports-rapports/pia-efvp/atip-aiprp/req-dem-info-eng.html"
+      }
+    },
+    {
+      "id": "sudbury",
+      "name": "Greater Sudbury Police Service",
+      "short": "Sudbury",
+      "kind": "police",
+      "region": "Greater Sudbury, Ontario",
+      "statute": "MFIPPA",
+      "operatorSlug": "greater-sudbury-police-service",
+      "why": "Runs stationary ALPR sites and publishes about them.",
+      "portal": null,
+      "card": false,
+      "address": "Greater Sudbury Police Service, 190 Brady Street, Sudbury ON P3E 1C7",
+      "fee": "$5",
+      "payee": null,
+      "form": {
+        "label": "FOI request form (DOCX)",
+        "url": "https://www.gsps.ca/request-for-information/freedom-of-information/"
+      },
+      "idRequired": "One piece of identification showing full name, date of birth, photograph and signature.",
+      "responseTime": null,
+      "phone": "705-675-9171 ext. 6704",
+      "email": "FOI@gsps.ca",
+      "warnings": [
+        "In person by appointment only, Monday to Friday. No mail route is published, which makes this difficult to file from out of town."
+      ],
+      "source": {
+        "label": "GSPS — Freedom of information",
+        "url": "https://www.gsps.ca/request-for-information/freedom-of-information/"
+      }
+    },
+    {
+      "id": "chatham-kent",
+      "name": "Chatham-Kent Police Service",
+      "short": "Chatham-Kent",
+      "kind": "police",
+      "region": "Chatham-Kent, Ontario",
+      "statute": "MFIPPA",
+      "operatorSlug": "chatham-kent-police-service",
+      "why": "Cameras mapped in the municipality.",
+      "portal": null,
+      "card": false,
+      "address": "Freedom of Information Unit, Chatham-Kent Police Service, 24 Third Street, Chatham ON N7M 2M5",
+      "fee": "$5",
+      "payee": "Chatham-Kent Police Service",
+      "form": {
+        "label": "FOI application form (PDF)",
+        "url": "https://ckpolice.com/wp-content/uploads/2026/07/FOI-Application-FORM-2026.pdf"
+      },
+      "idRequired": "Name, full address, date of birth and telephone number.",
+      "responseTime": null,
+      "phone": "519-436-6600 ext. 80224",
+      "email": null,
+      "warnings": [
+        "Their page still states 30 days. Ontario moved to 45 business days on 1 July 2026.",
+        "Cash, cheque or money order accepted."
+      ],
+      "source": {
+        "label": "CKPS — Freedom of information",
+        "url": "https://ckpolice.com/freedom-of-information/"
+      }
+    },
+    {
+      "id": "sault",
+      "name": "Sault Ste. Marie Police Service",
+      "short": "Sault Ste. Marie",
+      "kind": "police",
+      "region": "Sault Ste. Marie, Ontario",
+      "statute": "MFIPPA",
+      "operatorSlug": "sault-ste-marie-police-service",
+      "why": "Cameras mapped in the city.",
+      "portal": null,
+      "card": false,
+      "address": "Information Services, F.O.I./R.O.I. Office, Sault Ste. Marie Police Service, 580 Second Line East, Sault Ste. Marie ON P6B 4K1",
+      "fee": "$5, stated as non-waivable",
+      "payee": "Sault Ste. Marie Police Service",
+      "form": {
+        "label": "Request form (PDF)",
+        "url": "https://saultpolice.ca/wp-content/uploads/2020/01/SSMPS-Request-Form.pdf"
+      },
+      "idRequired": "Government photo ID for occurrence reports; signed authorization for a third party's information.",
+      "responseTime": null,
+      "phone": "705-949-6300",
+      "email": null,
+      "warnings": [
+        "Their page still states 30 days.",
+        "Cash, certified cheque or money order. No FOI-specific phone extension is published."
+      ],
+      "source": {
+        "label": "SSMPS — Information requests",
+        "url": "https://saultpolice.ca/what-we-do/our-services/information-requests/"
+      }
+    },
+    {
+      "id": "opp",
+      "name": "Ontario Provincial Police",
+      "short": "OPP",
+      "kind": "police",
+      "region": "Ontario",
+      "statute": "Ontario FIPPA",
+      "why": "Provincial force. Requests are handled by the Ministry of the Solicitor General, not by the OPP directly, and fall under FIPPA rather than MFIPPA.",
+      "portal": null,
+      "card": false,
+      "address": "Freedom of Information and Privacy Coordinator, Ministry of the Solicitor General, 200 First Avenue West, 4th Floor, North Bay ON P1B 3B9",
+      "fee": "$5",
+      "payee": "Minister of Finance",
+      "form": {
+        "label": "Form ON00089E",
+        "url": "https://forms.mgcs.gov.on.ca/en/dataset/on00089"
+      },
+      "idRequired": "Personal-information requests only.",
+      "responseTime": "45 business days",
+      "phone": "705-494-3080, or 1-855-273-3080",
+      "email": "foi.solgen@ontario.ca",
+      "warnings": [
+        "The ministry's own FOI page no longer resolves and has not been migrated to a findable replacement. This address comes from Ontario's Directory of Institutions, cross-checked against ministry correspondence. Confirm by phone before mailing."
+      ],
+      "source": {
+        "label": "Ontario Directory of Institutions",
+        "url": "https://www.ontario.ca/page/freedom-information-request"
+      }
+    },
+    {
+      "id": "ottawa",
+      "name": "Ottawa Police Service",
+      "short": "Ottawa",
+      "kind": "police",
+      "region": "Ottawa, Ontario",
+      "statute": "MFIPPA",
+      "portal": null,
+      "card": false,
+      "address": "Ottawa Police Service, Attention: Freedom of Information, P.O. Box 9634, Station T, Ottawa ON K1G 6H5",
+      "fee": "$5",
+      "payee": "Treasurer of the City of Ottawa",
+      "form": null,
+      "idRequired": "Two pieces of government-issued ID, one with a photograph.",
+      "responseTime": null,
+      "phone": "613-236-1222",
+      "email": "FOIRequests@ottawapolice.ca",
+      "warnings": [
+        "Payee is the City Treasurer, not the police service.",
+        "Their dedicated MFIPPA page would not load on any attempt. The fee and payee here come from the indexed copy of that page rather than a live read — verify by phone.",
+        "Do not confuse this with the $74.58 occurrence-report product. For records about the ALPR programme you want the $5 route."
+      ],
+      "source": {
+        "label": "Ottawa Police — Requests and applications",
+        "url": "https://www.ottawapolice.ca/en/reports-and-services/requests-and-applications/request-a-copy-of-a-police-report/"
+      }
+    },
+    {
+      "id": "hamilton",
+      "name": "Hamilton Police Service",
+      "short": "Hamilton",
+      "kind": "police",
+      "region": "Hamilton, Ontario",
+      "statute": "MFIPPA",
+      "portal": null,
+      "card": false,
+      "address": "Hamilton Police Service, Attn: Freedom of Information Coordinator, FOI Branch, 155 King William Street, Hamilton ON L8N 4C1",
+      "fee": "$5, non-waivable and non-refundable",
+      "payee": "Hamilton Police Service",
+      "form": null,
+      "idRequired": null,
+      "responseTime": "45 business days",
+      "phone": "905-546-4727",
+      "email": null,
+      "warnings": [
+        "Cash, debit, Visa and Mastercard accepted in person."
+      ],
+      "source": {
+        "label": "Hamilton Police — File an FOI request",
+        "url": "https://hamiltonpolice.on.ca/how-to/file-foi-request"
+      }
+    },
+    {
+      "id": "durham",
+      "name": "Durham Regional Police Service",
+      "short": "Durham",
+      "kind": "police",
+      "region": "Durham Region, Ontario",
+      "statute": "MFIPPA",
+      "why": "The best-built filing route of any service we looked at: submit and pay online in one step.",
+      "portal": "https://members.drps.ca/onlinepayment/accessrequest/Default.aspx",
+      "card": true,
+      "address": "Durham Regional Police Service, Information and Privacy Unit, P.O. Box 911, Whitby ON L1N 0B8",
+      "fee": "$5",
+      "payee": "Durham Regional Police Service",
+      "form": {
+        "label": "Access request form (PDF)",
+        "url": "https://www.drps.ca/online-services/freedom-of-information-requests/"
+      },
+      "idRequired": "Photocopy of valid photo identification.",
+      "responseTime": "45 business days",
+      "phone": "1-888-579-1520, press 0",
+      "email": null,
+      "warnings": [],
+      "source": {
+        "label": "DRPS — Freedom of information requests",
+        "url": "https://www.drps.ca/online-services/freedom-of-information-requests/"
+      }
+    },
+    {
+      "id": "niagara",
+      "name": "Niagara Regional Police Service",
+      "short": "Niagara",
+      "kind": "police",
+      "region": "Niagara Region, Ontario",
+      "statute": "MFIPPA",
+      "portal": null,
+      "card": false,
+      "address": "Information and Privacy Unit, Niagara Regional Police Service, 5700 Valley Way, Niagara Falls ON L2E 1X8",
+      "fee": "$5, plus $7.50 per 15 minutes of search and preparation",
+      "payee": "Niagara Regional Police Service",
+      "form": {
+        "label": "FOI request form (PDF)",
+        "url": "https://www.niagarapolice.ca/what-we-do/records-information-management/freedom-of-information-requests/"
+      },
+      "idRequired": "Two pieces of government-issued ID, one with a photograph. Copies must be notarized if you are mailing.",
+      "responseTime": null,
+      "phone": "905-688-4111, option 3, ext. 1024560",
+      "email": null,
+      "warnings": [
+        "Requests are not accepted by fax or email. Drop off at a district front desk or post it.",
+        "No cash by mail.",
+        "Notarized ID copies are unusual and add cost and delay — budget for it."
+      ],
+      "source": {
+        "label": "NRPS — Freedom of information requests",
+        "url": "https://www.niagarapolice.ca/what-we-do/records-information-management/freedom-of-information-requests/"
+      }
+    },
+    {
+      "id": "windsor",
+      "name": "Windsor Police Service",
+      "short": "Windsor",
+      "kind": "police",
+      "region": "Windsor, Ontario",
+      "statute": "MFIPPA",
+      "portal": null,
+      "card": false,
+      "address": "Information and Privacy Unit, Windsor Police Service, 150 Goyeau Street, P.O. Box 60, Windsor ON N9A 6J5",
+      "fee": "$5",
+      "payee": "City of Windsor",
+      "form": {
+        "label": "Access request form (PDF)",
+        "url": "https://windsorpolice.ca/documents/services/info-requests/Access%20Request%20Form.pdf"
+      },
+      "idRequired": "Two approved forms of identification.",
+      "responseTime": null,
+      "phone": "519-258-6111",
+      "email": null,
+      "warnings": [
+        "Payee is the City of Windsor, not the police service.",
+        "Their page states 30 to 60 days. Ontario moved to 45 business days on 1 July 2026.",
+        "No FOI-specific phone line is published."
+      ],
+      "source": {
+        "label": "Windsor Police — Freedom of information",
+        "url": "https://windsorpolice.ca/services/info-requests/freedom-of-information"
+      }
+    },
+    {
+      "id": "london",
+      "name": "London Police Service",
+      "short": "London",
+      "kind": "police",
+      "region": "London, Ontario",
+      "statute": "MFIPPA",
+      "portal": null,
+      "card": false,
+      "address": "London Police Service, Freedom of Information, Box 3415, London ON N6A 4K9",
+      "fee": "$5, stated as not waivable",
+      "payee": "London Police Service",
+      "form": null,
+      "idRequired": null,
+      "responseTime": null,
+      "phone": "519-661-5603",
+      "email": null,
+      "warnings": [
+        "Cash, debit and credit accepted in person by appointment only. There is a locked drop box outside the office."
+      ],
+      "source": {
+        "label": "London Police — Freedom of information requests",
+        "url": "https://www.londonpolice.ca/services/freedom-of-information-requests-and-access-to-police-records/freedom-of-information-requests/"
+      }
+    },
+    {
+      "id": "spvm",
+      "name": "Service de police de la Ville de Montréal",
+      "short": "SPVM",
+      "kind": "police",
+      "region": "Montréal, Québec",
+      "statute": "Quebec Access to Information Act",
+      "why": "Quebec's regime works differently from the rest of the country, and faster.",
+      "portal": null,
+      "card": false,
+      "address": "Accès à l'information SPVM, CP 47583 CSP Plateau Mont-Royal, Montréal (Québec) H2H 2S8",
+      "fee": "No flat application fee. Administrative documents are charged at $0.42 per page.",
+      "payee": "Ville de Montréal",
+      "form": {
+        "label": "Form F.470-16 (PDF, French)",
+        "url": "https://spvm.qc.ca/upload/02/f_470_16_demande_rapport_evenement.pdf"
+      },
+      "idRequired": "Not required for administrative document requests. ID is required only for operational documents.",
+      "responseTime": "20 days, extendable by 10",
+      "phone": null,
+      "email": "responsable.information@spvm.qc.ca",
+      "warnings": [
+        "Mail only. Fax submissions were discontinued in May 2025.",
+        "Nothing to pay up front for a policy or records request, which makes this the cheapest filing on this list."
+      ],
+      "source": {
+        "label": "SPVM — Accès à l'information",
+        "url": "https://spvm.qc.ca/fr/Fiches/Details/Acces-a-linformation"
+      }
+    },
+    {
+      "id": "vpd",
+      "name": "Vancouver Police Department",
+      "short": "Vancouver",
+      "kind": "police",
+      "region": "Vancouver, British Columbia",
+      "statute": "BC FIPPA",
+      "portal": null,
+      "card": false,
+      "address": "Attention: Information and Privacy Unit, Vancouver Police Department, 3585 Graveley Street, Vancouver BC V5K 5J5",
+      "fee": null,
+      "payee": null,
+      "form": {
+        "label": "FOI request form (PDF)",
+        "url": "https://vpd.ca/wp-content/uploads/2026/08/request-for-foi-fillable-v2025.pdf"
+      },
+      "idRequired": "Government photo ID. If filing by mail or email, they ask for a copy of the ID plus a photograph of you holding it.",
+      "responseTime": null,
+      "phone": "604-717-3071",
+      "email": "foi@vpd.ca",
+      "warnings": [
+        "Their page states no fee at all. Do not assume the City of Vancouver's rate — the VPD is a separate public body and is silent on this. Confirm by phone before sending money."
+      ],
+      "source": {
+        "label": "VPD — Information and privacy",
+        "url": "https://vpd.ca/contact-us/information-privacy/"
+      }
+    },
+    {
+      "id": "calgary",
+      "name": "Calgary Police Service",
+      "short": "Calgary",
+      "kind": "police",
+      "region": "Calgary, Alberta",
+      "statute": "Alberta Access to Information Act",
+      "portal": null,
+      "card": false,
+      "address": "Calgary Police Service, Access and Privacy Section, Mail Code 640, 5111 47 St. N.E., Calgary AB T3J 3R2",
+      "fee": "$25 for general records. No fee for your own personal information.",
+      "payee": "Calgary Police Service",
+      "form": {
+        "label": "ATIA request form (PDF)",
+        "url": "https://www.calgary.ca/content/dam/www/cps/documents/ATIA%20Request%20Form%20-%20web%20version.pdf"
+      },
+      "idRequired": "Government photo ID plus a photograph of you holding it, or in-person verification at a district office.",
+      "responseTime": null,
+      "phone": "403-428-8484",
+      "email": "access@calgarypolice.ca",
+      "warnings": [
+        "$25, five times the Ontario rate.",
+        "The form may be submitted by email, but payment is by phone, cheque, money order or in person."
+      ],
+      "source": {
+        "label": "Calgary Police — Access to information requests",
+        "url": "https://www.calgarypolice.ca/services/access-to-information-requests.html"
+      }
+    },
+    {
+      "id": "edmonton",
+      "name": "Edmonton Police Service",
+      "short": "Edmonton",
+      "kind": "police",
+      "region": "Edmonton, Alberta",
+      "statute": "Alberta Access to Information Act",
+      "portal": "https://epsca.secureocp.com/",
+      "card": false,
+      "address": "Edmonton Police Service, 9620 103A Avenue, Edmonton AB T5H 0H7",
+      "fee": "$25 for general records, plus reproduction costs if the estimate exceeds $150. No fee for personal requests.",
+      "payee": "City of Edmonton",
+      "form": null,
+      "idRequired": "Two pieces of ID, one government-issued.",
+      "responseTime": "30 business days",
+      "phone": "780-421-3346",
+      "email": "FOIPP2@edmontonpolice.ca",
+      "warnings": [
+        "Payee is the City of Edmonton, not the police service.",
+        "A form is referenced on their page but no direct link is published. Request it by phone or use the portal.",
+        "Whether the portal takes card payment is not stated."
+      ],
+      "source": {
+        "label": "EPS — ATIA requests",
+        "url": "https://www.edmontonpolice.ca/AboutEPS/HowToRequestInformation/ATIARequests"
+      }
+    }
+  ],
+  "notAccessible": [
+    {
+      "name": "407 ETR Concession Company Limited",
+      "operatorSlug": "407-etr",
+      "what": "We map its cameras, so this question comes up: you cannot file a freedom-of-information request against 407 ETR. It is a private consortium operating Highway 407 under a 99-year concession signed in 1999, it does not appear in Ontario's Directory of Institutions, and it publishes no access-to-records process.",
+      "nuance": "Its privacy notice states that \"both PIPEDA and FIPPA apply to our collection, use, and disclosure of Personal Information.\" That is a statement about privacy obligations, not a concession that it is an institution subject to access requests. The only route it offers is an individual asking for their own personal data, in writing, to the Customer Advocacy and Privacy Office, 6300 Steeles Avenue West, Woodbridge ON L4H 1J1.",
+      "instead": "File with the Ministry of Transportation under FIPPA. The Province is the counterparty to the concession and holds the contract, oversight and correspondence records. Expect third-party commercial-information exemptions to be raised.",
+      "gap": "We could not confirm whether the Highway 407 Act, 1998 contains a provision expressly applying or disapplying FIPPA to the concessionaire. CanLII refused the request and Ontario's e-Laws returned an empty page. What is above rests on 407 ETR's own privacy notice and its absence from the Directory of Institutions. If you are relying on this, check with Ontario's Information and Privacy Commissioner on 1-800-387-0073 first, and tell us what they say."
+    }
+  ]
+}

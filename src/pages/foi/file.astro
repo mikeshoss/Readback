@@ -1,0 +1,213 @@
+---
+import Base from '../../layouts/Base.astro';
+import routes from '../../data/foi-routes.json';
+import foi from '../../data/foi.json';
+import { cameras, num, slugify } from '../../lib/alpr';
+
+const { institutions, traps, notAccessible, verified } = routes;
+
+// Mapped-camera counts come from the live dataset rather than being typed in
+// here, so this page cannot drift from the map.
+const mapped = (slug?: string) =>
+  slug ? cameras.filter((c: any) => c.operator && slugify(c.operator) === slug).length : 0;
+
+// Which institutions we have already filed with, so the page can say so
+// rather than sending someone to duplicate work.
+const filedWith = new Set(foi.requests.map((r: any) => r.institution));
+
+const KIND_LABEL: Record<string, string> = {
+  police: 'Police service',
+  municipal: 'Municipality',
+  provincial: 'Provincial ministry',
+  federal: 'Federal agency',
+  university: 'University',
+};
+
+// Easiest first: a card-payment portal means no cheque, no post, no trip.
+const rank = (i: any) => (i.portal && i.card ? 0 : i.portal ? 1 : 2);
+const sorted = [...institutions].sort((a, b) => rank(a) - rank(b) || mapped(b.operatorSlug) - mapped(a.operatorSlug));
+const easy = sorted.filter((i) => rank(i) === 0);
+---
+<Base
+  title="Where to file"
+  titleFull="How to File an ALPR Records Request in Canada"
+  description="How to file a records request about plate readers with 23 Canadian police services, ministries and operators. Fees, payees, forms and the traps."
+  breadcrumbs={[{ name: 'Paper trail', href: '/foi' }, { name: 'Where to file', href: '/foi/file' }]}>
+  <p class="crumb"><a href="/foi">← Our own requests</a></p>
+  <h1>File your own</h1>
+  <p class="lede">
+    We publish <a href="/foi">the requests we send</a> so anyone can copy them. This page is the
+    other half: exactly where each organisation takes a request, what it costs, and who the
+    cheque is made out to. Every line comes from the organisation's own page, cited underneath.
+    Where their page does not say, we say that instead of guessing.
+  </p>
+
+  <div class="note">
+    <strong>Anyone can file.</strong> You do not need a reason, a lawyer, or to live in the
+    jurisdiction. In Ontario it costs $5 and the organisation has to answer. That is the whole
+    mechanism, and it is the only way to learn what a camera network is actually configured to do.
+  </div>
+
+  <h2>Four things that catch people out</h2>
+  <div class="traps">
+    {traps.map((t: any) => (
+      <div class="trap">
+        <h3>{t.t}</h3>
+        <p>{t.d}</p>
+        {t.source && <p class="srcline"><a href={t.source.url} rel="noopener">{t.source.label}</a></p>}
+      </div>
+    ))}
+  </div>
+
+  {easy.length > 0 && (
+    <>
+      <h2>Easiest to file</h2>
+      <p class="meta">
+        These take a card online, so there is no cheque and nothing to post:
+        {' '}{easy.map((i: any, n: number) => (
+          <>{n > 0 && ', '}<a href={`#${i.id}`}>{i.short}</a></>
+        ))}.
+      </p>
+    </>
+  )}
+
+  <h2>Every route we have verified</h2>
+  <p class="meta">
+    {institutions.length} organisations, ordered by how easy they are to file with. Checked {verified}.
+  </p>
+
+  {sorted.map((i: any) => {
+    const n = mapped(i.operatorSlug);
+    const filed = filedWith.has(i.name);
+    return (
+      <section class="inst" id={i.id}>
+        <div class="inst-head">
+          <div>
+            <h3>{i.name}</h3>
+            <div class="inst-sub">
+              <span class="kind">{KIND_LABEL[i.kind] ?? i.kind}</span>
+              <span class="statute">{i.statute}</span>
+              <span class="where">{i.region}</span>
+            </div>
+          </div>
+          <div class="badges">
+            {i.portal && i.card && <span class="badge easy">Online, pays by card</span>}
+            {i.portal && !i.card && <span class="badge">Online form</span>}
+            {!i.portal && <span class="badge post">Mail or in person</span>}
+            {filed && <span class="badge filed">We have filed</span>}
+          </div>
+        </div>
+
+        {i.why && <p class="why">{i.why}</p>}
+        {n > 0 && (
+          <p class="mappedline">
+            <a href={`/alpr/operator/${i.operatorSlug}`}>{num(n)} mapped {n === 1 ? 'camera' : 'cameras'} on our map →</a>
+          </p>
+        )}
+
+        <dl>
+          <dt>Fee</dt>
+          <dd>{i.fee ?? <span class="unknown">Not stated on their page. Confirm before sending money.</span>}</dd>
+
+          <dt>Cheque payable to</dt>
+          <dd>
+            {i.payee
+              ? <strong class={i.payee !== i.name ? 'payee-warn' : ''}>{i.payee}</strong>
+              : <span class="unknown">Not stated. Confirm by phone.</span>}
+          </dd>
+
+          <dt>How to send it</dt>
+          <dd>
+            {i.portal
+              ? <><a href={i.portal} rel="noopener">Online portal →</a>{i.card ? ' (takes a card)' : ''}<br /></>
+              : null}
+            {i.address}
+          </dd>
+
+          {i.form && <><dt>Form</dt><dd><a href={i.form.url} rel="noopener">{i.form.label} →</a></dd></>}
+
+          <dt>Identification</dt>
+          <dd>{i.idRequired ?? <span class="unknown">Not stated on their page.</span>}</dd>
+
+          <dt>They must respond within</dt>
+          <dd>{i.responseTime ?? <span class="unknown">Not stated on their page.</span>}</dd>
+
+          <dt>Contact</dt>
+          <dd>
+            {i.phone ?? <span class="unknown">No number published</span>}
+            {i.email && <> · <a href={`mailto:${i.email}`}>{i.email}</a></>}
+          </dd>
+        </dl>
+
+        {i.warnings && i.warnings.length > 0 && (
+          <ul class="warn">
+            {i.warnings.map((w: string) => <li>{w}</li>)}
+          </ul>
+        )}
+
+        <p class="srcline">Source: <a href={i.source.url} rel="noopener">{i.source.label}</a></p>
+      </section>
+    );
+  })}
+
+  <h2>One you cannot file against</h2>
+  {notAccessible.map((x: any) => (
+    <section class="inst blocked">
+      <div class="inst-head"><div><h3>{x.name}</h3></div><div class="badges"><span class="badge no">Not an institution</span></div></div>
+      <p class="why">{x.what}</p>
+      <dl>
+        <dt>The nuance</dt><dd>{x.nuance}</dd>
+        <dt>What to do instead</dt><dd>{x.instead}</dd>
+      </dl>
+      <div class="note gap"><strong>We could not fully verify this.</strong> {x.gap}</div>
+      {x.operatorSlug && mapped(x.operatorSlug) > 0 && (
+        <p class="mappedline"><a href={`/alpr/operator/${x.operatorSlug}`}>Its {num(mapped(x.operatorSlug))} mapped cameras →</a></p>
+      )}
+    </section>
+  ))}
+
+  <div class="note">
+    <strong>Filed one? Tell us.</strong> We will track it here alongside ours, and publish what
+    comes back. If a detail on this page is wrong or out of date, send the correction and we will
+    fix it and say that we did.
+    {' '}<a href="mailto:themiltonrecord@gmail.com">themiltonrecord@gmail.com</a>
+  </div>
+
+  <style>
+    .crumb { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .crumb a { color: var(--toll); text-decoration: none; }
+    .traps { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0.7rem; margin: 1rem 0 1.6rem; }
+    .trap { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--fleet); border-radius: 10px; padding: 0.8rem 0.95rem; }
+    .trap h3 { font-size: 0.92rem; margin: 0 0 0.35rem; }
+    .trap p { margin: 0; color: var(--muted); font-size: 0.85rem; }
+    .inst { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.15rem; margin: 0.9rem 0; scroll-margin-top: 1rem; }
+    .inst.blocked { border-left: 3px solid var(--police); }
+    .inst-head { display: flex; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; align-items: flex-start; }
+    .inst h3 { font-size: 1.05rem; margin: 0; }
+    .inst-sub { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.2rem; font-size: 0.75rem; color: var(--muted); }
+    .inst-sub .statute { color: var(--border-cat); }
+    .badges { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .badge { font-size: 0.68rem; font-weight: 700; border-radius: 999px; padding: 0.08rem 0.5rem; color: var(--muted); background: var(--panel-2); border: 1px solid var(--line); }
+    .badge.easy { color: var(--private); background: rgba(88,214,163,0.14); border-color: transparent; }
+    .badge.post { color: var(--muted); }
+    .badge.filed { color: var(--toll); background: rgba(77,163,255,0.14); border-color: transparent; }
+    .badge.no { color: var(--police); background: rgba(255,90,95,0.14); border-color: transparent; }
+    .why { color: var(--muted); font-size: 0.88rem; margin: 0.5rem 0 0.3rem; }
+    .mappedline { margin: 0.2rem 0 0.5rem; font-size: 0.85rem; }
+    .mappedline a { color: var(--toll); text-decoration: none; }
+    .inst dl { margin: 0.6rem 0 0; display: grid; grid-template-columns: 11rem 1fr; gap: 0.3rem 0.8rem; }
+    .inst dt { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); padding-top: 0.15rem; }
+    .inst dd { margin: 0; font-size: 0.88rem; color: var(--text); }
+    .inst dd a { color: var(--toll); text-decoration: none; }
+    .payee-warn { color: var(--fleet); }
+    .unknown { color: var(--fleet); font-style: italic; font-size: 0.85rem; }
+    .warn { margin: 0.7rem 0 0; padding-left: 1.1rem; }
+    .warn li { color: var(--muted); font-size: 0.84rem; margin-bottom: 0.25rem; }
+    .srcline { margin-top: 0.7rem; font-size: 0.76rem; color: var(--muted); }
+    .srcline a { color: var(--toll); text-decoration: none; }
+    .meta { color: var(--muted); font-size: 0.88rem; }
+    .meta a { color: var(--toll); text-decoration: none; }
+    .note.gap { border-left-color: var(--fleet); margin-top: 0.8rem; }
+    @media (max-width: 620px) { .inst dl { grid-template-columns: 1fr; gap: 0.1rem; } .inst dt { margin-top: 0.5rem; } }
+  </style>
+</Base>
