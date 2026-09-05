@@ -1,6 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
 import foi from '../data/foi.json';
+import { statSync, existsSync } from 'node:fs';
+
+// Published documents live in public/foi/. Size is read at build time so the
+// page cannot advertise a file that is not there: a broken link on the one
+// page whose whole point is "here is the paper" would be the worst place on
+// the site for it.
+const docInfo = (file: string) => {
+  const p = new URL(`../../public${file}`, import.meta.url).pathname;
+  if (!existsSync(p)) return null;
+  const kb = statSync(p).size / 1024;
+  return { size: kb >= 1024 ? `${(kb / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(kb))} KB` };
+};
+
+const DOC_KIND: Record<string, string> = {
+  form: 'Request form',
+  acknowledgment: 'Acknowledgment',
+  response: 'Response',
+  records: 'Records released',
+  fee: 'Fee notice',
+  correspondence: 'Correspondence',
+};
 
 const STATUS_LABELS: Record<string, string> = {
   drafted: 'Drafted',
@@ -66,6 +87,28 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
           <span class="filing-how">{r.submission.how}</span>
           {r.submission.portal && <a href={r.submission.portal} rel="noopener">File online →</a>}
         </div>
+        {r.documents && r.documents.length > 0 && (
+          <div class="docs">
+            <div class="docs-head">Documents</div>
+            <ul>
+              {r.documents.map((d: any) => {
+                const info = docInfo(d.file);
+                return (
+                  <li>
+                    <a href={d.file} rel="noopener">
+                      <span class="doc-kind">{DOC_KIND[d.kind] ?? 'Document'}</span>{d.label}
+                    </a>
+                    <span class="doc-meta">
+                      PDF{info ? ` · ${info.size}` : ''}{d.date ? ` · ${fmt(d.date)}` : ''}
+                      {d.redacted !== false ? ' · redacted' : ''}
+                    </span>
+                    {d.note && <span class="doc-note">{d.note}</span>}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
         <details>
           <summary>Read the full request ({r.items.length} items)</summary>
           <div class="letter">
@@ -115,6 +158,21 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
     .filing-how { color: var(--text); }
     .filing a { color: var(--toll); }
     .filing-addr { color: var(--muted); }
+    .docs { margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px dashed var(--line); }
+    .docs-head {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.35rem;
+    }
+    .docs ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+    .docs a { color: var(--toll); text-decoration: none; font-size: 0.86rem; }
+    .docs a:hover { text-decoration: underline; }
+    .doc-kind {
+      display: inline-block; margin-right: 0.4rem; padding: 0.02rem 0.4rem;
+      border-radius: 999px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--border-cat); background: rgba(176,122,255,0.14);
+    }
+    .doc-meta { display: block; font-size: 0.72rem; color: var(--muted); margin-top: 0.1rem; }
+    .doc-note { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
     details { margin-top: 0.7rem; }
     summary { cursor: pointer; color: var(--toll); font-size: 0.86rem; }
     .letter { margin-top: 0.8rem; border-left: 3px solid var(--line); padding-left: 1rem; font-size: 0.86rem; }
