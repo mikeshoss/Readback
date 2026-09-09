@@ -25,12 +25,16 @@ is where that base lives. Two rules govern it:
 
 - **Claims** need a primary source before they reach a page. Inference and
   reported-but-unverified material stays in `data/research/` with a flag.
-- **Entries** — the camera locations themselves — currently come from
+- **Entries** — the camera locations themselves — mostly come from
   OpenStreetMap, which means somebody mapped them, not that anyone verified
   them. A node link is provenance for the record, not proof of the fact. The
   goal is that every entry traces to a citable document (an FOI response, a
-  board minute, a budget line, a vendor filing); we are not there yet, and
-  the site says so rather than implying otherwise.
+  board minute, a budget line, a vendor filing), and the first entries that
+  do are now on the map: where an operator publishes its own camera register,
+  that record takes the point and says so. Every camera carries a
+  `provenance` value and the map draws the difference — a white ring means
+  the force publishes that one itself. Most of the dataset is still crowd
+  data, and the site says which is which rather than implying otherwise.
 
 We also publish [what this site collects about its own
 readers](https://readback.ofrecord.ca/tracking), to the same standard.
@@ -62,6 +66,7 @@ npm run dev      # live reload at localhost:4321
 Refresh the data from OpenStreetMap and the news feeds:
 
 ```
+npm run authoritative  # re-pull operator-published camera lists, merge, no Overpass
 npm run data     # cameras + province assignment (hits Overpass; takes a few minutes)
 npm run news     # RSS sweep into public/data/news.json + a review queue
 npm run og       # regenerate the share card and favicons
@@ -85,8 +90,11 @@ Deployment is direct upload, so **pushing to GitHub does not deploy.** Only
 - `src/lib/alpr.ts` — shared loaders and the quality floor for generated pages
 - `src/data/` — curated datasets: vendors, fleets, hardware, retention, FOI
   requests, tracking disclosures
-- `scripts/` — `build-cameras.mjs` (OSM pipeline), `fetch-news.mjs` (RSS),
-  `make-og.mjs` (share card)
+- `scripts/` — `build-cameras.mjs` (OSM pipeline), `fetch-authoritative.mjs`
+  and `merge-authoritative.mjs` (operator-published camera registers),
+  `fetch-news.mjs` (RSS), `make-og.mjs` (share card)
+- `data/authoritative/` — camera lists the operators publish themselves,
+  committed so a build never depends on a police portal being up
 - `data/research/` — sourced research base (every site claim traces here)
 - `data/raw/` — third-party datasets
 - `docs/` — deploy guide, pipeline design, map taxonomy, location discovery
@@ -98,6 +106,11 @@ Deployment is direct upload, so **pushing to GitHub does not deploy.** Only
 - Camera locations © OpenStreetMap contributors, licensed
   [ODbL 1.0](https://opendatacommons.org/licenses/odbl/), re-published under
   the same licence.
+- Operator-published camera registers carry their publisher's terms, not
+  ODbL, and are not ours to relicense. York Regional Police's list is
+  © 2024 York Regional Police BI, used non-commercially under the
+  [portal's terms](https://www.yrp.ca/en/crime-prevention/cctv-community-cameras.asp).
+  See `/data#licence`.
 - `data/raw/atlas-of-surveillance-*.csv` is the Electronic Frontier
   Foundation's [Atlas of Surveillance](https://atlasofsurveillance.org/),
   licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and

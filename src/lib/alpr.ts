@@ -6,13 +6,16 @@ import retentionData from '../data/retention.json';
 import foi from '../data/foi.json';
 
 export type Camera = {
-  id: number;
+  // An OSM node id (number) or an operator record id (string, e.g.
+  // "york-cctv-12"). Anything that links to openstreetmap.org must check.
+  id: number | string;
   lat: number;
   lon: number;
   province: string | null;
   // Which OSM tag put this node in the dataset — the denominator behind the
-  // tolling finding on /findings.
-  source: 'alpr_tagged' | 'toll_gantry' | 'border_control' | 'other';
+  // tolling finding on /findings. 'operator_published' means OSM never had it:
+  // the camera comes from the force's own list.
+  source: 'alpr_tagged' | 'toll_gantry' | 'border_control' | 'operator_published' | 'other';
   category: 'police_alpr' | 'toll' | 'border' | 'private';
   operator: string | null;
   rawOperator: string | null;
@@ -23,16 +26,49 @@ export type Camera = {
   photo: string | null;
   direction: number | null;
   tollMethod: string | null;
+  // --- provenance (see scripts/merge-authoritative.mjs) ---
+  // 'osm' — somebody mapped it. 'operator' — the institution publishes it.
+  provenance?: 'osm' | 'operator';
+  sourceId?: string;          // key into `sources`
+  siteId?: string | null;     // the operator's own identifier for the site
+  siteLabel?: string | null;  // intersection, as the operator names it
+  siteArea?: string | null;   // municipality
+  siteActive?: string | null; // date the operator says it went live
+  siteNote?: string | null;
+  osmId?: number | null;      // crowd node for the same camera, if any
+  notInOperatorList?: string; // crowd pin absent from that source's full list
+};
+
+// Operator-published sources, keyed by sourceId — name, portal page, licence,
+// the FOI that surfaced them, and what is claimed about ALPR at those sites.
+export type AuthoritativeSource = {
+  id: string;
+  operator: string;
+  province?: string;
+  sourceName: string;
+  sourcePage: string;
+  dataUrl: string;
+  attribution: string;
+  termsUrl?: string;
+  licence?: string;
+  complete?: boolean;
+  foi?: { requestId: string; file: string; found: string; note: string };
+  alprBasis?: { claim: string; source: string; url: string; confirmed: boolean };
 };
 
 const dataPath = new URL('../../public/data/cameras.json', import.meta.url).pathname;
 const data = JSON.parse(readFileSync(dataPath, 'utf8')) as {
   generated: string;
+  attribution: string;
   cameras: Camera[];
+  sources?: Record<string, AuthoritativeSource>;
 };
 
 export const cameras = data.cameras;
 export const generated = data.generated;
+export const attribution = data.attribution;
+export const sources = data.sources ?? {};
+export const sourceFor = (c: Camera) => (c.sourceId ? sources[c.sourceId] : undefined);
 
 export const CATEGORY_LABEL: Record<Camera['category'], string> = {
   police_alpr: 'Police ALPR',
@@ -48,6 +84,11 @@ export const slugify = (s: string) =>
     .replace(/^-|-$/g, '');
 
 export const osmNode = (id: number) => `https://www.openstreetmap.org/node/${id}`;
+
+// The OSM record for a camera, whichever way it reached the dataset: a crowd
+// pin's own id, or the corroborating node behind an adopted operator record.
+export const osmIdOf = (c: Camera): number | null =>
+  typeof c.id === 'number' ? c.id : (c.osmId ?? null);
 
 export const num = (n: number) => n.toLocaleString('en-CA');
 

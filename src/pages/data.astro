@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { cameras, generated, num } from '../lib/alpr';
+import { cameras, generated, num, sources } from '../lib/alpr';
 import { readFileSync, statSync, existsSync } from 'node:fs';
 
 // Sizes and timestamps are read from the actual published files at build time,
@@ -36,10 +36,10 @@ const files = [
 ].filter((f) => f.info);
 
 const fields = [
-  ['id', 'number', 'OpenStreetMap node ID. Append to openstreetmap.org/node/ for the source record and its full edit history.'],
+  ['id', 'number | string', 'A number is an OpenStreetMap node ID — append it to openstreetmap.org/node/ for the source record and its edit history. A string ("york-cctv-12") is a camera the operator publishes itself; sourceId says which list.'],
   ['lat, lon', 'number', 'Coordinates as recorded in OSM (WGS 84).'],
   ['province', 'string | null', 'Assigned at build time by point-in-polygon against OSM administrative boundaries (ISO3166-2 areas), not a geocoding service.'],
-  ['source', 'enum', 'Which OSM tag put this node in the dataset: alpr_tagged, toll_gantry, or border_control. This is the denominator behind the tolling finding.'],
+  ['source', 'enum', 'Which OSM tag put this node in the dataset: alpr_tagged, toll_gantry, or border_control — kept even when an operator record supersedes the node, so adopting a better source cannot quietly shrink the denominator behind the tolling finding. operator_published means OSM never had this camera at all.'],
   ['category', 'enum', 'Our classification layer, not an OSM tag: police_alpr, toll, border, private. Rules are in scripts/build-cameras.mjs.'],
   ['operator', 'string | null', 'Normalized operator name (e.g. "YRP" resolves to "York Regional Police"). null means OSM records no operator — true of a large share of the data.'],
   ['rawOperator', 'string | null', 'The original OSM value when normalization changed it, so you can see what we did.'],
@@ -48,6 +48,11 @@ const fields = [
   ['zone, cameraType, direction', 'string | number | null', 'Passed through from OSM tags where present.'],
   ['tollMethod', 'string | null', 'From the toll_method tag on gantries.'],
   ['photo', 'string | null', 'Community photograph URL where one exists. Currently only a handful, hosted on Wikimedia Commons.'],
+  ['provenance', 'enum', '"osm" — somebody mapped it. "operator" — the institution publishes it and the record is theirs. See below.'],
+  ['sourceId', 'string?', 'Key into the top-level sources object, which carries the publisher, the portal link, the licence, and the records request that surfaced it.'],
+  ['siteId, siteLabel, siteArea, siteActive, siteNote', 'string | null', "The operator's own identifier, intersection name, municipality, in-service date and note. No crowd pin carries any of these."],
+  ['osmId', 'number | null', 'The community node for the same camera where one exists, so an adopted record still credits the mapper who found it first.'],
+  ['notInOperatorList', 'string?', "Set on a crowd pin attributed to a force whose own complete published list does not contain it. A discrepancy we show rather than resolve."],
 ];
 
 const unattributed = cameras.filter((c: any) => !c.operator).length;
@@ -60,7 +65,11 @@ const dataset = {
   name: 'Readback — mapped ALPR and plate-reading cameras in Canada',
   description: 'Classified dataset of automated licence plate readers, toll gantries and border control points mapped in Canada, derived from OpenStreetMap with an added classification, operator-normalisation and province layer.',
   url: 'https://readback.ofrecord.ca/data',
+  // ODbL covers the OpenStreetMap-derived majority. Operator-published rows
+  // carry their publisher's terms instead, which is why usageInfo points at
+  // the full breakdown rather than letting one licence stand for all of it.
   license: 'https://opendatacommons.org/licenses/odbl/1-0/',
+  usageInfo: 'https://readback.ofrecord.ca/data#licence',
   creator: { '@type': 'Organization', name: 'Readback', url: 'https://readback.ofrecord.ca' },
   isBasedOn: 'https://www.openstreetmap.org/',
   spatialCoverage: { '@type': 'Place', name: 'Canada' },
@@ -120,6 +129,45 @@ const dataset = {
     </table>
   </div>
 
+  <h2 id="provenance">Where a camera came from</h2>
+  <p>
+    Every camera in this file carries a <code>provenance</code> value, because two very
+    different claims sit in the same dataset and flattening them would be the dishonest move.
+  </p>
+  <ul class="lic">
+    <li>
+      <strong><code>osm</code> — somebody mapped it.</strong> A contributor stood at a corner, or
+      looked at aerial imagery, and drew a point. That is provenance for the record, not proof of
+      the fact: the operator may be wrong, the camera may be gone, the vendor tag may be a guess.
+      {num(cameras.filter((c: any) => c.provenance !== 'operator').length)} of our
+      {' '}{num(cameras.length)} records are these.
+    </li>
+    <li>
+      <strong><code>operator</code> — the institution publishes it.</strong> The force's own
+      register of its own cameras, with its own site identifier, the intersection as it names it,
+      and the date it says the camera went live. {num(cameras.filter((c: any) => c.provenance === 'operator').length)}
+      {' '}records, and on the map they carry a white ring.
+    </li>
+  </ul>
+  <p>
+    Where both exist for one camera, the operator's record takes the point and keeps the
+    community node as <code>osmId</code> — the mapper who found it first still gets the link.
+    Where a crowd pin names a force whose own <em>complete</em> published list does not contain
+    it, we do not delete the pin and we do not trust it: it gets
+    {' '}<code>notInOperatorList</code>, and the discrepancy goes into a records request.
+    {' '}{num(cameras.filter((c: any) => c.notInOperatorList).length)} points are in that state
+    right now.
+  </p>
+  {Object.values(sources).map((s: any) => (
+    <p>
+      <strong>{s.sourceName}</strong> — {num(cameras.filter((c: any) => c.sourceId === s.id).length)}
+      {' '}cameras. <a href={s.sourcePage} rel="noopener">The publisher's page</a> ·
+      {' '}<a href={s.dataUrl} rel="noopener">the raw feed we read</a>.
+      {s.foi && <> {s.foi.note.replace(/\.$/, '')} — <a href="/foi">file {s.foi.file}</a>.</>}
+      {s.alprBasis && <> ALPR at these sites is {s.alprBasis.confirmed ? 'confirmed' : 'claimed but not confirmed camera by camera'}: {s.alprBasis.claim}, per <a href={s.alprBasis.url} rel="noopener">{s.alprBasis.source}</a>.</>}
+    </p>
+  ))}
+
   <h2>Reproducing the tolling finding</h2>
   <p>
     The headline claim on <a href="/findings">/findings</a> is checkable in three lines, which is
@@ -162,14 +210,23 @@ const dataset = {
     </li>
   </ul>
 
-  <h2>Licence and attribution</h2>
+  <h2 id="licence">Licence and attribution</h2>
   <ul class="lic">
     <li>
-      <strong>Camera data:</strong> © OpenStreetMap contributors, licensed under the
+      <strong>Camera data from OpenStreetMap:</strong> © OpenStreetMap contributors, licensed
+      under the
       {' '}<a href="https://opendatacommons.org/licenses/odbl/" rel="noopener">Open Database Licence (ODbL) 1.0</a>.
-      This dataset is a derivative database and is re-published under the same licence — if you
-      build on it, share alike and attribute OpenStreetMap.
+      That part of this dataset is a derivative database and is re-published under the same
+      licence — if you build on it, share alike and attribute OpenStreetMap.
     </li>
+    {Object.values(sources).map((s: any) => (
+      <li>
+        <strong>{s.sourceName}:</strong> {s.attribution}. These rows are <em>not</em> ODbL and are
+        not ours to relicense — {s.licence} We use them non-commercially, link every row back to
+        {' '}<a href={s.sourcePage} rel="noopener">the publisher's own record</a>, and pass the
+        restriction on to you rather than flattening it into the licence above.
+      </li>
+    ))}
     <li>
       <strong>Atlas of Surveillance:</strong> research in this project draws on the
       {' '}<a href="https://atlasofsurveillance.org/" rel="noopener">Electronic Frontier Foundation's Atlas of Surveillance</a>,

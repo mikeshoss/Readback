@@ -17,6 +17,26 @@ data changes. No servers, no database. Target runtime: GitHub Actions cron.
   necessarily newly *installed*. (Context: OSM ALPR tagging is growing
   ~10k nodes per 3 weeks globally — the mapping wave is itself a trend.)
 
+### Lane 1b — Cameras the OPERATOR publishes (running since 2026-09-09)
+`npm run authoritative` (fetch + merge, no Overpass) or as the first half of
+`npm run data`.
+- `scripts/fetch-authoritative.mjs` holds the registry of operator-published
+  camera lists and writes each to `data/authoritative/<id>.json` — committed,
+  so a build never depends on a police portal being up.
+- `scripts/merge-authoritative.mjs` folds them into the OSM-derived set
+  **before** the counts and before the change diff. The operator's record
+  takes the point; a crowd node within 150 m is absorbed and kept as `osmId`.
+- Two things it deliberately surfaces rather than smooths: a published site
+  nobody had mapped, and a crowd pin attributed to a force whose own
+  *complete* list does not contain it (`notInOperatorList`) — which is a
+  question for the force, and goes into the FOI.
+- A camera adopted from OSM keeps its original `source` tag, so the tolling
+  finding's denominator cannot shrink because we found a better record.
+- Licence is per-source, not global: York's data is non-commercial and is not
+  ODbL. `attributionFor()` builds the line; /data#licence spells it out.
+- Currently one source (York Regional Police, 58 sites). The method for
+  finding more is step 0 in docs/location-discovery.md.
+
 ### Lane 2 — Cameras coming ONLINE (early warning, before they exist)
 Sources that announce installs months ahead, monitored weekly:
 - **Ontario grant announcements** (Guns, Gangs & Violence Reduction

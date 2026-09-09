@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import {
-  cameras, generated, slugify, osmNode, countByCategory,
+  cameras, generated, slugify, osmNode, osmIdOf, sourceFor, countByCategory,
   CATEGORY_LABEL, retentionFor, foiFor, earnsAPage, num, clampDesc, type Camera,
 } from '../../../lib/alpr';
 
@@ -27,6 +27,12 @@ export function getStaticPaths() {
 const { operator, list } = Astro.props as { operator: string; list: Camera[] };
 
 const cats = countByCategory(list);
+// Cameras this operator publishes itself, and the source that produced them.
+// Where a force publishes its own list, the page stops hedging about crowd
+// data for those rows — and says which rows they are.
+const published = list.filter((c) => c.provenance === 'operator');
+const pubSource = published.length ? sourceFor(published[0]) : undefined;
+const allPublished = published.length === list.length;
 const provinces = [...new Set(list.map((c) => c.province).filter(Boolean))] as string[];
 const manufacturers = [...new Set(list.map((c) => c.manufacturer).filter(Boolean))] as string[];
 const disputed = list.filter((c) => c.vendorDisputed);
@@ -49,12 +55,23 @@ const desc = clampDesc(
   ]}>
   <p class="crumb"><a href="/alpr">← All operators and provinces</a></p>
   <h1>{operator}</h1>
-  <p class="lede">
-    <strong>{list.length}</strong> {plural} recorded in OpenStreetMap
-    {provinces.length === 1 ? ` in ${provinces[0]}` : provinces.length > 1 ? ` across ${provinces.join(', ')}` : ''}.
-    Every one links to the OpenStreetMap record it came from — which shows who mapped it and
-    when, not that it is still there.
-  </p>
+  {published.length > 0 && pubSource ? (
+    <p class="lede">
+      <strong>{list.length}</strong> {plural}
+      {provinces.length === 1 ? ` in ${provinces[0]}` : provinces.length > 1 ? ` across ${provinces.join(', ')}` : ''},
+      {published.length === list.length ? ' every one of them ' : ` ${num(published.length)} of them `}
+      from the force's own published list — with the intersection it names and the date it says
+      the camera went live.
+      {pubSource.foi ? <>{' '}{pubSource.foi.note.replace(/^Found/, 'We found it').replace(/\.$/, '')} — <a href="/foi">file {pubSource.foi.file}</a>.</> : ''}
+    </p>
+  ) : (
+    <p class="lede">
+      <strong>{list.length}</strong> {plural} recorded in OpenStreetMap
+      {provinces.length === 1 ? ` in ${provinces[0]}` : provinces.length > 1 ? ` across ${provinces.join(', ')}` : ''}.
+      Every one links to the OpenStreetMap record it came from — which shows who mapped it and
+      when, not that it is still there.
+    </p>
+  )}
 
   <h2>What is mapped: {list.length} licence plate {list.length === 1 ? 'reader' : 'readers'}</h2>
   <div class="stat-row">
@@ -118,36 +135,72 @@ const desc = clampDesc(
 
   <h2>Every mapped location</h2>
   <p class="meta">
-    Coordinates as recorded in OpenStreetMap. Follow any node link to see its full tag history
-    and who added it.
+    {published.length > 0 && pubSource
+      ? <>Sites and coordinates as the operator publishes them; crowd-mapped rows say so, and
+        every source link goes to the record it came from.</>
+      : <>Coordinates as recorded in OpenStreetMap. Follow any node link to see its full tag
+        history and who added it.</>}
   </p>
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Type</th><th>Latitude</th><th>Longitude</th><th>Hardware</th><th>Source</th></tr>
+        <tr>
+          {published.length > 0 && <th>Site</th>}
+          {published.length > 0 && <th>Live since</th>}
+          <th>Type</th><th>Latitude</th><th>Longitude</th><th>Hardware</th><th>Source</th>
+        </tr>
       </thead>
       <tbody>
-        {list.map((c) => (
-          <tr>
-            <td>{CATEGORY_LABEL[c.category]}</td>
-            <td>{c.lat.toFixed(5)}</td>
-            <td>{c.lon.toFixed(5)}</td>
-            <td>{c.manufacturer ?? '—'}</td>
-            <td><a href={osmNode(c.id)} rel="noopener nofollow">node {c.id}</a></td>
-          </tr>
-        ))}
+        {list.map((c) => {
+          const src = sourceFor(c);
+          const osm = osmIdOf(c);
+          return (
+            <tr>
+              {published.length > 0 && <td>{c.siteLabel ?? '—'}{c.siteArea ? <span class="dim">, {c.siteArea}</span> : ''}</td>}
+              {published.length > 0 && <td>{c.siteActive ?? '—'}</td>}
+              <td>{CATEGORY_LABEL[c.category]}</td>
+              <td>{c.lat.toFixed(5)}</td>
+              <td>{c.lon.toFixed(5)}</td>
+              <td>{c.manufacturer ?? '—'}</td>
+              <td>
+                {src
+                  ? <a href={src.sourcePage} rel="noopener">{c.siteId ?? 'published list'}</a>
+                  : <a href={osmNode(osm!)} rel="noopener nofollow">node {osm}</a>}
+                {src && osm ? <> · <a href={osmNode(osm)} rel="noopener nofollow" class="dim">node</a></> : ''}
+                {c.notInOperatorList ? <span class="dim"> · not on the published list</span> : ''}
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   </div>
 
   <div class="note">
-    <strong>What this page is and is not.</strong> These are cameras that somebody has mapped in
-    OpenStreetMap, not a complete inventory. A location missing here may still exist; a location
-    listed here was newly <em>mapped</em>, which is not the same as newly <em>installed</em>.
-    Across Canada we hold {num(cameras.length)} records and
-    {' '}{num(cameras.filter((c) => !c.operator).length)} of them carry no operator tag at all,
-    so per-operator counts are floors, not totals.
-    Data © OpenStreetMap contributors (ODbL), generated {generated.slice(0, 10)}.
+    <strong>What this page is and is not.</strong>
+    {allPublished && pubSource ? (
+      <>
+        {' '}Every row here comes from the {pubSource.sourceName} — the force's own record of
+        its own cameras, which is a different and better thing than a crowd pin.
+        {pubSource.complete ? ' It is published as the full list, so a camera missing from it is a question for the force rather than a gap in the mapping.' : ''}
+        {' '}It still says nothing about what the cameras are set to do: the retention values,
+        the sharing state and the audit record are what our <a href="/foi">records request</a>
+        {' '}is for. Locations {pubSource.attribution}, used non-commercially under the
+        {' '}<a href={pubSource.termsUrl ?? pubSource.sourcePage} rel="noopener">portal's terms</a>;
+        corroborating map records © OpenStreetMap contributors (ODbL).
+        Generated {generated.slice(0, 10)}.
+      </>
+    ) : (
+      <>
+        {' '}These are cameras that somebody has mapped in OpenStreetMap, not a complete
+        inventory. A location missing here may still exist; a location listed here was newly
+        {' '}<em>mapped</em>, which is not the same as newly <em>installed</em>.
+        Across Canada we hold {num(cameras.length)} records and
+        {' '}{num(cameras.filter((c) => !c.operator).length)} of them carry no operator tag at
+        all, so per-operator counts are floors, not totals.
+        Data © OpenStreetMap contributors (ODbL), generated {generated.slice(0, 10)}.
+      </>
+    )}
   </div>
 
   <p class="crumb"><a href="/">See these on the map →</a></p>
@@ -163,6 +216,7 @@ const desc = clampDesc(
     .stat .n { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
     .stat .l { display: block; font-size: 0.78rem; color: var(--muted); }
     .meta { color: var(--muted); font-size: 0.88rem; margin: 0.5rem 0; }
+    .dim { color: var(--muted); }
     .meta a { color: var(--toll); text-decoration: none; }
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     th, td { text-align: left; padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--line); }

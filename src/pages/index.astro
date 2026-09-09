@@ -21,7 +21,7 @@ const fleets = fleetsData.fleets;
           <span class="swatch police"></span>
           <span class="name">Police surveillance ALPR</span>
           <span class="count-sub" id="count-police"></span>
-          <span class="why">Generalized scanning of everyday movement. What this site is about.</span>
+          <span class="why">Generalized scanning of everyday movement. What this site is about. A white ring means the force publishes that camera itself — <a href="/data#provenance">how we know</a>.</span>
         </label>
         <label class="layer" data-layer="fleet">
           <input type="checkbox" checked />
@@ -115,10 +115,17 @@ const fleets = fleetsData.fleets;
         const el = document.getElementById(id);
         if (el) el.textContent = n ? `${n.toLocaleString()} mapped` : '0 mapped';
       };
+      // Three tiers, not two, since operators started publishing their own
+      // lists: a camera the force itself documents is a different claim from a
+      // camera a mapper attributed to that force.
       const policeAll = data.cameras.filter((c: any) => c.category === 'police_alpr');
-      const policeKnown = policeAll.filter((c: any) => c.operator).length;
+      const policePublished = policeAll.filter((c: any) => c.provenance === 'operator').length;
+      const policeKnown = policeAll.filter((c: any) => c.operator && c.provenance !== 'operator').length;
       const cp = document.getElementById('count-police');
-      if (cp) cp.innerHTML = `<b>${policeKnown}</b> verified operator &nbsp;·&nbsp; <b>${policeAll.length - policeKnown}</b> unverified <span class="hollow-dot"></span>`;
+      if (cp) cp.innerHTML =
+        `<b>${policePublished}</b> operator-published <span class="pub-dot"></span>` +
+        ` &nbsp;·&nbsp; <b>${policeKnown}</b> operator tagged` +
+        ` &nbsp;·&nbsp; <b>${policeAll.length - policePublished - policeKnown}</b> unverified <span class="hollow-dot"></span>`;
       setCount('count-toll', data.counts.toll);
       setCount('count-border', data.counts.border);
       setCount('count-private', data.counts.private);
@@ -193,8 +200,11 @@ const fleets = fleetsData.fleets;
         });
         map.addSource(cat, { type: 'geojson', data: fc(cat) });
         // Police layer honesty: a recorded operator renders solid; an
-        // unrecorded one renders hollow — mapped, but unverified.
+        // unrecorded one renders hollow — mapped, but unverified. A camera the
+        // operator publishes itself gets a white ring: not "someone says", but
+        // "the force's own record says".
         const known = ['to-boolean', ['get', 'operator']];
+        const published = ['==', ['get', 'provenance'], 'operator'];
         map.addLayer({
           id: cat,
           type: 'circle',
@@ -204,8 +214,8 @@ const fleets = fleetsData.fleets;
             'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 10, 5, 14, 8],
             'circle-color': CAT_COLORS[cat],
             'circle-opacity': ['case', known, 0.85, 0],
-            'circle-stroke-width': ['case', known, 1, 1.5],
-            'circle-stroke-color': ['case', known, '#101418', CAT_COLORS[cat]],
+            'circle-stroke-width': ['case', published, 1.8, known, 1, 1.5],
+            'circle-stroke-color': ['case', published, '#f2f5f8', known, '#101418', CAT_COLORS[cat]],
           } : {
             'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 10, 5, 14, 8],
             'circle-color': CAT_COLORS[cat],
@@ -217,6 +227,12 @@ const fleets = fleetsData.fleets;
         map.on('click', cat, (e) => {
           const p: any = e.features?.[0]?.properties ?? {};
           const hw = p.manufacturer ? (hardwareData.manufacturers as any)[p.manufacturer] : null;
+          // Where this pin came from. An operator-published camera carries the
+          // institution's own record — see data/authoritative/ and the merge
+          // in scripts/merge-authoritative.mjs.
+          const src: any = p.sourceId ? (data as any).sources?.[p.sourceId] : null;
+          // A crowd pin flagged against a published list carries that list's id.
+          const missingFrom: any = p.notInOperatorList ? (data as any).sources?.[p.notInOperatorList] : null;
           // Honesty rules: OSM points rarely record the camera model, and an
           // unknown operator means the "police" categorization is unverified.
           const unverified = p.category === 'police_alpr' && !p.operator;
@@ -229,10 +245,32 @@ const fleets = fleetsData.fleets;
             p.vendorDisputed ? `<div class="pop-dim">A mapper tagged this camera "Flock Safety," but Flock states it has no Canadian police contracts — "Flock" is often used generically for any pole-mounted ALPR. We can't validate the vendor; treat it as unconfirmed.</div>` : '',
             unverified ? `<div class="pop-dim">No operator is recorded on this map point — it could be police, private, or mistagged.</div>` : '',
             p.rawOperator ? `<div class="pop-dim">Operator recorded in OpenStreetMap as "${p.rawOperator}" — standardized by Readback.</div>` : '',
-            p.id ? `<div class="pop-src">Source of this pin: <a href="https://www.openstreetmap.org/node/${p.id}" rel="noopener">OpenStreetMap record ${p.id}</a> — crowd-maintained; anyone can inspect or correct it</div>` : '',
+            // A crowd pin attributed to a force whose own complete published
+            // list does not contain it. We show the discrepancy rather than
+            // dropping the pin or trusting it.
+            missingFrom
+              ? `<div class="pop-dim">A mapper attributed this camera to ${p.operator}, but it is not on the ${missingFrom.sourceName} — the force's own published list. Either the list is incomplete or the pin is wrong. <a href="/foi" rel="noopener">We have asked which.</a></div>`
+              : '',
+            // Operator-published: the source IS the institution, so lead with
+            // its record, then say what led us to it.
+            src ? `<div class="pop-src">Source of this pin: <b>${src.sourceName}</b> — the force's own published list${p.siteId ? `, site ${p.siteId}` : ''}. <a href="${src.sourcePage}" rel="noopener">Open the record →</a></div>` : '',
+            src?.foi ? `<div class="pop-src">How we found it: ${src.foi.note} <a href="/foi" rel="noopener">MFIPPA file ${src.foi.file} →</a></div>` : '',
+            src?.alprBasis ? `<div class="pop-dim">${src.alprBasis.claim}, per the <a href="${src.alprBasis.url}" rel="noopener">${src.alprBasis.source}</a>${src.alprBasis.confirmed ? '' : ' — not confirmed camera by camera, which is what the FOI now asks'}.</div>` : '',
+            src?.licence ? `<div class="pop-dim">Terms: ${src.licence}</div>` : '',
+            // OSM keeps its credit either way: as the source of a crowd pin,
+            // or as the corroborating record for an adopted one.
+            p.provenance !== 'operator'
+              ? `<div class="pop-src">Source of this pin: <a href="https://www.openstreetmap.org/node/${p.id}" rel="noopener">OpenStreetMap record ${p.id}</a> — crowd-maintained; anyone can inspect or correct it</div>`
+              : p.osmId
+                ? `<div class="pop-src">Also mapped by the community: <a href="https://www.openstreetmap.org/node/${p.osmId}" rel="noopener">OpenStreetMap record ${p.osmId}</a></div>`
+                : '',
           ].filter(Boolean).join('');
           const rows = [
             p.photo ? `<img class="pop-photo" src="${p.photo}" alt="Community photo of this camera" loading="lazy" onerror="this.remove()" />` : '',
+            // The operator's own list names the intersection and says when the
+            // camera went live. No crowd pin carries either.
+            p.siteLabel ? `<div><b>Site:</b> ${p.siteLabel}${p.siteArea ? `, ${p.siteArea}` : ''}</div>` : '',
+            p.siteActive ? `<div><b>Live since:</b> ${new Date(p.siteActive + 'T12:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' })}${p.siteNote ? ` <span class="pop-dim">(${p.siteNote})</span>` : ''}</div>` : '',
             p.operator ? `<div><b>Operator:</b> ${p.operator}</div>` : '',
             p.manufacturer ? `<div><b>Vendor:</b> ${p.manufacturer}${p.vendorDisputed ? ' <span class="pop-warn">(disputed — see ⓘ)</span>' : ''}</div>` : '',
             p.cameraType ? `<div><b>Type:</b> ${cap(p.cameraType)}</div>` : '',
@@ -319,9 +357,19 @@ const fleets = fleetsData.fleets;
     .layer .why { grid-column: 1 / -1; color: var(--muted); font-size: 0.76rem; }
     .layer .count-sub { grid-column: 1 / -1; color: var(--muted); font-size: 0.76rem; }
     .layer .count-sub b { color: var(--text); font-weight: 600; }
-    .hollow-dot {
+    /* Both legend dots are written into the panel by the map script, so they
+       never carry Astro's scoping attribute — a plain `.hollow-dot` rule
+       compiles to `.hollow-dot[data-astro-cid-…]` and silently never matches.
+       :global() is what makes them actually render. */
+    :global(.hollow-dot) {
       display: inline-block; width: 9px; height: 9px; border-radius: 50%;
       border: 1.5px solid var(--police); vertical-align: -1px; margin-left: 2px;
+    }
+    /* The camera the operator publishes itself: filled, ringed in white. */
+    :global(.pub-dot) {
+      display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+      background: var(--police); border: 1.5px solid #f2f5f8;
+      vertical-align: -1px; margin-left: 2px;
     }
     .layer .name { font-weight: 600; font-size: 0.88rem; }
     .layer .name em { font-style: normal; color: var(--muted); font-weight: 400; font-size: 0.78rem; }

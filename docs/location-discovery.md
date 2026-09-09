@@ -53,6 +53,34 @@ Ordered roughly by effort-to-payoff.
     (upstream, so panopti/DeFlock benefit too; good-citizen move that also
     makes us the best-maintained Canadian layer).
 
+## The one we should have started with
+
+0. **The operator's own open-data portal.** Added 2026-09-09, at the top of
+   the list because it cost us weeks. York Regional Police publishes every
+   CCTV site — intersection, municipality, in-service date, coordinates — as
+   a public ArcGIS feature service linked from its own CCTV page. We found it
+   by accident, answering the force's clarification letter on our own FOI.
+   Method that works, roughly a minute per force:
+   - open the service's own camera/CCTV program page (not its FOI page) and
+     follow any "map"/"portal"/"data" link;
+   - if it lands on an ArcGIS Hub domain, grab `"orgId"` from the page source
+     and search the org:
+     `https://www.arcgis.com/sharing/rest/search?f=json&q=orgid:<ORGID> AND (CCTV OR camera)`;
+   - the Feature Service it returns queries straight to GeoJSON with
+     `/0/query?where=1=1&outFields=*&outSR=4326&f=geojson`;
+   - check `licenseInfo` on the item before republishing — York's forbids
+     commercial use.
+   Registry and fetcher: `scripts/fetch-authoritative.mjs`.
+   **Not yet checked for:** Toronto, Peel, Halton, Waterloo, Durham, Hamilton,
+   Ottawa, Sudbury, Brampton (the City runs its own).
+
+0b. **OSM changeset `source` tags on cameras we already have.** The mapper who
+   added York's cameras in June 2026 cited the portal in nine changesets. Our
+   Overpass query (`out body`) reads node tags only, so the citation never
+   reached us. `out meta` plus a changeset lookup would mine every such
+   citation already sitting in the data — the cheapest lead source we have,
+   and it is not built.
+
 ## Already exhausted
 - OSM/Overpass (`surveillance:type=ALPR`) — the base layer, in pipeline.
 - panopti.ca cameras-ca.json — same OSM data, analyzed.

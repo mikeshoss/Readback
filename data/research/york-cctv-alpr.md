@@ -177,3 +177,62 @@ Still unpublished, and now the whole point of file 26-1898:
 5. Whether a PIA exists for the ALPR integration.
 6. The Ontario CCTV Grant agreement terms and reporting obligations.
 7. Aggregate misuse/audit statistics and the ALPR audit policy.
+
+## 7. How we had this for weeks without knowing
+
+Uncomfortable, and worth writing down precisely.
+
+We did not miss the cameras. On 2026-09-09, before any of this, our map already
+held **50 points tagged `operator=York Regional Police`**, and **46 of the 58
+sites YRP publishes were already among them** — every one within 33 metres of
+the published coordinate. What we missed was that they were *documented*. We
+rendered them as crowd pins with the site's standard hedge ("somebody mapped
+this, which is not that anyone verified it") while the force's own register of
+the same cameras sat in the open.
+
+The citation was inside the data we had already ingested. Querying the OSM
+API for those 50 nodes: they arrived in **12 changesets**, and nine of them —
+44 nodes, all on **2026-06-11**, by the mapper `ResistanceIsLiberty` — carry
+this changeset tag:
+
+    source = https://community-safety-portal-datayrp.hub.arcgis.com/pages/cctv
+    source = https://community-safety-portal-datayrp.hub.arcgis.com/pages/cctv;https://www.yrp.ca/explore/our-work/cctv-program
+
+with comments like "Added York Regional Police ALPR cameras in Vaughan."
+Somebody found the portal in June, mapped it into OSM, and *wrote down where it
+came from*. We consumed the nodes and threw the receipt away.
+
+Three specific causes:
+
+1. **Our Overpass query asks for `out body`** — node tags only. `source` on
+   these edits lives on the *changeset*, one level up, which `out meta` and a
+   changeset lookup would have surfaced. The provenance was one API call away
+   the whole time.
+2. **The pipeline had exactly one lane: OSM.** Nothing in it, and nothing in
+   docs/location-discovery.md, asked the obvious question — *does the operator
+   publish this itself?* The leads funnel listed procurement portals, board
+   agendas, WiGLE and Mapillary. Not open-data portals, which is where a police
+   service that wants credit for transparency puts things.
+3. **Our York research came from news, not from York.** The seed file was
+   media claims (the $255K, the 6% line); the FOI research pass read
+   yrp.ca/en/about/freedom-of-information.asp and stopped. Nobody opened the
+   force's own CCTV page, which links the portal in one click and states the
+   72-hour video retention in plain text.
+
+What changed as a result:
+
+- `scripts/fetch-authoritative.mjs` + `data/authoritative/` — operator-published
+  lists are a first-class source now, refreshed by `npm run authoritative`.
+- `scripts/merge-authoritative.mjs` — the operator's record takes the point,
+  keeps the crowd node as `osmId`, and flags crowd pins the operator's own
+  complete list does not contain. Five York pins are in that state: one in
+  Vaughan (Axis hardware, 43.8492/-79.5368) and four around East Gwillimbury
+  (44.20–44.22 / -79.46), a municipality with zero published sites. Two of
+  those four are a metre apart and are probably one camera mapped twice.
+- Every camera on the map now carries `provenance`, and the map draws the
+  difference: white ring = the force publishes this one itself.
+
+The open follow-up: **mine OSM changeset `source` tags across the whole
+dataset.** If one mapper cited an operator portal for York, others have done
+the same for other forces, and those citations are sitting in data we already
+pull.

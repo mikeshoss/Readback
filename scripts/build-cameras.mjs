@@ -7,6 +7,7 @@
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { mergeAuthoritative, attributionFor } from './merge-authoritative.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -214,7 +215,7 @@ out ids;`;
   for (const [id, p] of prevProvince) if (!provinceOf.has(id)) provinceOf.set(id, p);
 }
 
-const cameras = elements.map((e) => {
+const osmCameras = elements.map((e) => {
   const t = e.tags || {};
   const operator = normOp(t.operator || null);
   const manufacturer = normMfr(t.manufacturer || t.brand || null);
@@ -246,6 +247,14 @@ const cameras = elements.map((e) => {
   };
 });
 
+// Operator-published lists (data/authoritative/) are folded in HERE — before
+// the counts, before the change diff, before anything is written. A force's
+// own record of its own camera outranks a pin somebody drew off aerial
+// imagery, so it takes the point and keeps the crowd node as a cross
+// reference. Merging first also keeps the change feed honest: adopting a
+// better source for a camera is not that camera appearing and disappearing.
+const { cameras, sources } = mergeAuthoritative(osmCameras);
+
 const counts = {};
 for (const c of cameras) counts[c.category] = (counts[c.category] || 0) + 1;
 
@@ -272,11 +281,14 @@ console.log(`Toll finding: ${finding.reclassifiedAsToll} of ${finding.alprTagged
 
 const out = {
   generated: new Date().toISOString(),
-  attribution: '© OpenStreetMap contributors (ODbL)',
+  // One line no longer covers it: OSM is ODbL, an operator's own release
+  // carries the operator's terms. attributionFor names both.
+  attribution: attributionFor(sources),
   counts,
   provinceCounts,
   sourceCounts,
   finding,
+  sources,
   cameras,
 };
 
