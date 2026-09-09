@@ -1,0 +1,191 @@
+# Reply to York Regional Police — FOI file 26-1898
+
+Draft of 2026-09-09, answering the Access & Privacy clarification letter of
+the same date. Not yet sent. Send from the address the original request was
+filed under; when it goes, move the revised scope into `src/data/foi.json`
+as the York request's items and add the timeline event.
+
+Sourcing for every citation in this letter:
+[data/research/york-cctv-alpr.md](../data/research/york-cctv-alpr.md).
+
+---
+
+**To:** FOI@yrp.ca
+**Cc:** 5851@yrp.ca
+**Subject:** RE: Freedom of Information Request | Our File #26-1898 — clarification and narrowed scope
+
+---
+
+Dear Roni-Lee Shoniker Broad,
+
+Thank you for the acknowledgment and for setting out exactly where
+clarification would help. I have answered all eight points below, and I am
+narrowing the request substantially — in several places to nothing at all,
+because York Regional Police has already published the records. A
+consolidated revised request follows the answers; it replaces the seven
+items in my original letter.
+
+**1. CCTV or ALPR — both, but the ALPR layer is what I am after.** I am not
+asking for the CCTV program's general operational records. My interest is
+the automated licence plate recognition capability that the Board approved
+for integration into that network on June 25, 2025, and only the CCTV
+records that define how that capability behaves. Where an answer covers both
+projects in one document, one document is fine.
+
+**2. Camera locations — withdrawn; you already publish them.** York Regional
+Police publishes every active CCTV site on the Community Safety Data Portal,
+and the layer behind it returns the intersection, municipality, sector,
+status and activation date for each — 58 active sites when I queried it on
+September 9, 2026. That is better than anything a search would produce, so I
+withdraw the request for location records entirely. What the portal does not
+say is which of those cameras have ALPR enabled, so that single question
+replaces the item, together with whether any ALPR-capable camera is
+operating that the portal does not show.
+
+**3. The $255,000 expansion — identified.** It is the Ontario CCTV Grant
+contribution Ontario agreed to in April 2025, considered by the Board at its
+public meeting of **June 25, 2025** in the Report of the Chief of Police,
+*"Closed Circuit Television Video (CCTV) Cameras Annual Report and Program
+Expansion"*, whose Appendix A lists the 22 proposed additional locations,
+and announced publicly on **September 22, 2025** when Aurora–Newmarket MPP
+Dawn Gallagher Murphy presented the funding. I have that report — it is
+published on the Board's meeting portal — so I am not asking you to retrieve
+it, and I agree the Board rather than the Service may hold the surrounding
+records. All I need from this item is the grant agreement itself and its
+reporting conditions.
+
+**4. Retention, data flows, RTOC and vendor records — policy level and
+configured values only.** I am not seeking network diagrams, integration
+specifications, system architecture, credentials or anything else whose
+disclosure would raise a security concern, and I am content for any such
+material to be severed without argument from me. What I am asking for is
+numbers and authority: the retention values currently configured for plate
+reads, and the record of who is able to change them. Your website already
+states that video is kept roughly 72 hours, so I have dropped video
+retention from the request.
+
+**5. The crime-reduction analysis — identified precisely.** The statement I
+quoted was reported by David Yin, Local Journalism Initiative, in the
+*Markham Review* on November 16, 2025, covering the September 22, 2025
+announcement, and attributed to then-Deputy Chief (now Chief) Paulo Da
+Silva: "compared to 2024, areas within 1 km of a CCTV camera saw more than a
+six per cent reduction in crime." The underlying figure appears in section 4
+of the June 25, 2025 board report: 455 violent crimes within a
+one-kilometre radius of CCTV-equipped intersections between May 1, 2024 and
+May 1, 2025, against 485 in the same period a year earlier, a 6.19%
+decrease. So the item is not open-ended: I am asking for the Business
+Intelligence Unit's work behind those two counts, and for the result of the
+"evaluation of adjacent areas to CCTV locations" that section 2(b) of the
+same report lists as part of the annual evaluation.
+
+**6. Privacy Impact Assessments — both, and a "no" is a complete answer.**
+Final versions only. If a single assessment covers CCTV and ALPR together,
+that one document answers the item. If no assessment was completed for the
+ALPR integration specifically, a written statement to that effect fully
+answers it and I will not pursue it further.
+
+**7. Information-sharing agreements — narrowed to two things.** Not all
+agreements from 2023. Only (a) the instrument under which York Regional
+Police receives and uses the provincial stolen vehicle hot list, and (b)
+whether ALPR data collected by York Regional Police can be searched by any
+other agency through the Axon platform. For (b), the current state of that
+setting and the identity of any agency with access — or a statement that
+there is none — answers the item; I do not need the underlying contracts.
+
+**8. Investigation, audit and Board records — yes, aggregate only, and the
+Board portion is withdrawn.** Confirmed: limit item 7 to aggregate
+statistical reports and final, severed summary reports that are readily
+available. No names, no individual files, nothing requiring a case-by-case
+review. I am withdrawing the Police Services Board portion of that item
+entirely — I will take Board records from the Board's own public agendas.
+
+## The revised request
+
+This replaces my original seven items in full.
+
+1. **ALPR coverage.** A record showing which of the CCTV sites published on
+   the Community Safety Data Portal have ALPR enabled, and whether York
+   Regional Police operates any ALPR-capable camera — fixed, trailer-mounted,
+   temporary or otherwise — that is not published on that portal. If ALPR is
+   enabled at all published sites and there are no unpublished ones, a
+   written statement saying so is a complete answer.
+
+2. **Configured retention.** Records showing the retention period currently
+   configured in the ALPR system for (a) plate reads that do not match the
+   hot list, (b) reads that do match, and (c) ALPR audit logs. A
+   configuration export, an administrative settings page, or a governance
+   document stating the values is sufficient. Also: the record identifying
+   which position or role can change those values, and whether a change
+   requires anything beyond a system administrator's action.
+
+3. **The hot list, and sharing.** (a) The agreement, memorandum or terms of
+   use under which York Regional Police receives and uses the provincial
+   stolen vehicle hot list; (b) the current state of any setting permitting
+   another agency to search York Regional Police ALPR data through the Axon
+   platform, and the identity of any agency with such access.
+
+4. **The 6.19% analysis.** The Business Intelligence Unit analysis
+   underlying the June 25, 2025 board report's finding of 455 violent crimes
+   within one kilometre of CCTV-equipped intersections (May 1, 2024 –
+   May 1, 2025) against 485 the previous period: the methodology, the
+   offence categories counted, the per-location figures, and the results of
+   the evaluation of adjacent areas referred to at section 2(b) of that
+   report.
+
+5. **Privacy Impact Assessment.** The final Privacy Impact Assessment for
+   the CCTV program and the final assessment, addendum or update prepared
+   for the ALPR integration approved June 25, 2025 — or a written statement
+   that no assessment was prepared for the ALPR integration.
+
+6. **Grant record.** The Ontario CCTV Grant agreement or transfer-payment
+   terms for the $255,000 contribution agreed in April 2025, including any
+   reporting obligations to the Province, and Appendix A to the June 25,
+   2025 board report if the locations it names differ from those now
+   published on the portal.
+
+7. **Aggregate audit and misuse statistics.** For January 1, 2023 to
+   present: aggregate counts of internal, professional standards or privacy
+   investigations involving alleged unauthorized access to or misuse of
+   police information systems, the number substantiated, and the
+   disciplinary outcomes by category — no names or identifying information.
+   Plus the current audit policy for ALPR and CCTV queries, and the most
+   recent completed audit report, severed as required.
+
+## Fees, and priority if you need to cut
+
+If the estimate still exceeds the threshold, please issue it before doing
+the work, and tell me which item is driving it — I will drop or defer that
+item rather than have you carry the cost of a search I did not intend. My
+priority order is **2, 4, 5, 1, 3, 6, 7**: the configured retention values
+and the crime-reduction analysis matter most, and items 1, 5 and 3(b) can
+each be answered in a sentence.
+
+I also ask that you consider a fee waiver under s. 45(4)(c) of MFIPPA.
+These records concern a surveillance technology operating in public space,
+and everything released to me is published in full, free of charge and
+without paywall, at readback.ofrecord.ca, alongside the identical questions
+put to other Ontario police services — the comparison is the public benefit,
+and it does not exist anywhere else. I recognise the waiver criteria are
+applied more readily to personal-information requests and I am not asking
+you to disregard them; I am asking you to apply s. 45(4)(c) on its own
+terms.
+
+## Two housekeeping points
+
+I have replied well inside the 30 days your letter allows. For the record, I
+do not understand this exchange to restart the statutory time limit: the
+original request described the records with enough particularity to be
+searched, and this letter narrows that request rather than reframing it.
+I would appreciate confirmation of the response date you are working to.
+
+Finally, my original letter asked for electronic copies, final versions
+only, with the specific exemption cited and the remainder severed under
+s. 4(2) where anything is withheld. That still stands.
+
+Thank you for the assistance, and for setting the questions out as clearly
+as you did — it made the narrowing straightforward.
+
+Sincerely,
+
+Mike Shoss
+Readback — readback.ofrecord.ca

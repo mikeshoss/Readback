@@ -37,6 +37,13 @@ offers a verified email-submission channel for a complete request.
 - Email foi@yrp.ca published as contact — full email submission not explicitly accepted
 - Form (mail): YRP436 .docx from yrp.ca. One photo ID. Up to 45 business days. 1-866-876-5423 ext. 6740
 - Source: https://www.yrp.ca/en/about/freedom-of-information.asp
+- CONFIRMED 2026-09-09: FOI@yrp.ca is live and monitored — the Access & Privacy
+  unit acknowledged our file 26-1898 from it, cc'ing the assigned analyst at
+  a badge-numbered address (####@yrp.ca). Correspondence on an open file
+  works by email; whether a *new* complete submission would be accepted there
+  is still unconfirmed. Their acknowledgment also states search time on
+  general-records requests is billable under the Police Services Board bylaw,
+  with a written fee estimate above the threshold.
 
 ## Waterloo Regional Police Service
 - Unit: Access to Information Unit (their name for it)

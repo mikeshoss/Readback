@@ -81,10 +81,10 @@
     {
       "service": "York Regional Police",
       "vehicles": null,
-      "vehiclesLabel": "camera program, every camera has ALPR",
+      "vehiclesLabel": "58 published camera sites, ALPR on all of them",
       "lat": 44.0065,
       "lon": -79.4504,
-      "detail": "$255K expansion; cameras feed the real-time operations centre on Axon Fusus.",
+      "detail": "Board approved ALPR at every CCTV location June 25, 2025, on a $255K Ontario CCTV Grant; hits alert the real-time operations centre. Axon Fusus. Video kept ~72 h.",
       "retentionReads": "unpublished",
       "retentionHits": "unpublished",
       "vendor": "Axon Fusus"

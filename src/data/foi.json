@@ -119,7 +119,7 @@
       "id": "york",
       "institution": "York Regional Police",
       "region": "York Region (Vaughan, Markham, Richmond Hill, Newmarket, Aurora)",
-      "status": "sent",
+      "status": "acknowledged",
       "dateSent": "2026-09-01",
       "dateDue": "2026-11-05",
       "outcome": null,
@@ -140,7 +140,7 @@
         "phone": "1-866-876-5423 ext. 6740",
         "source": "https://www.yrp.ca/en/about/freedom-of-information.asp"
       },
-      "fileNumber": null,
+      "fileNumber": "26-1898",
       "events": [
         {
           "date": "2026-09-01",
@@ -151,6 +151,11 @@
           "date": "2026-09-01",
           "label": "Sent via online portal",
           "note": "$5 paid by credit card. Formal file number expected with acknowledgment. Response due in 45 business days (est. Nov 5, 2026)."
+        },
+        {
+          "date": "2026-09-09",
+          "label": "Acknowledged — file 26-1898, clarification requested",
+          "note": "York Regional Police's Access & Privacy unit acknowledged the request and asked us to clarify or narrow all seven items before any search begins, warning that search time is billable under the Police Services Board bylaw and that a fee estimate will follow if the threshold is exceeded. Reply due within 30 days (Oct 9). Answering it turned up the records: the Board approved putting ALPR on every camera on June 25, 2025, YRP publishes all 58 active camera locations as open data, and the \"6% crime reduction\" is 30 fewer violent crimes — 455 against 485 — with no control area published. Narrowed reply drafted; six of seven items shrank, one was withdrawn outright."
         }
       ]
     },
