@@ -5,6 +5,11 @@ the same date. Not yet sent. Send from the address the original request was
 filed under; when it goes, move the revised scope into `src/data/foi.json`
 as the York request's items and add the timeline event.
 
+**The copy to send is
+[`york-clarification-reply.txt`](york-clarification-reply.txt)** — same
+letter, plain text, hard-wrapped, no markdown to paste into a mail client by
+accident. This file is the annotated version. If one is edited, edit both.
+
 Sourcing for every citation in this letter:
 [data/research/york-cctv-alpr.md](../data/research/york-cctv-alpr.md).
 
