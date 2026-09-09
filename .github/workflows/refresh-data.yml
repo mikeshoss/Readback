@@ -33,7 +33,14 @@ jobs:
 
       - run: npm ci
 
-      - name: Query Overpass and classify
+      # Operator-published camera registers (data/authoritative/). Non-fatal:
+      # the lists are committed, so a police portal being down costs us
+      # freshness for the week, not the refresh.
+      - name: Refresh operator-published camera lists
+        continue-on-error: true
+        run: node scripts/fetch-authoritative.mjs
+
+      - name: Query Overpass, classify, merge operator records
         run: node scripts/build-cameras.mjs ${{ inputs.force && '--force' || '' }}
 
       - name: Fetch news feeds
@@ -45,7 +52,7 @@ jobs:
       - name: Commit if the data actually changed
         id: commit
         run: |
-          if git diff --quiet -- public/data/ data/news-queue.json; then
+          if git diff --quiet -- public/data/ data/authoritative/ data/news-queue.json; then
             echo "No change in camera data — nothing to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -54,7 +61,7 @@ jobs:
           REMOVED=$(node -e "const h=require('./public/data/changes.json').history[0]; console.log(h?h.removedIds.length:0)")
           git config user.name  "readback-bot"
           git config user.email "actions@github.com"
-          git add public/data/ data/news-queue.json
+          git add public/data/ data/authoritative/ data/news-queue.json
           git commit -m "Data refresh: +${ADDED} newly mapped, -${REMOVED} removed
 
           Automated weekly Overpass pull. Camera data © OpenStreetMap
@@ -67,7 +74,7 @@ jobs:
           {
             echo "### Camera data refresh"
             if [ "${{ steps.commit.outputs.changed }}" = "true" ]; then
-              echo "Committed. NOTE: the Pages project is direct-upload, so this does NOT auto-deploy yet — connect the repo in Pages, or add a wrangler deploy step here."
+              echo "Committed. The Deploy workflow picks this up on completion and publishes it."
             else
               echo "No changes this week. Nothing committed."
             fi
