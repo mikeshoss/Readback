@@ -1,9 +1,10 @@
 # Reply to York Regional Police — FOI file 26-1898
 
-Draft of 2026-09-09, answering the Access & Privacy clarification letter of
-the same date. Not yet sent. Send from the address the original request was
-filed under; when it goes, move the revised scope into `src/data/foi.json`
-as the York request's items and add the timeline event.
+**Sent 2026-09-09, 7:16 p.m.**, reply-all to FOI@yrp.ca with the assigned
+analyst on cc, answering the Access & Privacy clarification letter of the
+same morning. The revised scope is now the York request's live `items` in
+`src/data/foi.json`, with the original seven kept there as
+`supersededItems` and published on /foi under "What this replaced".
 
 **The copy to send is
 [`york-clarification-reply.txt`](york-clarification-reply.txt)** — same

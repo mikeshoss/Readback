@@ -116,14 +116,26 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
           </div>
         )}
         <details>
-          <summary>Read the full request ({r.items.length} items)</summary>
+          <summary>
+            Read the full request ({r.items.length} items)
+            {r.supersededItems ? ' — as narrowed' : ''}
+          </summary>
           <div class="letter">
             <p class="pre">{r.preamble ?? foi.preamble}</p>
-            <p><strong>I request the following records:</strong></p>
+            {!r.preamble && <p><strong>I request the following records:</strong></p>}
             <ol>
               {r.items.map((item) => <li>{item}</li>)}
             </ol>
-            <p class="pre">{foi.closing}</p>
+            <p class="pre">{r.closing ?? foi.closing}</p>
+            {r.supersededItems && (
+              <details class="superseded">
+                <summary>What this replaced — the {r.supersededItems.length} items as originally sent</summary>
+                <p class="pre">{foi.preamble}</p>
+                <ol>
+                  {r.supersededItems.map((item: string) => <li>{item}</li>)}
+                </ol>
+              </details>
+            )}
           </div>
         </details>
       </article>
@@ -182,6 +194,11 @@ const fmt = (d: string | null) => d ? new Date(d + 'T12:00:00').toLocaleDateStri
     details { margin-top: 0.7rem; }
     summary { cursor: pointer; color: var(--toll); font-size: 0.86rem; }
     .letter { margin-top: 0.8rem; border-left: 3px solid var(--line); padding-left: 1rem; font-size: 0.86rem; }
+    /* The superseded ask stays on the page: a narrowed request is a
+       negotiation, and hiding what was given up would be the wrong record. */
+    .superseded { margin-top: 0.9rem; padding-top: 0.6rem; border-top: 1px dashed var(--line); }
+    .superseded summary { font-size: 0.8rem; color: var(--muted); }
+    .superseded li { color: var(--muted); }
     .letter .pre { white-space: pre-line; color: var(--muted); margin-bottom: 0.7rem; }
     .letter ol { padding-left: 1.2rem; }
     .letter li { margin-bottom: 0.55rem; }
