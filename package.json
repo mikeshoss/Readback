@@ -9,8 +9,8 @@
     "data": "node scripts/fetch-authoritative.mjs && node scripts/build-cameras.mjs",
     "authoritative": "node scripts/fetch-authoritative.mjs && node scripts/merge-authoritative.mjs",
     "news": "node scripts/fetch-news.mjs",
-    "stage": "npm run build && wrangler pages deploy dist --project-name readback-bpq --branch staging --commit-dirty=true",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name readback-bpq --branch main --commit-dirty=true",
+    "stage": "npm run build && wrangler pages deploy dist --project-name readback --branch staging --commit-dirty=true",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name readback --branch main --commit-dirty=true",
     "refresh": "npm run data && npm run news && npm run deploy",
     "og": "node scripts/make-og.mjs"
   },
