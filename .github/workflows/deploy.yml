@@ -29,6 +29,23 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: diag-secrets-present
+        env:
+          CF_T: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_A: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CF_T" ]; then echo "CLOUDFLARE_API_TOKEN is EMPTY/missing"; exit 1; fi
+          if [ -z "$CF_A" ]; then echo "CLOUDFLARE_ACCOUNT_ID is EMPTY/missing"; exit 1; fi
+          echo "both secrets present"
+      - name: diag-token-valid
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler whoami
+      - name: diag-can-see-projects
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler pages project list
       - name: Deploy dist to Cloudflare Pages
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
