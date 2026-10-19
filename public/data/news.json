@@ -1,6 +1,18 @@
 {
-  "lastChecked": "2026-10-12T18:49:31.486Z",
+  "lastChecked": "2026-10-19T16:26:28.081Z",
   "items": [
+    {
+      "title": "We’re Asking the Wisconsin Supreme Court to End Warrantless ALPR Searches",
+      "url": "https://www.eff.org/deeplinks/2026/10/were-asking-wisconsin-supreme-court-end-warrantless-alpr-searches",
+      "date": "Wed, 14 Oct 2026 23:21:37 +0000",
+      "summary": "div class= field field--name-body field--type-text-with-summary field--label-hidden div class= field__items div class= field__item even p Today, EFF joined the ACLU of Wisconsin in filing a a href= https://www.eff.org/document/wcc-v-milwaukee-petition petition /a to the Wisconsin Supreme Court, asking it to rule that the state’s constitution requires a warrant for retrospective searches of ALPR da",
+      "outlet": "EFF",
+      "trust": "trusted",
+      "canadaOnly": false,
+      "canada": false,
+      "kind": "policy",
+      "iso": "2026-10-14T23:21:37.000Z"
+    },
     {
       "title": "Following 404 Media Investigation, Senator Demands Info About White House's License Plate Surveillance Program",
       "url": "https://www.404media.co/following-404-media-investigation-senator-demands-info-about-white-houses-license-plate-surveillance-program/",
@@ -12,6 +24,18 @@
       "canada": false,
       "kind": "policy",
       "iso": "2026-10-09T16:00:00.000Z"
+    },
+    {
+      "title": "Côte Saint-Luc, Que., piloting automated licence plate reader cameras - Yahoo News Canada",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1KQ3ByQWk4UVJaRXB0LVUzX1l2dHZVLU4xZ2h0TGNHNU1zbi11amN0bGpkckpOUkpwWmRPZFpRcjU2N0xleUxUak1EOExQRmJKRVItaEtOUlUzYlF6Zm13dGdJN2IwT2g5UGo4?oc=5",
+      "date": "Fri, 09 Oct 2026 14:02:12 GMT",
+      "summary": "a href=\"https://news.google.com/rss/articles/CBMia0FVX3lxTE1KQ3ByQWk4UVJaRXB0LVUzX1l2dHZVLU4xZ2h0TGNHNU1zbi11amN0bGpkckpOUkpwWmRPZFpRcjU2N0xleUxUak1EOExQRmJKRVItaEtOUlUzYlF6Zm13dGdJN2IwT2g5UGo4?oc=5\" target=\"_blank\" Côte Saint-Luc, Que., piloting automated licence plate reader cameras /a nbsp; nbsp; font color=\"#6f6f6f\" Yahoo News Canada /font",
+      "outlet": "Google News (Canada)",
+      "trust": "trusted",
+      "canadaOnly": true,
+      "canada": true,
+      "kind": "policy",
+      "iso": "2026-10-09T14:02:12.000Z"
     },
     {
       "title": "East Algoma OPP – Driver arrested after ALPR system alerts to wanted person - Wawa-news.com",

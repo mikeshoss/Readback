@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-12T18:31:28.111Z",
+  "generated": "2026-10-19T16:08:13.143Z",
   "source": {
     "id": "york-cctv",
     "operator": "York Regional Police",
@@ -25,8 +25,8 @@
     }
   },
   "counts": {
-    "total": 60,
-    "active": 60
+    "total": 68,
+    "active": 68
   },
   "sites": [
     {
@@ -502,7 +502,7 @@
       "siteId": "CCTV13-06",
       "lat": 44.056711783748,
       "lon": -79.4720829851363,
-      "label": "David Dr & Longford Dr",
+      "label": "Davis Dr & Longford Dr",
       "area": "Newmarket",
       "sector": "13",
       "status": "Active",
@@ -736,7 +736,7 @@
       "siteId": "CCTV31-04",
       "lat": 44.1987043056441,
       "lon": -79.4396815229605,
-      "label": "Raveshoe Rd & Woodbine Ave",
+      "label": "Ravenshoe Rd & Woodbine Ave",
       "area": "Georgina",
       "sector": "31",
       "status": "Active",
@@ -782,6 +782,110 @@
       "activeDate": "2026-10-07",
       "retireDate": null,
       "note": "Temporary Location"
+    },
+    {
+      "key": "78",
+      "siteId": "CCTV55-01",
+      "lat": 43.9567368205949,
+      "lon": -79.2793280058174,
+      "label": "Highway 48 & Hoover Park Dr",
+      "area": "Whitchurch-Stouffville",
+      "sector": "55",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "80",
+      "siteId": "CCTV54-07",
+      "lat": 43.8674917813362,
+      "lon": -79.2927746462394,
+      "label": "Markville Mall - Bullock Dr & Austin Dr",
+      "area": "Markham",
+      "sector": "54",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "81",
+      "siteId": "CCTV54-08",
+      "lat": 43.8663036098813,
+      "lon": -79.2883473853256,
+      "label": "Markville Mall - Highway 7",
+      "area": "Markham",
+      "sector": "54",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "82",
+      "siteId": "CCTV54-09",
+      "lat": 43.8667243448846,
+      "lon": -79.2865301354403,
+      "label": "Markville Mall - Highway 7",
+      "area": "Markham",
+      "sector": "54",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "83",
+      "siteId": "CCTV54-10",
+      "lat": 43.8698765451885,
+      "lon": -79.2852056992637,
+      "label": "Markville Mall - McCowan Rd & Heritage Rd",
+      "area": "Markham",
+      "sector": "54",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "84",
+      "siteId": "CCTV54-11",
+      "lat": 43.8719237006528,
+      "lon": -79.2881681164139,
+      "label": "Markville Mall - Bullock Dr & Markham Centennial Park",
+      "area": "Markham",
+      "sector": "54",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "85",
+      "siteId": "CCTV54-12",
+      "lat": 43.8704211052003,
+      "lon": -79.2891806676234,
+      "label": "Markville Mall - Bullock Dr & Markville Rd",
+      "area": "Markham",
+      "sector": "54",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "86",
+      "siteId": "CCTV54-13",
+      "lat": 43.8696035832151,
+      "lon": -79.2914155574149,
+      "label": "Markville Mall - Bullock Dr",
+      "area": "Markham",
+      "sector": "54",
+      "status": "Active",
+      "activeDate": "2026-10-01",
+      "retireDate": null,
+      "note": null
     },
     {
       "key": "469",
