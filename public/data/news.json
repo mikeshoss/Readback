@@ -1,6 +1,30 @@
 {
-  "lastChecked": "2026-10-19T16:26:28.081Z",
+  "lastChecked": "2026-10-26T16:08:19.283Z",
   "items": [
+    {
+      "title": "EFF’s State Legislative Agenda to End ALPR Mass Surveillance",
+      "url": "https://www.eff.org/deeplinks/2026/10/effs-state-legislative-agenda-end-alpr-mass-surveillance",
+      "date": "Wed, 21 Oct 2026 17:52:16 +0000",
+      "summary": "div class= field field--name-body field--type-text-with-summary field--label-hidden div class= field__items div class= field__item even p Police agencies across the U.S. have deployed Automated License Plate Readers (ALPRs) to capture images of passing vehicles along with time, date, and GPS coordinates. While the technology itself isn’t new (ALPRs have existed in various forms for a href= https:/",
+      "outlet": "EFF",
+      "trust": "trusted",
+      "canadaOnly": false,
+      "canada": false,
+      "kind": "policy",
+      "iso": "2026-10-21T17:52:16.000Z"
+    },
+    {
+      "title": "Require Police to Get a Warrant to Search ALPR Data",
+      "url": "https://www.eff.org/deeplinks/2026/10/require-police-get-warrant-search-alpr-data",
+      "date": "Mon, 19 Oct 2026 23:28:38 +0000",
+      "summary": "div class= field field--name-body field--type-text-with-summary field--label-hidden div class= field__items div class= field__item even p em This post was co-written by /em span a href= https://www.eff.org/about/staff/andi-cao em Andi Cao /em /a /span em , an EFF legal intern. /em /p p Automated license plate readers (ALPRs) are mass surveillance. They photograph every passing car and log where an",
+      "outlet": "EFF",
+      "trust": "trusted",
+      "canadaOnly": false,
+      "canada": false,
+      "kind": "policy",
+      "iso": "2026-10-19T23:28:38.000Z"
+    },
     {
       "title": "We’re Asking the Wisconsin Supreme Court to End Warrantless ALPR Searches",
       "url": "https://www.eff.org/deeplinks/2026/10/were-asking-wisconsin-supreme-court-end-warrantless-alpr-searches",

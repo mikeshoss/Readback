@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-19T16:08:13.143Z",
+  "generated": "2026-10-26T15:47:17.507Z",
   "source": {
     "id": "york-cctv",
     "operator": "York Regional Police",
@@ -25,8 +25,8 @@
     }
   },
   "counts": {
-    "total": 68,
-    "active": 68
+    "total": 71,
+    "active": 71
   },
   "sites": [
     {
@@ -888,17 +888,56 @@
       "note": null
     },
     {
-      "key": "469",
-      "siteId": "CCTV43-02",
-      "lat": 43.7841793769939,
-      "lon": -79.5731052113439,
-      "label": "Highway 7 & Pine Valley Dr",
+      "key": "87",
+      "siteId": "CCTV46-05",
+      "lat": 43.8455808858337,
+      "lon": -79.5540318968554,
+      "label": "Major Mackenzie Dr W & Vellore Woods Blvd",
       "area": "Vaughan",
-      "sector": "43",
+      "sector": "46",
       "status": "Active",
-      "activeDate": "2026-08-04",
+      "activeDate": "2026-10-23",
       "retireDate": null,
-      "note": "Temporary Location"
+      "note": null
+    },
+    {
+      "key": "88",
+      "siteId": "CCTV46-06",
+      "lat": 43.8261750584569,
+      "lon": -79.5562113933161,
+      "label": "Rutherford Rd & Weston Rd",
+      "area": "Vaughan",
+      "sector": "46",
+      "status": "Active",
+      "activeDate": "2026-10-23",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "89",
+      "siteId": "CCTV55-02",
+      "lat": 43.9671664877548,
+      "lon": -79.2656112261326,
+      "label": "Main St & Morstar St",
+      "area": "Whitchurch-Stouffville",
+      "sector": "55",
+      "status": "Active",
+      "activeDate": "2026-10-23",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "90",
+      "siteId": "CCTV55-03",
+      "lat": 43.9720681511623,
+      "lon": -79.2436383912146,
+      "label": "Main St & Park Dr",
+      "area": "Whitchurch-Stouffville",
+      "sector": "55",
+      "status": "Active",
+      "activeDate": "2026-10-23",
+      "retireDate": null,
+      "note": null
     },
     {
       "key": "471",
