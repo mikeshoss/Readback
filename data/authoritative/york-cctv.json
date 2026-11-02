@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26T15:47:17.507Z",
+  "generated": "2026-11-02T19:05:31.056Z",
   "source": {
     "id": "york-cctv",
     "operator": "York Regional Police",
@@ -25,8 +25,8 @@
     }
   },
   "counts": {
-    "total": 71,
-    "active": 71
+    "total": 72,
+    "active": 72
   },
   "sites": [
     {
@@ -771,19 +771,6 @@
       "note": "Temporary Location"
     },
     {
-      "key": "77",
-      "siteId": "CCTV54-06",
-      "lat": 43.8701526309567,
-      "lon": -79.3361460914683,
-      "label": "55 Hagerman Blvd",
-      "area": "Markham",
-      "sector": "54",
-      "status": "Active",
-      "activeDate": "2026-10-07",
-      "retireDate": null,
-      "note": "Temporary Location"
-    },
-    {
       "key": "78",
       "siteId": "CCTV55-01",
       "lat": 43.9567368205949,
@@ -936,6 +923,32 @@
       "sector": "55",
       "status": "Active",
       "activeDate": "2026-10-23",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "91",
+      "siteId": "CCTV43-02",
+      "lat": 43.7947836609666,
+      "lon": -79.5758237398252,
+      "label": "Pine Valley Dr & Chancellor Dr",
+      "area": "Vaughan",
+      "sector": "43",
+      "status": "Active",
+      "activeDate": "2026-10-22",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "93",
+      "siteId": "CCTV41-05",
+      "lat": 43.7972152434714,
+      "lon": -79.4725352180795,
+      "label": "Dufferin St & Clark Ave W",
+      "area": "Vaughan",
+      "sector": "41",
+      "status": "Active",
+      "activeDate": "2026-10-22",
       "retireDate": null,
       "note": null
     },
