@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02T19:05:31.056Z",
+  "generated": "2026-11-09T19:27:03.009Z",
   "source": {
     "id": "york-cctv",
     "operator": "York Regional Police",
@@ -25,8 +25,8 @@
     }
   },
   "counts": {
-    "total": 72,
-    "active": 72
+    "total": 73,
+    "active": 73
   },
   "sites": [
     {
@@ -654,19 +654,6 @@
       "note": null
     },
     {
-      "key": "67",
-      "siteId": "CCTV22-09",
-      "lat": 43.8624800600421,
-      "lon": -79.3869270475004,
-      "label": "16th Ave & Leslie St",
-      "area": "Richmond Hill",
-      "sector": "22",
-      "status": "Active",
-      "activeDate": "2026-06-30",
-      "retireDate": null,
-      "note": null
-    },
-    {
       "key": "68",
       "siteId": "CCTV22-10",
       "lat": 43.8804939580412,
@@ -949,6 +936,32 @@
       "sector": "41",
       "status": "Active",
       "activeDate": "2026-10-22",
+      "retireDate": null,
+      "note": null
+    },
+    {
+      "key": "94",
+      "siteId": "CCTV22-12",
+      "lat": 43.8615580802444,
+      "lon": -79.3906738394347,
+      "label": "16th Ave & Dewbourne Ave",
+      "area": "Richmond Hill",
+      "sector": "22",
+      "status": "Active",
+      "activeDate": "2026-11-06",
+      "retireDate": null,
+      "note": "Temporary Location"
+    },
+    {
+      "key": "95",
+      "siteId": "CCTV32-01",
+      "lat": 44.3101737327444,
+      "lon": -79.3653468844416,
+      "label": "Dalton Rd & Black River Dr",
+      "area": "Georgina",
+      "sector": "32",
+      "status": "Active",
+      "activeDate": "2026-11-06",
       "retireDate": null,
       "note": null
     },
